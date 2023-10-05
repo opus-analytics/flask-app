@@ -29,10 +29,10 @@
           </div>
           <a href="#" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
           <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
-            <a href="index.html" class="nav-link-7 w-nav-link">Home</a>
-            <a href="our-offerings.html" class="nav-link-7 w-nav-link">Our Offerings</a>
-            <a href="partners.html" class="nav-link-7 w-nav-link">Partners</a>
-            <a href="contact.html" class="nav-link-7 w-nav-link">Contact Us</a>
+            <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link">Home</a>
+            <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
+            <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
+            <a href="{{ url_for('contact') }}" class="nav-link-7 w-nav-link">Contact Us</a>
           </nav>
         </div>
       </div>
@@ -42,7 +42,7 @@
     <div class="div-block-18">
       <h3 class="heading-16">Your Email is Confirmed!</h3>
       <h3 class="heading-16 sub">Please Log in ..</h3>
-      <a href="#" class="nav-primary-button w-button">Sign In</a>
+      <a href="{{ url_for('sign_in') }}" class="nav-primary-button w-button">Sign In</a>
     </div>
   </section>
   <div class="footer-section">
@@ -51,23 +51,23 @@
         <div id="w-node-_86cd9d91-f9cc-f9bc-7f66-53d09ba196ef-dcb625e5" class="footer-block">
           <h3 class="heading-12">Opus Analytics</h3>
           <p class="body-text-2 light">Data visualization that simplifies workforce analytics and makes it usable.</p>
-          <a href="contact.html" class="nav-primary-button button-footer w-button">Contact Us</a>
+          <a href="{{ url_for('contact') }}" class="nav-primary-button button-footer w-button">Contact Us</a>
         </div>
         <div id="w-node-_86cd9d91-f9cc-f9bc-7f66-53d09ba196f6-dcb625e5" class="footer-block">
-          <a href="index.html" class="footer-link">Home</a>
-          <a href="our-offerings.html" class="footer-link">Our Offerings</a>
-          <a href="partners.html" class="footer-link">Partners</a>
+          <a href="{{ url_for('home') }}" class="footer-link">Home</a>
+          <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
+          <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
         </div>
         <div id="w-node-_86cd9d91-f9cc-f9bc-7f66-53d09ba196fd-dcb625e5" class="footer-block">
-          <a href="#" class="w-inline-block"><img src="images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
+          <a href="#" class="w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
         </div>
       </div>
       <div class="a-footer-divider-small"></div>
       <div class="a-footer-bottom">
         <div class="a-footer-legal">
-          <a href="#" class="a-footer-link-small">Privacy Policy</a>
-          <a href="cookie-policy.html" class="a-footer-link-small">Cookie Policy</a>
-          <a href="terms-of-use.html" class="a-footer-link-small">Terms of Use</a>
+          <a href="{{ url_for('privacy_policy') }}" class="a-footer-link-small">Privacy Policy</a>
+          <a href="{{ url_for('cookie_policy') }}" class="a-footer-link-small">Cookie Policy</a>
+          <a href="{{ url_for('terms_of_use') }}" class="a-footer-link-small">Terms of Use</a>
         </div>
         <div class="a-footer-language">
           <div class="a-footer-social">
