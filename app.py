@@ -142,8 +142,19 @@ def sign_up():
 
 @app.route("/confirmation-mail")
 def confirmation_mail():
-    
+
     return (render_template('confirmation-mail.html'))
+
+
+@app.route("/confirmed-mail")
+def confirmed_mail():
+    
+    return (render_template('confirm-email.html'))
+
+@app.route("/reset-password")
+def reset_password():
+    
+    return (render_template('reset-password.html'))
             
 
 @app.route("/log-out", methods = ["GET","POST"])

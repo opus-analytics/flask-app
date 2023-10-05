@@ -64,7 +64,11 @@
           <div>Oops! Something went wrong while submitting the form.</div>
         </div>
         <div class="a-account-forgot">
-          <div class="a-paragraph-small">Forgot Password?</div>
+          <a href = "{{ url_for('reset_password') }}" class="a-paragraph-small">Forgot Password?</a>
+        </div>
+        <div class="a-account-forgot">
+          <div class="a-paragraph-small">Don&#x27;t have an account?</div>
+          <a href="{{ url_for('sign_up') }}" class="a-text-link-regular">Sign Up</a>
         </div>
         
         {% with messages = get_flashed_messages(category_filter=["error"]) %}
