@@ -15,6 +15,8 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from smtplib import SMTP
 import ssl 
 from flask_mail import Mail, Message
+import bcrypt
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
@@ -121,6 +123,7 @@ def sign_up():
     full_name = request.form.get("Full-Name")
     email = request.form.get("Email-3")
     password = request.form.get("Password-5")
+    
     company = request.form.get("Company-Name")
 
     check_mail_query = f"SELECT email From users where email = '{email}'"
@@ -132,8 +135,11 @@ def sign_up():
         if count > 0:
             flash('email already exists!','error')
         else:
-            #hashed_pwd = generate_password_hash(password)
-            insertion_query = f"INSERT INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{password}','{email}', '{full_name}', '{company}', 'Pending')"
+            password = bytes(password, encoding = 'utf-8')
+            salt = bcrypt.gensalt()
+            hashed_pwd = bcrypt.hashpw(password, salt)
+            hashed_pwd = hashed_pwd.decode()
+            insertion_query = f"INSERT INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending')"
             cursor.execute(insertion_query)
             connection.commit()
             connection.close()
