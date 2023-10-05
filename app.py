@@ -11,15 +11,22 @@ from flask import Flask, request
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from mysql.connector import Error
+from itsdangerous import URLSafeTimedSerializer
 
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
+app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'info@opusanalytics.ai'
+app.config['MAIL_PASSWORD'] = 'YhnvfR^1998'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
-
-
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 class UploadFile(FlaskForm):
     file = FileField("File")
     submit = SubmitField("Submit File")
@@ -105,33 +112,39 @@ def sign_in():
 @app.route("/sign-up", methods = ["GET","POST"])
 
 def sign_up():
-    if request.method == "POST":
-        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-        cursor = connection.cursor()
-        full_name = request.form.get("Full-Name")
-        email = request.form.get("Email-3")
-        password = request.form.get("Password-5")
-        company = request.form.get("Company-Name")
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor()
+    full_name = request.form.get("Full-Name")
+    email = request.form.get("Email-3")
+    password = request.form.get("Password-5")
+    company = request.form.get("Company-Name")
 
-        check_mail_query = f"SELECT email From users where email = '{email}'"
+    check_mail_query = f"SELECT email From users where email = '{email}'"
+    
+    if request.method == "POST":
         cursor.execute(check_mail_query)
-        if cursor.rowcount > 0:
+        cursor.fetchall()
+        count = cursor.rowcount
+        if count > 0:
             flash('email already exists!','error')
         else:
             hashed_pwd = generate_password_hash(password)
-            insertion_query = f"INSERT INTO users (username, password, email, full_name, company_name,verification_status) VALUES '{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending'"
+            insertion_query = f"INSERT INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending')"
             cursor.execute(insertion_query)
+            connection.commit()
+            token = s.dumps(email, salt= 'email-confirm')
+            #msg = Message('Confirm Email', sender='info@opusanalytics.ai', recipients=[email])
+            #link = url_for('confirm_email',token=token, external=True)
+            return (redirect(url_for('confirmation_mail')))
 
-    r = requests.post(url="https://opus-backend.azurewebsites.net/authenticate", json={"username":email,"password":password})
-    if request.method == "POST":
-        if r.status_code == 200:
-            session['token'] = r.json()['token']
-            return redirect(url_for('home'))
-        else:
-            flash('Login Failed!','error')
-    return (render_template("sign-in.html"))
+    return (render_template("signup.html"))
 
 
+@app.route("/confirmation-mail")
+def confirmation_mail():
+    
+    return (render_template('confirmation-mail.html'))
+            
 
 @app.route("/log-out", methods = ["GET","POST"])
 
