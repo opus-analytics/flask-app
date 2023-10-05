@@ -1,0 +1,6 @@
+flask
+flask_wtf
+pandas
+requests
+mysql-connector-python
+flask_mail
