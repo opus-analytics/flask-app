@@ -153,7 +153,7 @@ def confirmation_mail():
     return (render_template('confirmation-mail.html'))
 
 
-@app.route("/confirmed-mail/<token>")
+@app.route("/confirmed-mail/<token>", methods = ["GET","POST"])
 def confirmed_mail(token):
     try:
         email = s.loads(token, salt='email-confirm', max_age=3600)
@@ -167,6 +167,17 @@ def confirmed_mail(token):
     except SignatureExpired:
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
+
+
+@app.route("/test", methods = ["GET","POST"])
+def test():
+     token = s.dumps('eman.a.hamied@gmail.com', salt= 'email-confirm')
+     msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=['eman.a.hamied@gmail.com'])
+     link = url_for('confirmed_mail',token=token, _external=True)
+     msg.body = 'Your Confirmation link is {}'.format(link)
+     mail.send(msg)
+     return (render_template('confirm-email.html'))
+
 
 @app.route("/reset-password")
 def reset_password():
