@@ -1,3 +1,30 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+.info-msg,
+.success-msg,
+.warning-msg,
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+.info-msg {
+  color: #059;
+  background-color: #BEF;
+}
+.success-msg {
+  color: #270;
+  background-color: #DFF2BF;
+}
+.warning-msg {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+.error-msg {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+
 :root {
   --medium-violet-red: #b7509d;
   --medium-orchid: #9a60a7;
@@ -30,6 +57,7 @@
   --elements-webflow-library-accent--primary-1: #4a3aff;
   --elements-webflow-library-secondary--color-2: #f2f1ff;
 }
+
 
 .w-layout-blockcontainer {
   max-width: 940px;

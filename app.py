@@ -146,7 +146,7 @@ def sign_up():
             token = s.dumps(email, salt= 'email-confirm')
             msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=[email])
             link = url_for('confirmed_mail',token=token, _external=True)
-            msg.body = 'Your Confirmation link is {}'.format(link)
+            msg.html = render_template('verification.html',link = link)
             mail.send(msg)
             return (redirect(url_for('confirmation_mail')))
 
@@ -161,36 +161,62 @@ def confirmation_mail():
 
 @app.route("/confirmed-mail/<token>", methods = ["GET","POST"])
 def confirmed_mail(token):
-    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-    cursor = connection.cursor()
     try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)   
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+        cursor = connection.cursor()   
         check_mail_query = f"UPDATE USERS SET verification_status = 'Verified' WHERE email = '{email}'"
         cursor.execute(check_mail_query)
         connection.commit()
         connection.close()
 
     except SignatureExpired:
-
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
 
 
-@app.route("/test", methods = ["GET","POST"])
-def test():
-     token = s.dumps('eman.a.hamied@gmail.com', salt= 'email-confirm')
-     msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=['eman.a.hamied@gmail.com'])
-     link = url_for('confirmed_mail',token=token, _external=True)
-     msg.body = 'Your Confirmation link is {}'.format(link)
-     mail.send(msg)
-     return (render_template('confirm-email.html'))
-
-
-@app.route("/reset-password")
+@app.route("/reset-password", methods = ["GET","POST"])
 def reset_password():
-    
-    return (render_template('reset-password.html'))
+    email = request.form.get("Email")
+    token = s.dumps(email, salt= 'email-confirm')
+    msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=['eman.a.hamied@gmail.com'])
+    link = url_for('new_password',token=token, _external=True)
+    #msg.body = 'Your Confirmation link is {}'.format(link)
+    msg.html = render_template('reset_password_mail.html',link = link)
+    if request.method == "POST":
+        mail.send(msg)
+        flash('Reset mail has been sent!','success')
+        
+    return (render_template('reset-passowrd.html',token=token))
             
+
+@app.route("/new-password/<token>", methods = ["GET","POST"])
+def new_password(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+        password = request.form.get("Password")
+        confirm_password = request.form.get("Confirm-Password")
+        if request.method == "POST":
+            if password != confirm_password:
+                flash('Passwords do not match!','error')
+            else:
+                password = bytes(password, encoding = 'utf-8')
+                salt = bcrypt.gensalt()
+                hashed_pwd = bcrypt.hashpw(password, salt)
+                hashed_pwd = hashed_pwd.decode()
+                connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+                cursor = connection.cursor()   
+                check_mail_query = f"UPDATE USERS SET password = '{hashed_pwd}' WHERE email = '{email}'"
+                cursor.execute(check_mail_query)
+                connection.commit()
+                connection.close()
+                return redirect(url_for("sign_in"))
+
+
+    except SignatureExpired:
+        return (render_template('404.html'))
+    return (render_template('new-password.html'))
+
 
 @app.route("/log-out", methods = ["GET","POST"])
 
