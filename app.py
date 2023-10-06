@@ -126,7 +126,7 @@ def sign_up():
     
     company = request.form.get("Company-Name")
 
-    check_mail_query = f"SELECT email From users where email = '{email}'"
+    check_mail_query = f"SELECT email From users where email = '{email}' AND verification_status != 'Pending'"
     
     if request.method == "POST":
         cursor.execute(check_mail_query)
@@ -139,7 +139,7 @@ def sign_up():
             salt = bcrypt.gensalt()
             hashed_pwd = bcrypt.hashpw(password, salt)
             hashed_pwd = hashed_pwd.decode()
-            insertion_query = f"INSERT INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending')"
+            insertion_query = f"REPLACE INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending')"
             cursor.execute(insertion_query)
             connection.commit()
             connection.close()
@@ -161,16 +161,17 @@ def confirmation_mail():
 
 @app.route("/confirmed-mail/<token>", methods = ["GET","POST"])
 def confirmed_mail(token):
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor()
     try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
-        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-        cursor = connection.cursor()
+        email = s.loads(token, salt='email-confirm', max_age=3600)   
         check_mail_query = f"UPDATE USERS SET verification_status = 'Verified' WHERE email = '{email}'"
         cursor.execute(check_mail_query)
         connection.commit()
         connection.close()
 
     except SignatureExpired:
+
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
 
