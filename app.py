@@ -179,7 +179,7 @@ def confirmed_mail(token):
 def reset_password():
     email = request.form.get("Email")
     token = s.dumps(email, salt= 'email-confirm')
-    msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=['eman.a.hamied@gmail.com'])
+    msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=[email])
     link = url_for('new_password',token=token, _external=True)
     #msg.body = 'Your Confirmation link is {}'.format(link)
     msg.html = render_template('reset_password_mail.html',link = link)
