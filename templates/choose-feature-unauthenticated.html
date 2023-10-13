@@ -1,11 +1,11 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  -->
-<!--  Last Published: Fri Sep 29 2023 16:01:24 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="64d3b6b81a1144c81630b8f3" data-wf-site="64d3b6b81a1144c81630b849">
+<!--  Last Published: Fri Oct 13 2023 17:14:40 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="65297916bb384c4b30afe3c2" data-wf-site="64d3b6b81a1144c81630b849">
 <head>
   <meta charset="utf-8">
-  <title>Sign Up</title>
-  <meta content="Sign Up" property="og:title">
-  <meta content="Sign Up" property="twitter:title">
+  <title>Choose Feature</title>
+  <meta content="Choose Feature_Unauthenticated" property="og:title">
+  <meta content="Choose Feature_Unauthenticated" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="./static/css/normalize.css" rel="stylesheet" type="text/css">
@@ -29,58 +29,71 @@
           </div>
           <a href="#" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
           <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
-            <a href="{{ url_for('home') }}" aria-current="page" class="nav-link-7 w-nav-link w--current">Home</a>
+            <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link">Home</a>
             <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
             <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
             <a href="{{ url_for('contact') }}" class="nav-link-7 w-nav-link">Contact Us</a>
             <a href="{{ url_for('choose_feature') }}" class="nav-link-7 w-nav-link">Features</a>
           </nav>
         </div>
+        <div class="navigation-split-wrap">
+          <a href="{{ url_for('sign_in') }}" class="nav-secondary-button margin-right w-button">Sign in</a>
+          <a href="{{ url_for('sign_up') }}" class="nav-primary-button nav-button w-button">Sign Up</a>
+        </div>
       </div>
     </div>
   </section>
-  <div class="a-section-regular"><img src="./static/images/form-graphic.svg" loading="lazy" alt="" class="a-account-background-image">
-    <div class="a-account-container-regular">
-      <div class="a-title-wrap-center">
-        <div class="a-margin-bottom-16">
-          <h2 class="a-h2-heading">Sign Up</h2>
-        </div>
-      </div>
-      <div class="a-account-form-block-large w-form">
-        <form action = "#" id="wf-form-Sign-In-Form" name="wf-form-Sign-In-Form" data-name="Sign In Form" method="POST" class="a-account-form-large" data-wf-page-id="64d3b6b81a1144c81630b8f3" data-wf-element-id="cfae28c0-e738-4d8c-6ee9-95a2c04b77b0">
-          <div class="w-layout-grid a-account-form-grid">
-            <div class="a-account-field-wrapper"><label for="First-Name-2" class="a-detail-small">Full Name</label><input type="text" class="a-account-text-field w-input" maxlength="256" name="Full-Name" data-name="First Name 2" placeholder="" id="First-Name-2" required=""></div>
-            <div class="a-account-field-wrapper"><label for="Email-3" class="a-detail-small">Email</label><input type="email" class="a-account-text-field w-input" maxlength="256" name="Email-3" data-name="Email 3" placeholder="" id="Email-3" required=""></div>
-            <div class="a-account-field-wrapper"><label for="password-5" class="a-detail-small">Password</label>
-              <div class="a-account-password"><input type="password" class="a-account-text-field w-input" maxlength="256" name="Password-5" data-name="Password 5" placeholder="" id="Password-5" required=""></div>
+  <div class="f-section-large">
+    <div class="div-block-20">
+      <h2 class="heading_features">Choose What to Analyze!</h2>
+    </div>
+    <div class="f-container-regular">
+      <div class="w-layout-grid f-grid-three-column">
+        <a href="{{ url_for('sign_in') }}" class="link-block w-inline-block">
+          <div class="f-feature-card-filled">
+            <div class="f-feature-icon-wrapper-white"><img src="./static/images/opus-versa.png" loading="lazy" width="53" sizes="64px" alt="" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+            <div class="f-margin-bottom-16">
+              <h6 class="f-h5-heading">Compare a Resume Against The Job Description</h6>
             </div>
-            <div class="a-account-field-wrapper"><label for="password-6" class="a-detail-small">Company Name</label>
-              <div class="a-account-password"><input type="text" class="a-account-text-field w-input" maxlength="256" name="Company-Name" data-name="Password 5" placeholder="" id="Password-5" required=""></div>
-            </div>
+            <p class="f-paragraph-large">Submit a resume and see how it matches your wanted position Description.</p>
           </div>
-          <div class="a-account-button-wrapper"><input type="submit" value="Sign Up" data-wait="Please wait..." class="a-button-primary w-button">
-            <div class="a-account-forgot">
-              <div class="a-paragraph-small">Already has an account?</div>
-              <a href="{{ url_for('sign_in') }}" class="a-text-link-regular">Sign in</a>
+        </a>
+        <a href="{{ url_for('sign_in') }}" class="link-block w-inline-block">
+          <div class="f-feature-card-filled">
+            <div class="f-feature-icon-wrapper-white"><img src="./static/images/opus-versa.png" loading="lazy" width="53" sizes="64px" alt="" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+            <div class="f-margin-bottom-16">
+              <h5 class="f-h5-heading">Compare Two Resumes Against Each Other Based on a Job Title</h5>
             </div>
+            <p class="f-paragraph-large">Submit two or more resumes to get results against your wanted title.</p>
           </div>
-        </form>
-        <div class="a-success-message w-form-done">
-          <div>Thank you! Your submission has been received!</div>
-        </div>
-        <div class="a-error-message w-form-fail">
-          <div>Oops! Something went wrong while submitting the form.</div>
-        </div>
-        {% with messages = get_flashed_messages(category_filter=["error"]) %}
-        {% if messages %}
-        <div class="error-msg">
-            {%- for msg in messages %}
-            <i class="fa fa-times-circle"></i>
-              {{ msg }}
-            {% endfor -%}
-        </div>
-        {% endif %}
-        {% endwith %}
+        </a>
+        <a href="{{ url_for('sign_in') }}" class="link-block w-inline-block">
+          <div class="f-feature-card-filled">
+            <div class="f-feature-icon-wrapper-white"><img src="./static/images/opus-versa.png" loading="lazy" width="53" sizes="64px" alt="" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+            <div class="f-margin-bottom-16">
+              <h5 class="f-h5-heading">Compare Two Resumes Relevance to The Job Description</h5>
+            </div>
+            <p class="f-paragraph-large">Upload two or more resumes to a job description.</p>
+          </div>
+        </a>
+        <a href="{{ url_for('sign_in') }}" class="link-block w-inline-block">
+          <div class="f-feature-card-filled">
+            <div class="f-feature-icon-wrapper-white"><img src="./static/images/opus-versa.png" loading="lazy" width="53" sizes="64px" alt="" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+            <div class="f-margin-bottom-16">
+              <h5 class="f-h5-heading">Analyze Resume to Get The Most Suitable Position </h5>
+            </div>
+            <p class="f-paragraph-large">Upload a resume to get insights about where this candidate fits.</p>
+          </div>
+        </a>
+        <a href="{{ url_for('sign_in') }}" class="link-block w-inline-block">
+          <div class="f-feature-card-filled">
+            <div class="f-feature-icon-wrapper-white"><img src="./static/images/opus-versa.png" loading="lazy" width="53" sizes="64px" alt="" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+            <div class="f-margin-bottom-16">
+              <h5 class="f-h5-heading">Analyze Your Current Employees Data</h5>
+            </div>
+            <p class="f-paragraph-large">Upload a file to get insights about your employess.</p>
+          </div>
+        </a>
       </div>
     </div>
   </div>

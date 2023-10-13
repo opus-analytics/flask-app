@@ -16,13 +16,17 @@ from smtplib import SMTP
 import ssl 
 from flask_mail import Mail, Message
 import bcrypt
+import io
+import tempfile
+
+
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 app.config['MAIL_SERVER'] = 'smtp.office365.com'
-
+app.config['UPLOAD_FOLDER']
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
 app.config['MAIL_PASSWORD'] = 'Em@281194'
@@ -225,17 +229,188 @@ def log_out():
     return redirect(url_for('home'))
 
 
+@app.route("/choose-feature", methods = ["GET","POST"])
+
+def choose_feature():
+     if session.get('token') == None:
+        return render_template("choose-feature-unauthenticated.html")
+     else:
+        return (render_template('choose-feature.html'))
 
 
-@app.route("/success", methods = ["POST"])
+@app.route("/compare_resume_job", methods = ["GET","POST"])
 
-def success():
-    file = request.files['file']
-    file_name = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-    df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-    df = df.head(5).to_html()
-    return(df)
+def compare_resume_job():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload one file and submit a job title!"
+        result = ''
+        job_title = request.form.get('field-2')
+        file = request.form.get('file-field')
+        if request.method == "POST":
+            file_ = request.files['file-field']        
+            file_name = secure_filename(file_.filename)
+                    
+            file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+            test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={"description" : job_title},  files={"analyze-files" : test_file})
+            if r.status_code == 200:
+                jsonData = json.dumps(r.json()[0])
+                resp = json.loads(jsonData)
+                result = resp['message']['content']
+                result = "</br>".join(result.split("\n"))
+                flash('Files Uploaded Successfully','success')
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                file_name = secure_filename(file_.filename)
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("upload_single_file.html",result= result,tag=tag))
+
+
+
+@app.route("/compare_resumes", methods = ["GET","POST"])
+
+def compare_resumes():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload two files and submit a job title!"
+        result = ''
+        job_title = request.form.get('field-2')
+        files = []
+        if request.method == "POST":    
+            files_form = request.files.getlist('file-field') 
+            
+            for file in files_form:    
+                file_name = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+                files.append(("analyze-files",file_saved))
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes", headers={"description" : job_title},  files=files)
+            if r.status_code == 200:
+                jsonData = json.dumps(r.json()[0])
+                resp = json.loads(jsonData)
+                result = resp['message']['content']
+                result = "</br>".join(result.split("\n"))
+                flash('Files Uploaded Successfully','success')
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                for file in files_form: 
+                    file_name = secure_filename(file.filename)
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("upload.html",result= result,tag=tag))
+
+
+
+@app.route("/compare-resumes-job", methods = ["GET","POST"])
+
+def compare_resumes_job():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload two files and submit a job title!"
+        result = ''
+        job_title = request.form.get('field-2')
+        files = []
+        if request.method == "POST":    
+            files_form = request.files.getlist('file-field') 
+            
+            for file in files_form:    
+                file_name = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+                files.append(("analyze-files",file_saved))
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume", headers={"description" : job_title},  files=files)
+            if r.status_code == 200:
+                jsonData = json.dumps(r.json()[0])
+                resp = json.loads(jsonData)
+                result = resp['message']['content']
+                result = "</br>".join(result.split("\n")) 
+                flash('Files Uploaded Successfully','success')
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                for file in files_form: 
+                    file_name = secure_filename(file.filename)
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("upload.html",result= result,tag=tag))
+
+
+@app.route("/analyze-resume", methods = ["GET","POST"])
+
+def analyze_resume():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload a resume to get analyzed!"
+        result = ''
+        file = request.form.get('file-field')
+        if request.method == "POST":
+            file_ = request.files['file-field']        
+            file_name = secure_filename(file_.filename)
+                    
+            file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+            test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume",files={"analyze-file" : test_file})
+            if r.status_code == 200:
+                jsonData = json.dumps(r.json()[0])
+                resp = json.loads(jsonData)
+                result = resp['message']['content']
+                result = "</br>".join(result.split("\n"))
+                flash('Files Uploaded Successfully','success')
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                file_name = secure_filename(file_.filename)
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("analyze.html",result= result,tag=tag))
+
+
+
+@app.route("/analyze-employees", methods = ["GET","POST"])
+
+def analyze_employees():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload one file for employees data to get analyzed!"
+        result = ''
+        file = request.form.get('file-field')
+        if request.method == "POST":
+            file_ = request.files['file-field']        
+            file_name = secure_filename(file_.filename)
+                    
+            file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+            test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/employees",files={"analyze-file" : test_file})
+            if r.status_code == 200:
+                jsonData = json.dumps(r.json()[0])
+                resp = json.loads(jsonData)
+                result = resp['message']['content']
+                result = "</br>".join(result.split("\n"))
+                flash('Files Uploaded Successfully','success')
+
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                file_name = secure_filename(file_.filename)
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("analyze.html",result= result,tag=tag))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -33,10 +33,11 @@
             <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
             <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
             <a href="{{ url_for('contact') }}" class="nav-link-7 w-nav-link">Contact Us</a>
+            <a href="{{ url_for('choose_feature') }}" class="nav-link-7 w-nav-link">Features</a>
           </nav>
         </div>
         <div class="navigation-split-wrap">
-          <a href="sign-in.html" class="nav-secondary-button margin-right mobile-hidden w-button">Upload</a>
+          <a href="{{ url_for('choose_feature') }}" class="nav-secondary-button margin-right authenticated w-button">Upload</a>
           <button><a href= "{{ url_for('log_out') }}" class="user-log-in-log-out" data-wf-user-login="Log out" data-wf-user-logout="Log out" type="button">Log out</a></button>
         </div>
       </div>
@@ -48,19 +49,20 @@
     </div>
   </section>
   <div class="footer-section">
-    <div data-w-id="2c78d9b3-44ca-3687-b901-2b45c2f90b5a" style="-webkit-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="container-17">
+    <div data-w-id="cfa58525-5efc-d001-b2b8-916b5659dd3a" class="container-17">
       <div class="w-layout-grid footer-grid">
-        <div id="w-node-_2c78d9b3-44ca-3687-b901-2b45c2f90b5c-5fad21bf" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd3c-5659dd39" class="footer-block">
           <h3 class="heading-12">Opus Analytics</h3>
           <p class="body-text-2 light">Data visualization that simplifies workforce analytics and makes it usable.</p>
           <a href="{{ url_for('contact') }}" class="nav-primary-button button-footer w-button">Contact Us</a>
         </div>
-        <div id="w-node-_2c78d9b3-44ca-3687-b901-2b45c2f90b63-5fad21bf" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd43-5659dd39" class="footer-block">
           <a href="{{ url_for('home') }}" class="footer-link">Home</a>
-          <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
           <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
+          <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
+          <a href="{{ url_for('choose_feature') }}" class="footer-link">Features</a>
         </div>
-        <div id="w-node-_2c78d9b3-44ca-3687-b901-2b45c2f90b6a-5fad21bf" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd4c-5659dd39" class="footer-block">
           <a href="#" class="w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  -->
-<!--  Last Published: Sun Oct 01 2023 19:39:34 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Fri Oct 13 2023 16:46:32 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6519aa0c84af08535fad9650" data-wf-site="64d3b6b81a1144c81630b849">
 <head>
   <meta charset="utf-8">
@@ -27,33 +27,32 @@
           <div class="menu-button-3 margin-right w-nav-button">
             <div class="w-icon-nav-menu"></div>
           </div>
-          <a href="#" class="brand-2 w-nav-brand"><img src="./staticimages/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
+          <a href="#" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
           <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
-            <a href="{{ url_for('home') }}" aria-current="page" class="nav-link-7 w-nav-link w--current">Home</a>
+            <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link">Home</a>
             <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
             <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
             <a href="{{ url_for('contact') }}" class="nav-link-7 w-nav-link">Contact Us</a>
+            <a href="{{ url_for('choose_feature') }}" aria-current="page" class="nav-link-7 w-nav-link w--current">Features</a>
           </nav>
         </div>
         <div class="navigation-split-wrap">
-          <button><a href= "{{ url_for('log_out') }}" class="user-log-in-log-out" data-wf-user-login="Log out" data-wf-user-logout="Log out" type="button">Log out</a></button>
+          <button><a href= "{{ url_for('log_out') }}" class="user-log-in-log-out" data-wf-user-login="Log out" data-wf-user-logout="Log out" type="button">Log out</a></button></div>
       </div>
     </div>
   </section>
   <section class="uploading">
     <div class="submit-form-wrap">
+      <div class="div-block-22"><img src="./static/images/opus-versa.png" loading="lazy" sizes="(max-width: 479px) 15vw, (max-width: 991px) 10vw, 98.70000457763672px" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" alt="" class="image-25"></div>
       <div>
-        <h1 class="heading-15">Upload Your File</h1>
+        <h1 class="heading-15">Upload Your Files</h1>
+        <h5 class="heading-17 uploading">{{ tag }}</h5>
       </div>
       <div id="Submission-Form" class="submission-form w-form">
-        <form id="wf-form-Submission-Form" name="wf-form-Submission-Form" data-name="Submission Form" method="get" class="form-2" data-wf-page-id="6519aa0c84af08535fad9650" data-wf-element-id="adb60a07-f141-b65e-55a7-ee3f6678bcb3"><select id="field" name="field" data-name="Field" required="" class="select-field-2 w-select">
-            <option value="">Select one...</option>
-            <option value="Employee Value &amp; Performance">Employee Value &amp; Performance</option>
-            <option value="Productivity">Productivity</option>
-            <option value="Engagement &amp; Retention">Engagement &amp; Retention</option>
-            <option value="Organizational Measures">Organizational Measures</option>
-            <option value="Learning &amp; Development">Learning &amp; Development</option>
-          </select><input type="text" class="text-field-2 w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Primary Key" id="field-2" required=""><input type="submit" value="Upload" data-wait="Please wait..." class="a-button-primary upload w-button"></form>
+        <form action = "#" id="wf-form-Submission-Form" name="wf-form-Submission-Form" data-name="Submission Form" method="POST" enctype="multipart/form-data" class="form-2" data-wf-page-id="6519aa0c84af08535fad9650" data-wf-element-id="adb60a07-f141-b65e-55a7-ee3f6678bcb3">
+          <input type="text" class="text-field-2 w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Job Title" id="field-2" required="">
+          <input type="file" class="upload_field w-input" maxlength="256" name="file-field" data-name="Field 2" placeholder="Job Title" id="field-2" required="" multiple>
+          <input type="submit" value="Upload" data-wait="Please wait..." class="a-button-primary upload w-button"></form>
         <div class="success-message w-form-done">
           <div>Ohhh Yes!! <br><br>Your submission has been staged.<br>We&#x27;ll check it out and submit it within 24 hours. </div>
           <div>This is some text inside of a div block.</div>
@@ -63,24 +62,46 @@
         </div>
       </div>
     </div>
-    <div class="iframe_block">
-      <div class="w-embed w-iframe"><iframe class="gummi" width="100%" height="800" src="https://xd.adobe.com/embed/aafaf0b1-0525-411c-84f0-c38eb020d9aa" frameborder="0" allowfullscreen=""></iframe></div>
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+          {% if messages %}
+          <div class="error-msg">
+              {%- for msg in messages %}
+              <i class="fa fa-times-circle"></i>
+                {{ msg }}
+              {% endfor -%}
+          </div>
+          {% endif %}
+          {% endwith %}
+    
+          {% with messages = get_flashed_messages(category_filter=["success"]) %}
+          {% if messages %}
+          <div class="success-msg">
+              {%- for msg in messages %}
+              <i class="fa fa-check"></i>
+                {{ msg }}
+              {% endfor -%}
+          </div>
+          {% endif %}
+          {% endwith %}
+    <div class="div-block-21">
+      <p class="paragraph-73"><strong class="bold-text">Generated Results for Your Files Are:<br></strong>{{ result | safe}}</p>
     </div>
   </section>
   <div class="footer-section">
-    <div data-w-id="426765bc-aaaa-0a16-e51a-a826af40386c" style="-webkit-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 30px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="container-17">
+    <div data-w-id="cfa58525-5efc-d001-b2b8-916b5659dd3a" class="container-17">
       <div class="w-layout-grid footer-grid">
-        <div id="w-node-_426765bc-aaaa-0a16-e51a-a826af40386e-5fad9650" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd3c-5659dd39" class="footer-block">
           <h3 class="heading-12">Opus Analytics</h3>
           <p class="body-text-2 light">Data visualization that simplifies workforce analytics and makes it usable.</p>
           <a href="{{ url_for('contact') }}" class="nav-primary-button button-footer w-button">Contact Us</a>
         </div>
-        <div id="w-node-_426765bc-aaaa-0a16-e51a-a826af403875-5fad9650" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd43-5659dd39" class="footer-block">
           <a href="{{ url_for('home') }}" class="footer-link">Home</a>
-          <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
           <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
+          <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
+          <a href="{{ url_for('choose_feature') }}" class="footer-link">Features</a>
         </div>
-        <div id="w-node-_426765bc-aaaa-0a16-e51a-a826af40387c-5fad9650" class="footer-block">
+        <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd4c-5659dd39" class="footer-block">
           <a href="#" class="w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
         </div>
       </div>
