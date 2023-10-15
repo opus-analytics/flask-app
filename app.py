@@ -18,7 +18,7 @@ from flask_mail import Mail, Message
 import bcrypt
 import io
 import tempfile
-
+import pandas as pd
 
 
 
@@ -410,6 +410,58 @@ def analyze_employees():
                 return response
     return (render_template("analyze.html",result= result,tag=tag))
 
+
+
+@app.route("/analyze-company-data", methods = ["GET","POST"])
+
+def analyze_company_data():
+    table = ''
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload one file for employees data to get analyzed!"
+        
+        if request.method == "POST":
+            data_dic = {
+                    'Measure': ['Hr employee ratio'],
+                    'Percentage': ['35.56%']}
+            columns = ['Measure', 'Percentage']
+            flash('Files Uploaded Successfully','success')
+            df = pd.DataFrame(data_dic, columns=columns)
+            table = df.to_html(classes='table table-stripped',index=False)
+
+            
+    return (render_template("analyze-company-data.html",table= table,tag=tag))
+
+
+@app.route("/compare_resumes-demo", methods = ["GET","POST"])
+
+def compare_resumes_demo():
+    if session.get('token') == None:
+        return (render_template('404.html'))
+    else :
+        tag = "Upload two files and submit a job title!"
+        result = ''
+        if request.method == "POST":    
+     
+            result = '''AMK's Resume:\n AMK holds extensive experience working with large multi-national and private sector corporations.
+            He has also worked in various government positions, including the Ministry of Finance in Egypt and Kenya, managing financial affairs related to PPP implementation. 
+            As an independent expert on PPP, he advised governments on numerous projects and achieved financial closure for several projects. 
+            His previous roles include being a Finance Manager and Audit Manager, and he is a certified Chartered Accountant.
+            \n\nMF's Resume:
+            \nMF has a strong financial background with experience in government administration and is skilled in Procurement, Financial Analysis, and Team Management. 
+            She has worked as a Financial Analyst in the Ministry of Finance. 
+            She evaluated financial studies and models, prepared project documents, monitored operational procedures, 
+            coordinated with all parties throughout project phases and assisted in determining the value for money of received financial bids.
+            She is also an MBA holder.
+            \n\nComparison:\nOverall, both candidates possess strong financial backgrounds and have had extensive experience working in government institutions. 
+            However, when it comes to the finance manager role, AMK appears to be more qualified due to his extensive experience in managerial roles such as Finance Manager and General Manager at the Ministry of Finance. 
+            He also has specialized qualifications such as a Chartered Accountant credential. 
+            Furthermore, his experience working with multi-national and large private sector corporations gives him a broader view of financial management in different contexts, making him more suitable for a Finance Manager role. 
+            MF, while having strong financial analysis skills, lacks the leadership and managerial experience that AMK possesses.'''
+            flash('Files Uploaded Successfully','success')
+            
+    return (render_template("upload.html",result= result,tag=tag))
 
 
 if __name__ == '__main__':
