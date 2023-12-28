@@ -19,6 +19,10 @@ import bcrypt
 import io
 import tempfile
 import pandas as pd
+import stripe
+import jwt
+
+
 
 
 
@@ -43,55 +47,68 @@ class UploadFile(FlaskForm):
 @app.route("/")
 
 def home():
+    username = ''
     if session.get('token') == None:
         return render_template("index.html")
     else:
-        return render_template("home.html")
+        username = session.get('username')
+
+        return render_template("home.html",username=username)
 
 
 @app.route("/our-offerings")
 
 def our_offerings():
+    username = ''
     if session.get('token') == None:
         return render_template("our-offerings.html")
     else:
-        return render_template("our-offerings-authenticated.html")
+        username = session.get('username')
+        return render_template("our-offerings-authenticated.html",username=username)
 
 
 @app.route("/partners")
 
 def partners():
+    username = ''
     if session.get('token') == None:
         return render_template("partners.html")
     else:
-        return render_template("partners-authenticated.html")
+        username = session.get('username')
+        return render_template("partners-authenticated.html",username=username)
 
 
 @app.route("/contact", methods = ["GET", "POST"])
 
 def contact():
+    username = ''
     if session.get('token') == None:
         return render_template("contact.html")
     else:
-        return render_template("contact-authenticated.html")
+        username = session.get('username')
+        return render_template("contact-authenticated.html",username=username)
 
 
 @app.route("/privacy-policy")
 
 def privacy_policy():
+    username = ''
     if session.get('token') == None:
         return render_template("privacy-policy.html")
     else:
-        return render_template("privacy-policy-authenticated.html")
+        username = session.get('username')
+        return render_template("privacy-policy-authenticated.html",username=username)
 
 
 @app.route("/cookie-policy")
 
 def cookie_policy():
+    username = ''
     if session.get('token') == None:
         return render_template("cookie-policy.html")
     else:
-        return render_template("cookie-policy-authenticated.html")
+        username = session.get('username')
+        return render_template("cookie-policy-authenticated.html",username=username)
 
 
 @app.route("/terms-of-use")
@@ -100,7 +117,8 @@ def terms_of_use():
     if session.get('token') == None:
         return render_template("terms-of-use.html")
     else:
-        return render_template("terms-of-use-authenticated.html")
+        username = session.get('username')
+        return render_template("terms-of-use-authenticated.html",username=username)
 
 
 @app.route("/sign-in", methods = ["GET","POST"])
@@ -112,6 +130,8 @@ def sign_in():
     if request.method == "POST":
         if r.status_code == 200:
             session['token'] = r.json()['token']
+            session['username'] = email
+            session['type'] = r.json()['user_type']
             return redirect(url_for('home'))
         else:
             flash('Login Failed!','error')
@@ -226,9 +246,11 @@ def new_password(token):
 
 def log_out():
     session.pop('token',None)
+    session.pop('username',None)
+    session.pop('type',None) 
     return redirect(url_for('home'))
 
-
+'''
 @app.route("/choose-feature", methods = ["GET","POST"])
 
 def choose_feature():
@@ -236,48 +258,69 @@ def choose_feature():
         return render_template("choose-feature-unauthenticated.html")
      else:
         return (render_template('choose-feature.html'))
-
+'''
 
 @app.route("/compare_resume_job", methods = ["GET","POST"])
 
 def compare_resume_job():
-    if session.get('token') == None:
-        return (render_template('404.html'))
-    else :
+    type = session.get('type')
+    username = ''
+    enable_multiple = False
+    has_job = True
+    token = session.get('token')
+    if token == None:
+        return redirect(url_for('sign_in'))
+    else:
+       username = session.get('username')
+       bearer_token = "Bearer " + token 
+       r =  requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={'Authorization': bearer_token})
+       if r.status_code == 401:
+            return redirect(url_for('sign_in'))
+       else:
         tag = "Upload one file and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
         file = request.form.get('file-field')
         if request.method == "POST":
             file_ = request.files['file-field']        
-            file_name = secure_filename(file_.filename)
-                    
+            file_name = secure_filename(file_.filename)     
             file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
             test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={"description" : job_title},  files={"analyze-files" : test_file})
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={'Authorization': bearer_token},data = {"description" : job_title},  files={"analyze-files" : test_file})
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
                 result = resp['message']['content']
                 result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
+            elif r.status_code == 403:
+                flash('You have used the free features five times. Please subscribe!','warning')
+            elif r.status_code == 500:
+                return redirect(url_for("sign_in"))
             else:
                 flash('Invalid Data','error')
+                result = r.status_code
             @after_this_request
             def remove_file(response):
                 file_name = secure_filename(file_.filename)
                 os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 return response
-    return (render_template("upload_single_file.html",result= result,tag=tag))
-
+    return (render_template("account-not-premium-form.html",result= result,tag=tag, enable_multiple = enable_multiple,username=username,has_job=has_job, type=type))
 
 
 @app.route("/compare_resumes", methods = ["GET","POST"])
 
 def compare_resumes():
+    type = session.get('type')
+    username = ''
+    enable_multiple = True
+    has_job = True
+    token = session.get('token')
     if session.get('token') == None:
-        return (render_template('404.html'))
+        return redirect(url_for('sign_in'))
     else :
+        username = session.get('username')
+        bearer_token = "Bearer " + token 
         tag = "Upload two files and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
@@ -290,13 +333,17 @@ def compare_resumes():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes", headers={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
                 result = resp['message']['content']
                 result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
+            elif r.status_code == 403:
+                flash('You have used the free features five times. Please subscribe!','warning')
+            elif r.status_code == 500:
+                return redirect(url_for("sign_in"))
             else:
                 flash('Invalid Data','error')
             @after_this_request
@@ -305,16 +352,23 @@ def compare_resumes():
                     file_name = secure_filename(file.filename)
                     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 return response
-    return (render_template("upload.html",result= result,tag=tag))
+    return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
 
 
 
 @app.route("/compare-resumes-job", methods = ["GET","POST"])
 
 def compare_resumes_job():
+    type = session.get('type')
+    username = ''
+    enable_multiple = True
+    has_job = True
+    token = session.get('token')
     if session.get('token') == None:
         return (render_template('404.html'))
     else :
+        username = session.get('username')
+        bearer_token = "Bearer " + token 
         tag = "Upload two files and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
@@ -327,13 +381,17 @@ def compare_resumes_job():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume", headers={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
                 result = resp['message']['content']
                 result = "</br>".join(result.split("\n")) 
                 flash('Files Uploaded Successfully','success')
+            elif r.status_code == 403:
+                flash('You have used the free features five times. Please subscribe!','warning')
+            elif r.status_code == 500:
+                return redirect(url_for("sign_in"))
             else:
                 flash('Invalid Data','error')
             @after_this_request
@@ -342,15 +400,22 @@ def compare_resumes_job():
                     file_name = secure_filename(file.filename)
                     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 return response
-    return (render_template("upload.html",result= result,tag=tag))
+    return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
 
 
 @app.route("/analyze-resume", methods = ["GET","POST"])
 
 def analyze_resume():
+    type = session.get('type')
+    username = ''
+    enable_multiple = True
+    has_job = False
+    token = session.get('token')
     if session.get('token') == None:
         return (render_template('404.html'))
     else :
+        username = session.get('username')
+        bearer_token = "Bearer " + token 
         tag = "Upload a resume to get analyzed!"
         result = ''
         file = request.form.get('file-field')
@@ -360,13 +425,17 @@ def analyze_resume():
                     
             file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
             test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume",files={"analyze-file" : test_file})
+            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume",headers= {'Authorization':bearer_token},files={"analyze-file" : test_file})
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
                 result = resp['message']['content']
                 result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
+            elif r.status_code == 403:
+                flash('You have used the free features five times. Please subscribe!','warning')
+            elif r.status_code == 500:
+                return redirect(url_for("sign_in"))
             else:
                 flash('Invalid Data','error')
             @after_this_request
@@ -374,10 +443,10 @@ def analyze_resume():
                 file_name = secure_filename(file_.filename)
                 os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 return response
-    return (render_template("analyze.html",result= result,tag=tag))
+    return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
 
 
-
+"""
 @app.route("/analyze-employees", methods = ["GET","POST"])
 
 def analyze_employees():
@@ -410,11 +479,15 @@ def analyze_employees():
                 return response
     return (render_template("analyze.html",result= result,tag=tag))
 
-
+"""
 
 @app.route("/analyze-company-data", methods = ["GET","POST"])
 
 def analyze_company_data():
+    type = session.get('type')
+    username = ''
+    enable_multiple = True
+    token = session.get('token')
     table = ''
     if session.get('token') == None:
         return (render_template('404.html'))
@@ -431,9 +504,11 @@ def analyze_company_data():
             table = df.to_html(classes='table table-stripped',index=False)
 
             
-    return (render_template("analyze-company-data.html",table= table,tag=tag))
+    return (render_template("analyze-company-data.html",table= table,tag=tag,username=username,enable_multiple=enable_multiple,type=type))
 
 
+
+"""
 @app.route("/compare_resumes-demo", methods = ["GET","POST"])
 
 def compare_resumes_demo():
@@ -462,7 +537,44 @@ def compare_resumes_demo():
             flash('Files Uploaded Successfully','success')
             
     return (render_template("upload.html",result= result,tag=tag))
+"""
 
+@app.route("/subscription", methods = ["GET","POST"])
+
+def subscription():
+    username = ''
+    if session.get('token') == None:
+        return (render_template("subscription.html"))
+    
+    else:
+        username = session.get('username')
+        return (render_template("subscription-authenticated.html",username=username))
+
+'''
+@app.route("/payment", methods = ["GET","POST"])
+
+def payment():
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor()
+
+    check_mail_query = "UPDATE users SET user_type = 'SAAS' where email = 'eman.a.hamied@gmail.com' "
+    cursor.execute(check_mail_query)
+    connection.commit()
+    connection.close()
+    print(request.data)
+    return (render_template("subscription.html"))
+'''
+
+@app.route("/dashboard", methods = ["GET","POST"])
+
+def dashboard():
+    username = ''
+    type = session.get('type')
+    if session.get('token') == None:
+        return redirect(url_for('sign_in'))
+    else:
+        username = session.get('username')
+        return (render_template("account-not-premium.html",username=username,type=type))
 
 if __name__ == '__main__':
     app.run(debug=True)

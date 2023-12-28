@@ -27,18 +27,28 @@
           <div class="menu-button-3 margin-right w-nav-button">
             <div class="w-icon-nav-menu"></div>
           </div>
-          <a href="#" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
+          <a href="{{ url_for('home') }}" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
           <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
             <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link">Home</a>
             <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
             <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
-            <a href="{{ url_for('contact') }}" class="nav-link-7 w-nav-link">Contact Us</a>
-            <a href="{{ url_for('choose_feature') }}" class="nav-link-7 w-nav-link">Features</a>
+            <a href="{{ url_for('subscription') }}" class="nav-link-7 w-nav-link">Subscription</a>
           </nav>
         </div>
-        <div class="navigation-split-wrap">
-          <a href="{{ url_for('choose_feature') }}" class="nav-secondary-button margin-right authenticated w-button">Upload</a>
-          <button><a href= "{{ url_for('log_out') }}" class="user-log-in-log-out" data-wf-user-login="Log out" data-wf-user-logout="Log out" type="button">Log out</a></button>
+        <div data-hover="true" data-delay="0" data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823" class="brix---dropdown-wrapper w-dropdown">
+          <div class="brix---dropdown-toggle w-dropdown-toggle">
+            <div class="text-block-13">{{ username }}</div><img src="./static/images/line-rounded-chevron-down-black-brix-templates.svg" alt="Icon Rounded Chevron Dark - BRIX Templates" class="brix---dropdown-chevron-2">
+          </div>
+          <nav class="brix---dropdown-column-wrapper w-dropdown-list">
+            <div class="brix---dropdown-card">
+              <div class="brix---dropdown-pd">
+                <div class="w-layout-grid brix---dropdown-links-grid">
+                  <a href="{{ url_for('dashboard') }}" class="brix---dropdown-link w-dropdown-link">Dashboard</a>
+                  <a href="{{ url_for('log_out') }}" class="brix---dropdown-link w-dropdown-link">Log Out</a>
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
     </div>
@@ -102,7 +112,7 @@
         <a href="{{ url_for('home') }}" class="footer-link">Home</a>
         <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
         <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
-        <a href="{{ url_for('choose_feature') }}" class="footer-link">Features</a>
+        <a href="{{ url_for('subscription') }}" class="footer-link">Subscription</a>
       </div>
       <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd4c-5659dd39" class="footer-block">
         <a href="#" class="w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>

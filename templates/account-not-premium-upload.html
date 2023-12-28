@@ -1,16 +1,17 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  -->
-<!--  Last Published: Fri Sep 29 2023 16:01:24 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="65149f3d41965aa94fa80b7d" data-wf-site="64d3b6b81a1144c81630b849">
+<!--  Last Published: Mon Dec 25 2023 23:28:11 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="6589787030ef456e32d0d521" data-wf-site="64d3b6b81a1144c81630b849">
 <head>
   <meta charset="utf-8">
-  <title>Sign In</title>
-  <meta content="Sign In" property="og:title">
-  <meta content="Sign In" property="twitter:title">
+  <title>Account Not Premium Upload</title>
+  <meta content="Account Not Premium Upload" property="og:title">
+  <meta content="Account Not Premium Upload" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="./static/css/normalize.css" rel="stylesheet" type="text/css">
   <link href="./static/css/webflow.css" rel="stylesheet" type="text/css">
   <link href="./static/css/opus-test.webflow.css" rel="stylesheet" type="text/css">
+  <style>@media (min-width:992px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="e8889f2b-6dea-bbb6-d86b-fbae7f901e34"] {opacity:0;}}</style>
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -27,65 +28,130 @@
           <div class="menu-button-3 margin-right w-nav-button">
             <div class="w-icon-nav-menu"></div>
           </div>
-          <a href="#" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
+          <a href="{{ url_for('home') }}" class="brand-2 w-nav-brand"><img src="./static/images/logos-1_1.png" loading="lazy" alt="" class="image-15"></a>
           <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
-            <a href="{{ url_for('home') }}" aria-current="page" class="nav-link-7 w-nav-link w--current">Home</a>
+            <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link">Home</a>
             <a href="{{ url_for('our_offerings') }}" class="nav-link-7 w-nav-link">Our Offerings</a>
             <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link">Partners</a>
             <a href="{{ url_for('subscription') }}" class="nav-link-7 w-nav-link">Subscription</a>
           </nav>
         </div>
+        <div data-hover="true" data-delay="0" data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823" class="brix---dropdown-wrapper w-dropdown">
+          <div class="brix---dropdown-toggle w-dropdown-toggle">
+            <div class="text-block-13">Eman Abd El-Hamied</div><img src="images/line-rounded-chevron-down-black-brix-templates.svg" alt="Icon Rounded Chevron Dark - BRIX Templates" class="brix---dropdown-chevron-2">
+          </div>
+          <nav class="brix---dropdown-column-wrapper w-dropdown-list">
+            <div class="brix---dropdown-card">
+              <div class="brix---dropdown-pd">
+                <div class="w-layout-grid brix---dropdown-links-grid">
+                  <a href="#" class="brix---dropdown-link w-dropdown-link">Dashboard</a>
+                  <a href="{{ url_for('log_out') }}" class="brix---dropdown-link w-dropdown-link">Log Out</a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
     </div>
-    
   </section>
-  <div class="a-section-regular"><img src="./static/images/form-graphic.svg" loading="lazy" alt="" class="a-account-background-image">
-    <div class="a-account-container-regular">
-      <div class="a-title-wrap-center">
-        <div class="a-margin-bottom-16">
-          <h2 class="a-h2-heading">Sign In</h2>
+  <div class="cf-features-section-1">
+    <div data-w-id="e8889f2b-6dea-bbb6-d86b-fbae7f901e34" class="cf-features-section-1-wrapper">
+      <h2 class="cf-58px-heading---white">Upgrade Now to Enjoy the Extra Features!</h2>
+      <div class="w-layout-grid cf-features-section-1-grid">
+        <div class="cf-features-section-1-grid-cell"><img src="./static/images/Icon-7.svg" loading="lazy" width="30" height="30" alt="" class="cf-features-section-1-image-contain-2">
+          <p class="cf-features-section-1-block-paragraph">No hidden fees, <br>no surprises</p>
+        </div>
+        <div class="cf-features-section-1-grid-cell black"><img src="./static/images/Icon-8.svg" loading="lazy" width="30" height="30" alt="" class="cf-features-section-1-image-contain-2">
+          <p class="cf-features-section-1-block-paragraph">The ability to analyza, stack, rank and score</p>
+        </div>
+        <div class="cf-features-section-1-grid-cell black"><img src="./static/images/Icon-9.svg" loading="lazy" width="30" height="30" alt="" class="cf-features-section-1-image-contain-2">
+          <p class="cf-features-section-1-block-paragraph">Opus Versa for bulk resume analysis</p>
         </div>
       </div>
-      <div class="a-account-form-block-large w-form">
-        <form action = '#' id="wf-form-Sign-In-Form" name="wf-form-Sign-In-Form" data-name="Sign In Form" method="POST" class="a-account-form-large" data-wf-page-id="65149f3d41965aa94fa80b7d" data-wf-element-id="cfae28c0-e738-4d8c-6ee9-95a2c04b77b0">
-          <div class="w-layout-grid a-account-form-grid">
-            <div class="a-account-field-wrapper"><label for="User-Name" class="a-detail-small">Username</label><input type="text" class="a-account-text-field w-input" maxlength="256" name="User-Name" data-name="User Name" placeholder="" data-ms-content="members" id="User-Name-5" data-ms-member="email" required=""></div>
-            <div class="a-account-field-wrapper"><label for="password-5" class="a-detail-small">Password</label>
-              <div class="a-account-password"><input type="password" class="a-account-text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="" id="Password-6" required=""></div>
+      <a href="#" class="a-button-primary-square secondary w-button">Subscribe Now</a>
+    </div>
+  </div>
+  <div class="spark-section">
+    <div class="spark-container w-container">
+      <div class="spark-centered-900"></div>
+      <div data-current="Free Stats" data-easing="ease" data-duration-in="0" data-duration-out="0" class="spark-tabs-parent w-tabs">
+        <div class="spark-flat-tabs-menu w-tab-menu">
+          <a data-w-tab="Free Stats" class="spark-flat-tab w-inline-block w-tab-link w--current">
+            <div class="tabs">Free Stats</div>
+          </a>
+          <a data-w-tab="Profile" class="spark-flat-tab w-inline-block w-tab-link">
+            <div class="tabs">Profile</div>
+          </a>
+        </div>
+        <div class="spark-tabs-content w-tab-content">
+          <div data-w-tab="Free Stats" class="w-tab-pane w--tab-active">
+            <div class="f-section-large">
+              <div class="div-block-20">
+                <div class="combine-button-icon">
+                  <div class="combine-button-content">
+                    <div class="combine-chevron-right_icon w-embed"><svg width="100%" height="currentHeight" viewbox="0 0 16 16" fill="none" transform="scale(-1,1)" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.83301 13L11.833 8L6.83301 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg></div>
+                    <div>Back</div>
+                  </div>
+                </div>
+              </div>
+              <div class="f-container-regular">
+                <div class="submit-form-wrap">
+                  <div class="div-block-22"><img src="./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM.jpeg" loading="lazy" width="80" sizes="(max-width: 479px) 12vw, (max-width: 1439px) 7vw, 80px" alt="" srcset="images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg 500w, images/WhatsApp-Image-2023-10-14-at-8.04.45-AM.jpeg 663w" class="image-25"></div>
+                  <div>
+                    <h1 class="heading-15">Upload Your Files</h1>
+                    <h5 class="heading-17 uploading">tag</h5>
+                  </div>
+                  <div id="Submission-Form" class="submission-form w-form">
+                    <form id="wf-form-Submission-Form" name="wf-form-Submission-Form" data-name="Submission Form" method="post" class="form-2" data-wf-page-id="6589787030ef456e32d0d521" data-wf-element-id="4b70657a-3034-e2b6-7231-675ac68db3cf"><select id="select" name="select" data-name="Select" required="" class="select-field-3 w-select">
+                        <option value="engagement_total,commitment_to_stay,rating_of_manager,empowerment,agility_of_processes">Employee Value &amp; Performance</option>
+                        <option value="engagement_total,commitment_to_stay,rating_of_manager,empowerment,agility_of_processes">Engagement</option>
+                        <option value="turnover_per_department,first_year_turn_over,first_three_months_turn_over">Engagement &amp; Retention</option>
+                        <option value="training_success_rate,training_participation_rate,training_completion_rate">Learning &amp; Development</option>
+                        <option value="hr_employee_ratio,average_age,headcount_contract_type,headcount_joined,headcount_geography,headcount_department,headcount_job_title,headcount_fte,headcount_gender,get_age_group">Organizational Measures</option>
+                        <option value="revenue_per_employee,revenue_per_fte,profit_per_employee,profit_per_fte">Productivity</option>
+                        <option value="promotion_rate,skills_year_over_year,managers_assigned_yearly">Tenure Risk</option>
+                      </select><input type="text" class="upload_field w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Primary Key" id="field-2" required=""><input type="text" class="upload_field w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Files" id="field-2" required=""><input type="submit" value="Upload" data-wait="Please wait..." class="a-button-primary upload w-button"></form>
+                    <div class="success-message w-form-done">
+                      <div>Ohhh Yes!! <br><br>Your submission has been staged.<br>We&#x27;ll check it out and submit it within 24 hours. </div>
+                      <div>This is some text inside of a div block.</div>
+                    </div>
+                    <div class="w-form-fail">
+                      <div>Oops! Something went wrong while submitting the form.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-embed w-iframe"><iframe class="gummi" width="100%" height="800" src="https://xd.adobe.com/embed/aafaf0b1-0525-411c-84f0-c38eb020d9aa" frameborder="0" allowfullscreen=""></iframe></div>
+              </div>
             </div>
           </div>
-          <div class="a-account-button-wrapper"><input type="submit" value="Sign In" data-wait="Please wait..." class="a-button-primary w-button"></div>
-        </form>
-        
-        <div class="a-success-message w-form-done">
-          <div>Thank you! Your submission has been received!</div>
+          <div data-w-tab="Profile" class="w-tab-pane">
+            <div class="testimonial-card-three">
+              <div class="a-account-form-block-large w-form">
+                <form id="wf-form-Sign-In-Form" name="wf-form-Sign-In-Form" data-name="Sign In Form" method="get" class="a-account-form-large" data-wf-page-id="6589787030ef456e32d0d521" data-wf-element-id="87c76aa3-7808-475a-df85-0972e1320617">
+                  <div class="w-layout-grid a-account-form-grid">
+                    <div class="a-account-field-wrapper"><label for="First-Name-3" class="a-detail-small">Full Name</label><input type="text" class="a-account-text-field w-input" maxlength="256" name="First-Name-2" data-name="First Name 2" placeholder="" id="First-Name-2" required=""></div>
+                    <div class="a-account-field-wrapper"><label for="Email-4" class="a-detail-small">Email</label><input type="email" class="a-account-text-field w-input" maxlength="256" name="Email-3" data-name="Email 3" placeholder="" id="Email-3" required=""></div>
+                    <div class="a-account-field-wrapper"><label for="password-6" class="a-detail-small">Company Name</label>
+                      <div class="a-account-password"><input type="text" class="a-account-text-field w-input" maxlength="256" name="Password-5" data-name="Password 5" placeholder="" id="Password-5" required=""></div>
+                    </div>
+                  </div>
+                  <div class="a-account-button-wrapper"><input type="submit" value="Update" data-wait="Please wait..." class="a-button-primary w-button"></div>
+                </form>
+                <div class="a-success-message w-form-done">
+                  <div>Thank you! Your submission has been received!</div>
+                </div>
+                <div class="a-error-message w-form-fail">
+                  <div>Oops! Something went wrong while submitting the form.</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="a-error-message w-form-fail">
-          <div>Oops! Something went wrong while submitting the form.</div>
-        </div>
-        <div class="a-account-forgot">
-          <a href = "{{ url_for('reset_password') }}" class="a-paragraph-small">Forgot Password?</a>
-        </div>
-        <div class="a-account-forgot">
-          <div class="a-paragraph-small">Don&#x27;t have an account?</div>
-          <a href="{{ url_for('sign_up') }}" class="a-text-link-regular">Sign Up</a>
-        </div>
-        
-        {% with messages = get_flashed_messages(category_filter=["error"]) %}
-        {% if messages %}
-        <div class="error-msg">
-            {%- for msg in messages %}
-            <i class="fa fa-times-circle"></i>
-              {{ msg }}
-            {% endfor -%}
-        </div>
-        {% endif %}
-        {% endwith %}
-        
       </div>
     </div>
   </div>
-        
   <div class="footer-section">
     <div data-w-id="cfa58525-5efc-d001-b2b8-916b5659dd3a" class="container-17">
       <div class="w-layout-grid footer-grid">
@@ -96,12 +162,12 @@
         </div>
         <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd43-5659dd39" class="footer-block">
           <a href="{{ url_for('home') }}" class="footer-link">Home</a>
-          <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
           <a href="{{ url_for('our_offerings') }}" class="footer-link">Our Offerings</a>
+          <a href="{{ url_for('partners') }}" class="footer-link">Partners</a>
           <a href="{{ url_for('subscription') }}" class="footer-link">Subscription</a>
         </div>
         <div id="w-node-cfa58525-5efc-d001-b2b8-916b5659dd4c-5659dd39" class="footer-block">
-          <a href="#" class="w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
+          <a href="#" class="link-block-7 w-inline-block"><img src="./static/images/Group-1.svg" loading="lazy" width="55" alt="" class="image-18 logo-footer"></a>
         </div>
       </div>
       <div class="a-footer-divider-small"></div>
