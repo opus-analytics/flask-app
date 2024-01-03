@@ -7272,7 +7272,7 @@ figcaption {
 }
 
 .cf-green-vs-circle {
-  z-index: 11111;
+  z-index: 1;
   width: 72px;
   height: 72px;
   background-image: linear-gradient(135deg, var(--conversion-flow-library-medium-purple), var(--conversion-flow-library-light-coral) 49%, var(--conversion-flow-library-sandy-brown));

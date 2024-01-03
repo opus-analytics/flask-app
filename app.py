@@ -51,8 +51,10 @@ def home():
     if session.get('token') == None:
         return render_template("index.html")
     else:
-        username = session.get('username')
-
+        if session.get('username') == None:
+            return render_template("index.html")
+        else:
+            username = session.get('username')
         return render_template("home.html",username=username)
 
 
@@ -63,7 +65,10 @@ def our_offerings():
     if session.get('token') == None:
         return render_template("our-offerings.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("our-offerings.html")
+        else:
+            username = session.get('username')
         return render_template("our-offerings-authenticated.html",username=username)
 
 
@@ -74,7 +79,10 @@ def partners():
     if session.get('token') == None:
         return render_template("partners.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("partners.html")
+        else:
+            username = session.get('username')
         return render_template("partners-authenticated.html",username=username)
 
 
@@ -85,7 +93,10 @@ def contact():
     if session.get('token') == None:
         return render_template("contact.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("contact.html")
+        else:
+            username = session.get('username')
         return render_template("contact-authenticated.html",username=username)
 
 
@@ -96,7 +107,10 @@ def privacy_policy():
     if session.get('token') == None:
         return render_template("privacy-policy.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("privacy-policy.html")
+        else:
+            username = session.get('username')
         return render_template("privacy-policy-authenticated.html",username=username)
 
 
@@ -107,7 +121,10 @@ def cookie_policy():
     if session.get('token') == None:
         return render_template("cookie-policy.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("cookie-policy.html")
+        else:
+            username = session.get('username')
         return render_template("cookie-policy-authenticated.html",username=username)
 
 
@@ -117,7 +134,10 @@ def terms_of_use():
     if session.get('token') == None:
         return render_template("terms-of-use.html")
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return render_template("terms-of-use.html")
+        else:
+            username = session.get('username')
         return render_template("terms-of-use-authenticated.html",username=username)
 
 
@@ -270,6 +290,8 @@ def compare_resume_job():
     token = session.get('token')
     if token == None:
         return redirect(url_for('sign_in'))
+    elif session.get('username') == None:
+        return redirect(url_for('sign_in'))
     else:
        username = session.get('username')
        bearer_token = "Bearer " + token 
@@ -317,6 +339,8 @@ def compare_resumes():
     has_job = True
     token = session.get('token')
     if session.get('token') == None:
+        return redirect(url_for('sign_in'))
+    elif session.get('username') == None:
         return redirect(url_for('sign_in'))
     else :
         username = session.get('username')
@@ -366,6 +390,8 @@ def compare_resumes_job():
     token = session.get('token')
     if session.get('token') == None:
         return (render_template('404.html'))
+    elif session.get('username') == None:
+        return redirect(url_for('sign_in'))
     else :
         username = session.get('username')
         bearer_token = "Bearer " + token 
@@ -413,6 +439,8 @@ def analyze_resume():
     token = session.get('token')
     if session.get('token') == None:
         return (render_template('404.html'))
+    elif session.get('username') == None:
+        return redirect(url_for('sign_in'))
     else :
         username = session.get('username')
         bearer_token = "Bearer " + token 
@@ -491,6 +519,8 @@ def analyze_company_data():
     table = ''
     if session.get('token') == None:
         return (render_template('404.html'))
+    elif session.get('username') == None:
+        return redirect(url_for('sign_in'))
     else :
         tag = "Upload one file for employees data to get analyzed!"
         
@@ -547,7 +577,10 @@ def subscription():
         return (render_template("subscription.html"))
     
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return (render_template("subscription.html"))
+        else:
+            username = session.get('username')
         return (render_template("subscription-authenticated.html",username=username))
 
 '''
@@ -573,7 +606,10 @@ def dashboard():
     if session.get('token') == None:
         return redirect(url_for('sign_in'))
     else:
-        username = session.get('username')
+        if session.get('username') == None:
+            return redirect(url_for('sign_in'))
+        else:
+            username = session.get('username')
         return (render_template("account-not-premium.html",username=username,type=type))
 
 if __name__ == '__main__':
