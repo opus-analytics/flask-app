@@ -19,8 +19,8 @@ import bcrypt
 import io
 import tempfile
 import pandas as pd
-import stripe
-import jwt
+#import stripe
+#import jwt
 
 
 
