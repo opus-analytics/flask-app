@@ -9,3 +9,4 @@ itsdangerous
 secure-smtplib
 bcrypt
 pandas
+stripe
