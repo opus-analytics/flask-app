@@ -21,9 +21,8 @@ import tempfile
 import pandas as pd
 #import stripe
 #import jwt
-
-
-
+from prettytable import PrettyTable 
+from prettytable.colortable import ColorTable, Themes
 
 
 app = Flask(__name__)
@@ -36,6 +35,8 @@ app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
 app.config['MAIL_PASSWORD'] = 'Em@281194'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+powerbi_blueprint = Blueprint('powerbi', __name__)
+
 
 mail = Mail(app)
 
@@ -342,7 +343,7 @@ def compare_resumes():
         return redirect(url_for('sign_in'))
     elif session.get('username') == None:
         return redirect(url_for('sign_in'))
-    else :
+    else : 
         username = session.get('username')
         bearer_token = "Bearer " + token 
         tag = "Upload two files and submit a job title!"
@@ -512,29 +513,66 @@ def analyze_employees():
 @app.route("/analyze-company-data", methods = ["GET","POST"])
 
 def analyze_company_data():
+    results = []
     type = session.get('type')
     username = ''
-    enable_multiple = True
     token = session.get('token')
     table = ''
     if session.get('token') == None:
-        return (render_template('404.html'))
+        return redirect(url_for('sign_in'))
     elif session.get('username') == None:
         return redirect(url_for('sign_in'))
     else :
+        username = session.get('username')
+        bearer_token = 'Bearer ' + token
         tag = "Upload one file for employees data to get analyzed!"
-        
+        primary_key = request.form.get('field-2')
+        measure = request.form.get('select')
+        files = []
         if request.method == "POST":
-            data_dic = {
-                    'Measure': ['Hr employee ratio'],
-                    'Percentage': ['35.56%']}
-            columns = ['Measure', 'Percentage']
-            flash('Files Uploaded Successfully','success')
-            df = pd.DataFrame(data_dic, columns=columns)
-            table = df.to_html(classes='table table-stripped',index=False)
-
+            files_form = request.files.getlist('file-field') 
             
-    return (render_template("analyze-company-data.html",table= table,tag=tag,username=username,enable_multiple=enable_multiple,type=type))
+            print(files_form)
+            for file in files_form:  
+                file_name = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+                files.append(("file",file_saved))
+            
+            r = requests.post(url="https://opus-backend.azurewebsites.net/upload", headers={'Authorization': bearer_token}, data={'primary_key':primary_key,'uploader':token,'measure':measure},files=files)
+            if r.status_code == 200:
+                
+                for item in r.json().get("root", []):
+                    measure = item.get("measure", "")
+                    result = item.get("result", "")
+                    results.append(result)
+                    labels = result.split(";")[0]
+                    labels = labels.split(",")
+                    values = result.split(";")[1:]
+                    if len(values) > 0:
+                        myTable = PrettyTable(labels)
+                        myTable.title = measure 
+                        for i in values:
+                            myTable.add_row(i.split(","))
+                        myTable.align = "l"
+                        #myTable.border = True
+                        #myTable.padding_width = 3
+                        table += myTable.get_html_string(attributes={"class":"tbl"}, format=True)
+                        
+                flash('Files Uploaded Successfully','success')
+            elif r.status_code == 403:
+                flash('You have used the free features five times. Please subscribe!','warning')
+            elif r.status_code == 401:
+                return redirect(url_for('sign_in'))
+            else:
+                flash('Invalid Data','error')
+            @after_this_request
+            def remove_file(response):
+                for file in files_form: 
+                    file_name = secure_filename(file.filename)
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                return response
+    return (render_template("account-form-upload.html",table= table,tag=tag,username=username,type=type))
 
 
 
@@ -602,15 +640,42 @@ def payment():
 
 def dashboard():
     username = ''
+    embed_url = ''
+    embed_token = ''
+    report_id = ''
     type = session.get('type')
     if session.get('token') == None:
         return redirect(url_for('sign_in'))
     else:
         if session.get('username') == None:
             return redirect(url_for('sign_in'))
+        elif type == 'Partner':
+            bearer_token = 'Bearer ' + session.get('token')
+            username = session.get('username')
+            tenantid = '6b18344a-5dd4-4c5a-b955-c585da922019'
+            client_id = '0227a726-59b5-4bb1-8e06-db339069aa19'
+            client_secret = 'Us48Q~uf42f_tflzheJUDL8U-j3zQ4NOkf4hxcZ-'
+            r = requests.post(url="https://opus-backend.azurewebsites.net/powerBIADDToken", headers={'Authorization': bearer_token}, data={'tenantid':'6b18344a-5dd4-4c5a-b955-c585da922019','grant_type':'client_credentials','client_id':'0227a726-59b5-4bb1-8e06-db339069aa19','client_secret':'Us48Q~uf42f_tflzheJUDL8U-j3zQ4NOkf4hxcZ-','resource':'https://analysis.windows.net/powerbi/api'})
+            if r.status_code != 200:
+                return redirect(url_for('sign_in'))
+            else:
+                access_token = r.json().get("access_token")
+                workspace = '55661f01-33a3-4beb-aea1-f20245199f2f'
+                report_id = '507a6282-b50e-461d-97c1-e6d647a26a56'
+                report = requests.post(url="https://opus-backend.azurewebsites.net/powerBISingleReport", headers={'Authorization': bearer_token}, data={'workspace':workspace,'report':report_id,'token':access_token})
+                if report.status_code == 200:
+                    embed_url = report.json().get("embedUrl")
+                    dataset_id = 'f9403e03-fa1f-465e-bb2d-aab8b6b856f7'
+                    generate_embed = requests.post(url="https://opus-backend.azurewebsites.net/powerBIGenerateToken", headers={'Authorization': bearer_token}, data={'workspace':workspace,'report':report_id,'token':access_token,'username':'hamza', 'datasets':dataset_id})
+                    if generate_embed.status_code == 200:
+                        embed_token = generate_embed.json().get("token")
+    
+            return (render_template("account.html",username=username,type=type,embed_url=embed_url,embed_token=embed_token,report_id=report_id))
         else:
             username = session.get('username')
+        
         return (render_template("account-not-premium.html",username=username,type=type))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

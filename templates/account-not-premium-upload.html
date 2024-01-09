@@ -3,7 +3,7 @@
 <html data-wf-page="6589787030ef456e32d0d521" data-wf-site="64d3b6b81a1144c81630b849">
 <head>
   <meta charset="utf-8">
-  <title>Account Not Premium Upload</title>
+  <title>Upload</title>
   <meta content="Account Not Premium Upload" property="og:title">
   <meta content="Account Not Premium Upload" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -38,13 +38,13 @@
         </div>
         <div data-hover="true" data-delay="0" data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823" class="brix---dropdown-wrapper w-dropdown">
           <div class="brix---dropdown-toggle w-dropdown-toggle">
-            <div class="text-block-13">Eman Abd El-Hamied</div><img src="images/line-rounded-chevron-down-black-brix-templates.svg" alt="Icon Rounded Chevron Dark - BRIX Templates" class="brix---dropdown-chevron-2">
+            <div class="text-block-13">{{ username }}</div><img src="./static/images/line-rounded-chevron-down-black-brix-templates.svg" alt="Icon Rounded Chevron Dark - BRIX Templates" class="brix---dropdown-chevron-2">
           </div>
           <nav class="brix---dropdown-column-wrapper w-dropdown-list">
             <div class="brix---dropdown-card">
               <div class="brix---dropdown-pd">
                 <div class="w-layout-grid brix---dropdown-links-grid">
-                  <a href="#" class="brix---dropdown-link w-dropdown-link">Dashboard</a>
+                  <a href="{{ url_for('dashboard') }}" class="brix---dropdown-link w-dropdown-link">Dashboard</a>
                   <a href="{{ url_for('log_out') }}" class="brix---dropdown-link w-dropdown-link">Log Out</a>
                 </div>
               </div>
@@ -105,13 +105,13 @@
                   </div>
                   <div id="Submission-Form" class="submission-form w-form">
                     <form id="wf-form-Submission-Form" name="wf-form-Submission-Form" data-name="Submission Form" method="post" class="form-2" data-wf-page-id="6589787030ef456e32d0d521" data-wf-element-id="4b70657a-3034-e2b6-7231-675ac68db3cf"><select id="select" name="select" data-name="Select" required="" class="select-field-3 w-select">
-                        <option value="engagement_total,commitment_to_stay,rating_of_manager,empowerment,agility_of_processes">Employee Value &amp; Performance</option>
-                        <option value="engagement_total,commitment_to_stay,rating_of_manager,empowerment,agility_of_processes">Engagement</option>
-                        <option value="turnover_per_department,first_year_turn_over,first_three_months_turn_over">Engagement &amp; Retention</option>
-                        <option value="training_success_rate,training_participation_rate,training_completion_rate">Learning &amp; Development</option>
-                        <option value="hr_employee_ratio,average_age,headcount_contract_type,headcount_joined,headcount_geography,headcount_department,headcount_job_title,headcount_fte,headcount_gender,get_age_group">Organizational Measures</option>
-                        <option value="revenue_per_employee,revenue_per_fte,profit_per_employee,profit_per_fte">Productivity</option>
-                        <option value="promotion_rate,skills_year_over_year,managers_assigned_yearly">Tenure Risk</option>
+                        <option value="Employee Value & Performance">Employee Value &amp; Performance</option>
+                        <option value="Engagement">Engagement</option>
+                        <option value="Engagement & Retention">Engagement &amp; Retention</option>
+                        <option value="Learning & Development">Learning &amp; Development</option>
+                        <option value="Organizational Measures">Organizational Measures</option>
+                        <option value="Productivity">Productivity</option>
+                        <option value="Tenure Risk">Tenure Risk</option>
                       </select><input type="text" class="upload_field w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Primary Key" id="field-2" required=""><input type="text" class="upload_field w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Files" id="field-2" required=""><input type="submit" value="Upload" data-wait="Please wait..." class="a-button-primary upload w-button"></form>
                     <div class="success-message w-form-done">
                       <div>Ohhh Yes!! <br><br>Your submission has been staged.<br>We&#x27;ll check it out and submit it within 24 hours. </div>
