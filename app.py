@@ -19,19 +19,19 @@ import bcrypt
 import io
 import tempfile
 import pandas as pd
-#import stripe
-#import jwt
+import stripe
 from prettytable import PrettyTable 
 from prettytable.colortable import ColorTable, Themes
+import datetime
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 app.config['MAIL_SERVER'] = 'smtp.office365.com'
-app.config['UPLOAD_FOLDER']
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
+
 app.config['MAIL_PASSWORD'] = 'Em@281194'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
@@ -296,25 +296,35 @@ def compare_resume_job():
     else:
        username = session.get('username')
        bearer_token = "Bearer " + token 
-       r =  requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={'Authorization': bearer_token})
+       r =  requests.post(url="https://opus-openai.azurewebsites.net/compare/resume/translate", headers={'Authorization': bearer_token})
        if r.status_code == 401:
             return redirect(url_for('sign_in'))
        else:
         tag = "Upload one file and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
+        language = request.form.get('Language') 
         file = request.form.get('file-field')
         if request.method == "POST":
-            file_ = request.files['file-field']        
+            file_ = request.files['file-field']       
             file_name = secure_filename(file_.filename)     
             file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
             test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume", headers={'Authorization': bearer_token},data = {"description" : job_title},  files={"analyze-files" : test_file})
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume/translate", headers={'Authorization': bearer_token},data = {"description" : job_title},  files={"analyze-files" : test_file})
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
-                result = resp['message']['content']
-                result = "</br>".join(result.split("\n"))
+                if language == 'English':
+                    result = resp['message']['content']
+                    result = "</br>".join(result.split("\n"))
+                elif language == 'Arabic':
+                    result = resp['message']['contentAr']
+                    result = "<span dir='rtl'>" + result
+                    result = "</br>".join(result.split("\n"))
+                    result += "</span>"
+                else:
+                    result = resp['message']['contentFr']
+                    result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
             elif r.status_code == 403:
                 flash('You have used the free features five times. Please subscribe!','warning')
@@ -350,6 +360,7 @@ def compare_resumes():
         result = ''
         job_title = request.form.get('field-2')
         files = []
+        language = request.form.get('Language')
         if request.method == "POST":    
             files_form = request.files.getlist('file-field') 
             
@@ -358,12 +369,21 @@ def compare_resumes():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes/translate", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
-                result = resp['message']['content']
-                result = "</br>".join(result.split("\n"))
+                if language == 'English':
+                    result = resp['message']['content']
+                    result = "</br>".join(result.split("\n"))
+                elif language == 'Arabic':
+                    result = resp['message']['contentAr']
+                    result = "<span dir='rtl'>" + result
+                    result = "</br>".join(result.split("\n"))
+                    result += "</span>"
+                else:
+                    result = resp['message']['contentFr']
+                    result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
             elif r.status_code == 403:
                 flash('You have used the free features five times. Please subscribe!','warning')
@@ -400,6 +420,7 @@ def compare_resumes_job():
         result = ''
         job_title = request.form.get('field-2')
         files = []
+        language = request.form.get('Language')
         if request.method == "POST":    
             files_form = request.files.getlist('file-field') 
             
@@ -408,12 +429,24 @@ def compare_resumes_job():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume/translate", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
-                result = resp['message']['content']
-                result = "</br>".join(result.split("\n")) 
+                if language == 'English':
+                    result = resp['message']['content'].replace("{","").replace("}","").replace("]","").replace("[","").replace('"', '')
+                    result = "</br>".join(result.split("\n"))
+                    result = result.replace("pros:","<br/><b>Pros : </b><br/>").replace("cons:","<br/><b>Cons : </b><br/>")
+                elif language == 'Arabic':
+                    result = resp['message']['contentAr'].replace("{","").replace("}","").replace("]","").replace("[","").replace('"', '')
+                    result = "<span dir='rtl'>" + result
+                    result = "</br>".join(result.split("\n"))
+                    result = result.replace("الايجابيات:","<br/><b>الإيجابيات : </b><br/>").replace("pros:","<br/><b>الإيجابيات : </b><br/>").replace("سلبيات:","<br/><b>سلبيات : </b><br/>").replace("السلبيات:","<br/><b>سلبيات : </b><br/>")
+                    result += "</span>"
+                else:
+                    result = resp['message']['contentFr'].replace("{","").replace("}","").replace("]","").replace("[","").replace('"', '').replace("»","").replace("«","")
+                    result = "</br>".join(result.split("\n"))
+                    result = result.replace("pros","<br/><b>Pros :</b><br/>").replace("contre","<br/><b>Contre :</b><br/>").replace("Inconvénients","<br/><b>Inconvénients :</b><br/>").replace("pours","<br/><b>Pours :</b><br/>").replace("cons","<br/><b>Cons :</b><br/>")
                 flash('Files Uploaded Successfully','success')
             elif r.status_code == 403:
                 flash('You have used the free features five times. Please subscribe!','warning')
@@ -448,18 +481,28 @@ def analyze_resume():
         tag = "Upload a resume to get analyzed!"
         result = ''
         file = request.form.get('file-field')
+        language = request.form.get('Language')
         if request.method == "POST":
             file_ = request.files['file-field']        
             file_name = secure_filename(file_.filename)
                     
             file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
             test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume",headers= {'Authorization':bearer_token},files={"analyze-file" : test_file})
+            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume/translate",headers= {'Authorization':bearer_token},files={"analyze-file" : test_file})
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
-                result = resp['message']['content']
-                result = "</br>".join(result.split("\n"))
+                if language == 'English':
+                    result = resp['message']['content']
+                    result = "</br>".join(result.split("\n"))
+                elif language == 'Arabic':
+                    result = resp['message']['contentAr']
+                    result = "<span dir='rtl'>" + result
+                    result = "</br>".join(result.split("\n"))
+                    result += "</span>"
+                else:
+                    result = resp['message']['contentFr']
+                    result = "</br>".join(result.split("\n"))
                 flash('Files Uploaded Successfully','success')
             elif r.status_code == 403:
                 flash('You have used the free features five times. Please subscribe!','warning')
@@ -589,24 +632,36 @@ def subscription():
         else:
             username = session.get('username')
         return (render_template("subscription-authenticated.html",username=username))
-
-'''
-@app.route("/payment", methods = ["GET","POST"])
-
-def payment():
-    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-    cursor = connection.cursor()
-
-    check_mail_query = "UPDATE users SET user_type = 'SAAS' where email = 'eman.a.hamied@gmail.com' "
-    cursor.execute(check_mail_query)
-    connection.commit()
-    connection.close()
-    print(request.data)
-    return (render_template("subscription.html"))
-'''
+    
 
 @app.route("/dashboard", methods = ["GET","POST"])
+def dashboard():
+    username = ''
+    type = session.get('type')
+    full_name = ''
+    company_name = ''
+    if session.get('token') == None:
+        return redirect(url_for('sign_in'))
+    else:
+        if session.get('username') == None:
+            return redirect(url_for('sign_in'))
+        else:
+            username = session.get('username')
+            connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+            cursor = connection.cursor()
+            query = f"SELECT full_name,company_name FROM USERS WHERE email = '{username}'"
+            cursor.execute(query)
+            result = cursor.fetchone()
+            full_name = result[0]
+            company_name = result[1]
+            connection.commit()
+            connection.close()
+        if type == 'Partner':
+            return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name))
+        
+    return (render_template("account-not-premium.html",username=username,type=type,full_name=full_name,company_name=company_name))
 
+"""
 def dashboard():
     username = ''
     embed_url = ''
@@ -644,6 +699,37 @@ def dashboard():
             username = session.get('username')
         
         return (render_template("account-not-premium.html",username=username,type=type))
+
+"""
+
+
+@app.route("/payment", methods = ["GET","POST"])
+
+def payment():
+        
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor()
+
+    data = request.get_json().get('data').get('object')
+    #billing_details = data.get('billing_details', {})
+
+    email = data.get("customer_email")
+    description = data['lines']['data'][0]['description']
+
+    period_start = data['lines']['data'][0]['period']['start']
+    period_end = data['lines']['data'][0]['period']['end']
+    dt_start = datetime.datetime.fromtimestamp(period_start)
+    dt_end = datetime.datetime.fromtimestamp(period_end)
+    if 'Standard' in description:
+        plan = 'SAAS'
+    if 'Advanced' in description:
+        plan = 'Partner'
+    check_mail_query = f"UPDATE users SET user_type = '{plan}', subscription_from_date = '{dt_start}', subscription_expiration_date = '{dt_end}' where email = '{email}' "
+    cursor.execute(check_mail_query)
+    connection.commit()
+    connection.close()
+    print(dt_end)
+    return (render_template("subscription.html"))
 
 
 if __name__ == '__main__':

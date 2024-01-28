@@ -122,6 +122,11 @@
                     {% else %}
                     <input type="file" class="upload_field w-input" maxlength="256" name="file-field" data-name="Field 2" placeholder="File" id="file-field" required="" >
                     {% endif %}
+                    <select id="Language" name="Language" data-name="Select" required="" class="select-field-3 w-select"> 
+                      <option value="English">English</option>
+                      <option value="Arabic">Arabic</option>
+                      <option value="French">French</option>
+                    </select>
                       <input type="submit" value="Upload" data-wait="Please wait..." class="a-button-primary upload w-button"></form>
                   </div>
                   {% with messages = get_flashed_messages(category_filter=["error"]) %}

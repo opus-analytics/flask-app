@@ -68,10 +68,12 @@
     <div class="spark-container w-container">
       <div data-current="Free Stats" data-easing="ease" data-duration-in="0" data-duration-out="0" class="spark-tabs-parent w-tabs">
         <div class="spark-flat-tabs-menu w-tab-menu">
+          <!--
           <a data-w-tab="Dashboard" class="spark-flat-tab w-inline-block w-tab-link w--current">
             <div class="tabs">Dashboard</div>
           </a>
-          <a data-w-tab="Free Stats" class="spark-flat-tab w-inline-block w-tab-link">
+          -->
+          <a data-w-tab="Free Stats" class="spark-flat-tab w-inline-block w-tab-link w--current">
             <div id="freeStats" class="tabs">Free Stats</div>
           </a>
           <a data-w-tab="Profile" class="spark-flat-tab w-inline-block w-tab-link">
@@ -149,7 +151,7 @@
             </div>
             <div>
               {% block content %}
-
+<!--
         <div class = "div-block-55" id="dashboardContainer"></div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -204,10 +206,10 @@
             }
         </script>
    {% endblock %}
-
+ -->
             </div> 
           </div>
-          
+         
           <div data-w-tab="Free Stats" class="w-tab-pane w--tab-active">
             <div class="f-section-large">
               <div class="div-block-20">
@@ -253,7 +255,7 @@
                   </a>
                   <a href="{{ url_for('analyze_company_data') }}" class="link-block w-inline-block">
                     <div class="f-feature-card-filled">
-                      <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt="" src="./static/images/opus-versa.png" loading="lazy" srcset="./static/images/opus-versa-p-500.png 500w, ./static/images/opus-versa-p-800.png 800w, ./static/images/opus-versa-p-1080.png 1080w, ./static/images/opus-versa-p-1600.png 1600w, ./static/images/opus-versa-p-2000.png 2000w, ./static/images/opus-versa-p-2600.png 2600w, ./static/images/opus-versa-p-3200.png 3200w, ./static/images/opus-versa.png 5228w" class="image-23"></div>
+                      <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt="" src="./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg" loading="lazy" srcset="./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg, ./static/images/WhatsApp-Image-2023-10-14-at-8.04.45-AM-p-500.jpeg" class="image-23"></div>
                       <div class="f-margin-bottom-16">
                         <h5 class="f-h5-heading">Analyze Your Current Employees Data</h5>
                       </div>
@@ -267,12 +269,11 @@
           <div data-w-tab="Profile" class="w-tab-pane">
             <div class="testimonial-card-three">
               <div class="a-account-form-block-large w-form">
-                <form id="wf-form-Sign-In-Form" name="wf-form-Sign-In-Form" data-name="Sign In Form" method="get" class="a-account-form-large" data-wf-page-id="657361bcebc7fece9c296eff" data-wf-element-id="87c76aa3-7808-475a-df85-0972e1320617">
+                <form action = "#" id="wf-form-Sign-In-Form" name="wf-form-Sign-In-Form" data-name="Sign In Form" method="POST" class="a-account-form-large" data-wf-page-id="657361bcebc7fece9c296eff" data-wf-element-id="87c76aa3-7808-475a-df85-0972e1320617">
                   <div class="w-layout-grid a-account-form-grid">
-                    <div class="a-account-field-wrapper"><label for="First-Name-3" class="a-detail-small">Full Name</label><input type="text" class="a-account-text-field w-input" maxlength="256" name="First-Name-2" data-name="First Name 2" placeholder="" id="First-Name-2" required=""></div>
-                    <div class="a-account-field-wrapper"><label for="Email-4" class="a-detail-small">Email</label><input type="email" class="a-account-text-field w-input" maxlength="256" name="Email-3" data-name="Email 3" placeholder="" id="Email-3" required=""></div>
-                    <div class="a-account-field-wrapper"><label for="password-6" class="a-detail-small">Company Name</label>
-                      <div class="a-account-password"><input type="text" class="a-account-text-field w-input" maxlength="256" name="Password-5" data-name="Password 5" placeholder="" id="Password-5" required=""></div>
+                    <div class="a-account-field-wrapper"><label for="First-Name-3" class="a-detail-small">Full Name</label><input type="text" class="a-account-text-field w-input" maxlength="256" name="First-Name-2" data-name="First Name 2" placeholder="" id="First-Name-2" value = "{{ full_name }}" required=""></div>
+                    <div class="a-account-field-wrapper"><label for="Email-4" class="a-detail-small">Email</label><input type="email" class="a-account-text-field w-input" maxlength="256" name="Email-3" data-name="Email 3" placeholder="" id="Email-3"  value = "{{ username }}" required=""></div>
+                    <div class="a-account-field-wrapper"><label for="Email-4" class="a-detail-small">Company Name</label><input type="email" class="a-account-text-field w-input" maxlength="256" name="Company" data-name="Email 3" placeholder="" id="Company" value = "{{ company_name }}" required=""></div>
                     </div>
                   </div>
                   <div class="a-account-button-wrapper"><input type="submit" value="Update" data-wait="Please wait..." class="a-button-primary w-button"></div>
