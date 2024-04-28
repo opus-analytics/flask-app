@@ -3,7 +3,7 @@
 <html data-wf-page="658970bc646aea108ee055d6" data-wf-site="64d3b6b81a1144c81630b849">
 <head>
   <meta charset="utf-8">
-  <title>Account Not Premium Form</title>
+  <title>Analyze</title>
   <meta content="Account Not Premium Form" property="og:title">
   <meta content="Account Not Premium Form" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -116,7 +116,8 @@
                     <form action = "#" id="resumeForm" name="wf-form-Submission-Form" data-name="Submission Form" method="POST" enctype="multipart/form-data" class="form-2" data-wf-page-id="658970bc646aea108ee055d6" data-wf-element-id="c44e0800-8b05-42ff-bd38-48e519989928">
                       {% if has_job %}
                       <input type="text" class="text-field-2 w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Job Title" id="field-2" required="">
-                    {% endif %}
+                      <textarea type="text" id="job_description" name="job_description" placeholder="Enter job descreption .." maxlength="10000" data-name="Message" class="text-field-2 w-input"></textarea>
+                      {% endif %}
                       {% if enable_multiple %}
                       <input type="file" class="upload_field w-input" maxlength="256" name="file-field" data-name="Field 2" placeholder="File" id="file-field" required="" multiple>
                     {% else %}

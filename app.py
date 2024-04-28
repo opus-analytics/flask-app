@@ -32,7 +32,7 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
 
-app.config['MAIL_PASSWORD'] = 'Em@281194'
+app.config['MAIL_PASSWORD'] = 'Opus @ 2023'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
@@ -303,6 +303,7 @@ def compare_resume_job():
         tag = "Upload one file and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
+        job_description = request.form.get('job_description')
         language = request.form.get('Language') 
         file = request.form.get('file-field')
         if request.method == "POST":
@@ -310,7 +311,7 @@ def compare_resume_job():
             file_name = secure_filename(file_.filename)     
             file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
             test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume/translate", headers={'Authorization': bearer_token},data = {"description" : job_title},  files={"analyze-files" : test_file})
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resume/translate", headers={'Authorization': bearer_token},data = {"description" : job_title, "job_description" : job_description},  files={"analyze-files" : test_file})
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
@@ -359,6 +360,7 @@ def compare_resumes():
         tag = "Upload two files and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
+        job_description = request.form.get('job_description')
         files = []
         language = request.form.get('Language')
         if request.method == "POST":    
@@ -369,7 +371,7 @@ def compare_resumes():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes/translate", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes/translate", headers= {'Authorization':bearer_token},data={"description" : job_title, "job_description" : job_description},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
@@ -419,6 +421,7 @@ def compare_resumes_job():
         tag = "Upload two files and submit a job title!"
         result = ''
         job_title = request.form.get('field-2')
+        job_description = request.form.get('job_description')
         files = []
         language = request.form.get('Language')
         if request.method == "POST":    
@@ -429,7 +432,7 @@ def compare_resumes_job():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume/translate", headers= {'Authorization':bearer_token},data={"description" : job_title},  files=files)
+            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/each/resume/translate", headers= {'Authorization':bearer_token},data={"description" : job_title, "job_description" : job_description},  files=files)
             if r.status_code == 200:
                 jsonData = json.dumps(r.json()[0])
                 resp = json.loads(jsonData)
