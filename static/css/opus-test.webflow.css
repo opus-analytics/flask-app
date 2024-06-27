@@ -250,6 +250,10 @@
   background-color: #d3d3d3;
 }
 
+.container-20 {
+  width: 90%;
+}
+
 @media screen and (max-width: 991px) {
   .w-layout-blockcontainer {
     max-width: 728px;

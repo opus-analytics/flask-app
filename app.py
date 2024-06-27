@@ -751,6 +751,9 @@ def payment():
     print(dt_end)
     return (render_template("subscription.html"))
 
+@app.route("/knowledge-graph")
+def knowledge_graph():
+    return (render_template("knowledge-graph-starting-form.html"))
 
 if __name__ == '__main__':
     app.run(debug=True)
