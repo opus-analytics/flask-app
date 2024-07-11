@@ -7803,6 +7803,7 @@ figcaption {
   flex-direction: column;
   padding: 40px 32px 32px;
   display: flex;
+  max-width: 30rem;
 }
 
 .a-button-primary-square-2 {
