@@ -263,7 +263,7 @@ const jobFunctionalityList = [
   },
   {
     value: 12,
-    text: "Engineering",
+    text: "Construction Engineering",
   },
   {
     value: 13,
@@ -271,7 +271,7 @@ const jobFunctionalityList = [
   },
   {
     value: 14,
-    text: "Engineering",
+    text: "Medical Engineering",
   },
   {
     value: 15,

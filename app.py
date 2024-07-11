@@ -646,11 +646,11 @@ def analyze_company_data():
 def subscription():
     username = ''
     if session.get('token') == None:
-        return (render_template("subscription.html"))
+        return (render_template("subscription-authenticated.html"))
     
     else:
         if session.get('username') == None:
-            return (render_template("subscription.html"))
+            return (render_template("subscription-authenticated.html"))
         else:
             username = session.get('username')
         return (render_template("subscription-authenticated.html",username=username))
