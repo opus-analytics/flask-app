@@ -16,6 +16,10 @@ form.addEventListener("submit", (event) => {
   const jobTitle = document.getElementById("Job-Title").value;
   const monthsInRole = document.getElementById("monthsInRole").value;
 
+  console.log("Numbers");
+  console.log(jobTitleData.length);
+  console.log(jobFunctionalityList.length);
+
   const data = {
     name,
     jobFunctionality,

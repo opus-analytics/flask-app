@@ -58,7 +58,7 @@
     />
     <link href="./static/images/webclip.png" rel="apple-touch-icon" />
     <style>
-      .sliderForm{
+      .sliderForm {
         display: flex;
         width: 70%;
         margin: auto;
@@ -68,20 +68,20 @@
         transition: all 1s;
       }
 
-      .sliderForm button{
+      .sliderForm button {
         display: flex;
         margin: auto;
       }
 
-      .sliderForm div > label{
+      .sliderForm div > label {
         color: black;
         font-size: 1rem;
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
         text-transform: capitalize;
         font-weight: 400;
       }
 
-      .sliderForm div{
+      .sliderForm div {
         margin-block: 2rem;
       }
 
@@ -108,18 +108,18 @@
         appearance: none;
         width: 20px;
         height: 20px;
-        background: #9A60A7;
+        background: #9a60a7;
         cursor: pointer;
       }
 
       .sliderForm div > input::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background: #9A60A7;
+        background: #9a60a7;
         cursor: pointer;
       }
 
-      .sliderForm div > output{
+      .sliderForm div > output {
         width: 60%;
         display: flex;
         margin: auto;
@@ -129,7 +129,7 @@
         font-size: 0.9;
       }
 
-      .result{
+      .result {
         display: flex;
         width: 50%;
         margin: auto;
@@ -137,7 +137,7 @@
         justify-content: center;
         align-items: center;
         font-size: 1.2rem;
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
         text-transform: capitalize;
         font-weight: 600;
         background-color: #01ccbe;
@@ -148,11 +148,11 @@
         transition: all 1s;
       }
 
-      @media screen and (max-width: 600px){
+      @media screen and (max-width: 600px) {
         .sliderForm div > input {
           width: 100%;
         }
-        .sliderForm div > output{
+        .sliderForm div > output {
           width: 100%;
         }
       }
@@ -174,7 +174,7 @@
             <div class="menu-button-3 margin-right w-nav-button">
               <div class="w-icon-nav-menu"></div>
             </div>
-            <a href="#" class="brand-2 w-nav-brand"
+            <a href="{{ url_for('home') }}" class="brand-2 w-nav-brand"
               ><img
                 src="./static/images/logos-1_1.png"
                 loading="lazy"
@@ -182,25 +182,48 @@
                 class="image-15"
             /></a>
             <nav role="navigation" class="nav-menu-6 margin-left w-nav-menu">
-              <a href="index.html" class="nav-link-7 w-nav-link">Home</a>
-              <a href="our-offerings.html" class="nav-link-7 w-nav-link"
+              <a href="{{ url_for('home') }}" class="nav-link-7 w-nav-link"
+                >Home</a
+              >
+              <a
+                href="{{ url_for('our_offerings') }}"
+                class="nav-link-7 w-nav-link"
                 >Our Offerings</a
               >
-              <a href="partners.html" class="nav-link-7 w-nav-link">Partners</a>
-              <a href="subscription.html" class="nav-link-7 w-nav-link"
+              <a href="{{ url_for('partners') }}" class="nav-link-7 w-nav-link"
+                >Partners</a
+              >
+              <a
+                href="{{ url_for('subscription') }}"
+                class="nav-link-7 w-nav-link"
                 >Subscription</a
               >
             </nav>
           </div>
-          <div class="navigation-split-wrap">
-            <a
-              href="sign-in.html"
-              class="nav-secondary-button margin-right w-button"
-              >Sign in</a
-            >
-            <a href="signup.html" class="nav-primary-button nav-button w-button"
-              >Sign Up</a
-            >
+          <div
+            data-hover="true"
+            data-delay="0"
+            data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823"
+            class="brix---dropdown-wrapper w-dropdown"
+          >
+            <nav class="brix---dropdown-column-wrapper w-dropdown-list">
+              <div class="brix---dropdown-card">
+                <div class="brix---dropdown-pd">
+                  <div class="w-layout-grid brix---dropdown-links-grid">
+                    <a
+                      href="{{ url_for('dashboard')}}"
+                      class="brix---dropdown-link w-dropdown-link"
+                      >Dashboard</a
+                    >
+                    <a
+                      href="{{ url_for('log_out') }}"
+                      class="brix---dropdown-link w-dropdown-link"
+                      >Log Out</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </nav>
           </div>
         </div>
       </div>
@@ -295,10 +318,9 @@
           />
         </form>
         <div>
-        <div id="assessmentForm" class="sliderForm">
-        </div>
-        <div id="result" class="result"></div>
-        <!-- <div class="slidecontainer">
+          <div id="assessmentForm" class="sliderForm"></div>
+          <div id="result" class="result"></div>
+          <!-- <div class="slidecontainer">
           
           <p>Default range slider:</p>
           <input
@@ -311,7 +333,7 @@
           />
           <input class="sliderLabel" type="text" id="textInput" value="0" />
         </div> -->
-      </div>
+        </div>
       </div>
     </div>
     <div class="footer-section">

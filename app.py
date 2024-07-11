@@ -151,6 +151,7 @@ def sign_in():
     if request.method == "POST":
         if r.status_code == 200:
             session['token'] = r.json()['token']
+            print(session['token'])
             session['username'] = email
             session['type'] = r.json()['user_type']
             return redirect(url_for('home'))
@@ -586,8 +587,10 @@ def analyze_company_data():
                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
                 files.append(("file",file_saved))
             
+            print(bearer_token)
             r = requests.post(url="https://opus-backend.azurewebsites.net/upload", headers={'Authorization': bearer_token}, data={'primary_key':primary_key,'uploader':token,'measure':measure},files=files)
-                    
+            print(r)
+            
             if r.status_code == 200:
                 # print(r.json())
                 
@@ -606,7 +609,7 @@ def analyze_company_data():
                         json_values = []
                         for i in values:
                             json_values.append(i.split(","))
-                            myTable.add_row(i.split(","))
+                            # myTable.add_row(i.split(","))
                         myTable.align = "l"
                         #myTable.border = True
                         #myTable.padding_width = 3
@@ -679,7 +682,8 @@ def dashboard():
         if type == 'Partner':
             return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name))
         
-    return (render_template("account-not-premium.html",username=username,type=type,full_name=full_name,company_name=company_name))
+        # account-not-premium.html
+    return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name))
 
 # """
 # def dashboard():
