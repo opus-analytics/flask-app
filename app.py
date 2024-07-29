@@ -246,8 +246,8 @@ def create_user():
         
     # For user password
     length = 8
-    characters = string.ascii_letters + string.digits
-    passwordGenerated = ''.join(random.choice(characters) for _ in range(length))
+    # characters = string.ascii_letters + string.digits
+    passwordGenerated = "nxjwnxkjwnk"
     tempPassword = passwordGenerated
     password = bytes(passwordGenerated, encoding = 'utf-8')
     salt = bcrypt.gensalt()

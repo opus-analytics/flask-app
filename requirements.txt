@@ -13,5 +13,4 @@ stripe
 PrettyTable
 datetime
 xmltodict
-random
 string
