@@ -13,4 +13,3 @@ stripe
 PrettyTable
 datetime
 xmltodict
-string
