@@ -23,7 +23,9 @@ import stripe
 from prettytable import PrettyTable 
 from prettytable.colortable import ColorTable, Themes
 import datetime
-
+import xmltodict
+import random
+import string
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
@@ -205,6 +207,8 @@ def confirmation_mail():
     return (render_template('confirmation-mail.html'))
 
 
+
+
 @app.route("/confirmed-mail/<token>", methods = ["GET","POST"])
 def confirmed_mail(token):
     try:
@@ -219,6 +223,49 @@ def confirmed_mail(token):
     except SignatureExpired:
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
+
+@app.route("/create", methods = ["POST"])
+def create_user():
+    
+    xml_data = request.data;
+     # Parse the XML data using xmltodict
+    parsed_data = xmltodict.parse(xml_data)
+    # Access data as a Python dictionary
+    user = parsed_data['properties']
+    
+    # user email
+    email = user['email']
+    
+    # USer type
+    if (user['productId'] == '1'):
+        userType = 'Free'
+    elif (user['productId'] == '2'):
+        userType = 'Advance'
+    else:
+        userType = 'Enable'
+        
+    # For user password
+    length = 8
+    characters = string.ascii_letters + string.digits
+    passwordGenerated = ''.join(random.choice(characters) for _ in range(length))
+    tempPassword = passwordGenerated
+    password = bytes(passwordGenerated, encoding = 'utf-8')
+    salt = bcrypt.gensalt()
+    hashed_pwd = bcrypt.hashpw(password, salt)
+    hashed_pwd = hashed_pwd.decode()
+    try:
+        # insert into users (username,password,email,full_name,company_name,user_type,verification_status) values ("Nashaat","12345678","omarnashaat@gmail.com","Omar Nashaat", "Vodafone","Enable", "Verified");
+        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+        cursor = connection.cursor()   
+        create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','Omarrr','Vodafone','{userType}','Verified');"
+        cursor.execute(create)
+        connection.commit()
+        connection.close()
+
+    except Error as e:
+        print(e, "Error")
+        return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
+    return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email ,"tempPassword": tempPassword}), mimetype='application/json')
 
 
 @app.route("/reset-password", methods = ["GET","POST"])
