@@ -24,8 +24,7 @@ from prettytable import PrettyTable
 from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
-import random
-import string
+from python_random_strings import random_strings
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'test123'
@@ -245,9 +244,7 @@ def create_user():
         userType = 'Enable'
         
     # For user password
-    length = 8
-    # characters = string.ascii_letters + string.digits
-    passwordGenerated = "nxjwnxkjwnk"
+    passwordGenerated = random_strings.random_letters(8)
     tempPassword = passwordGenerated
     password = bytes(passwordGenerated, encoding = 'utf-8')
     salt = bcrypt.gensalt()
