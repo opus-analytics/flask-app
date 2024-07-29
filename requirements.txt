@@ -13,5 +13,5 @@ stripe
 PrettyTable
 datetime
 xmltodict
-random
+secrets
 string

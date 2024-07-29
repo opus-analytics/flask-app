@@ -24,7 +24,7 @@ from prettytable import PrettyTable
 from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
-import random
+import secrets
 import string
 
 app = Flask(__name__)
@@ -247,7 +247,7 @@ def create_user():
     # For user password
     length = 8
     characters = string.ascii_letters + string.digits
-    passwordGenerated = ''.join(random.choice(characters) for _ in range(length))
+    passwordGenerated = ''.join(secrets.choice(characters) for _ in range(length))
     tempPassword = passwordGenerated
     password = bytes(passwordGenerated, encoding = 'utf-8')
     salt = bcrypt.gensalt()
