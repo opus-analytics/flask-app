@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Development'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -61,5 +61,5 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'opus-app'
-          slot-name: 'dev'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3335A8FF477C4F1887ED20B4DB1E8D90 }}
