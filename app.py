@@ -232,6 +232,11 @@ def create_user():
     # Access data as a Python dictionary
     user = parsed_data['properties']
     
+    userInfo = user['userInfo'].split('@')
+    full_name = userInfo[0]
+    company_name = userInfo[1]
+    user_type = userInfo[2]
+    
     # user email
     email = user['email']
     
@@ -254,13 +259,14 @@ def create_user():
         # insert into users (username,password,email,full_name,company_name,user_type,verification_status) values ("Nashaat","12345678","omarnashaat@gmail.com","Omar Nashaat", "Vodafone","Enable", "Verified");
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
-        create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','Omarrr','Vodafone','{userType}','Verified');"
+        create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','{full_name}','{company_name}','{userType}','Verified');"
         cursor.execute(create)
         connection.commit()
         connection.close()
 
     except Error as e:
-        print(e, "Error")
+        if(e.errno == 1062):
+            return Response(status=500, response=json.dumps({"message":"Email already exists"}), mimetype='application/json')
         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
     return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email ,"tempPassword": tempPassword}), mimetype='application/json')
 
