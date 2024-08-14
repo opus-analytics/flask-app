@@ -16,7 +16,7 @@ form.addEventListener("submit", (event) => {
   const jobTitle = document.getElementById("Job-Title").value;
   const monthsInRole = document.getElementById("monthsInRole").value;
 
-  console.log(typeof(jobTitle));
+  console.log(typeof jobTitle);
   let jobAssessmentArray = jobTitleData.find(
     (job) => job.value == jobTitle
   ).functionalAssessment;
@@ -314,13 +314,7 @@ const jobFunctionalityList = [
     value: 2,
     text: "Insurance",
     desc: [
-      "Product innovation",
-      "Major product version updates",
-      "Claims and cost management",
-      "Sales production and customer service",
-      "Industry consolidation, mergers and acquisitions",
-      "Operational outsourcing",
-      "Compliance and quality (regulatory, quality, etc)",
+      "A structured approach to capturing the skills of the industry specific requirements have been used.  The roles cover key tasks such as: Product innovation, Major product version updates, Claims and cost management, Sales production and customer service, Industry consolidation, mergers and acquisitions, Operational outsourcing, Compliance and quality (regulatory, quality, etc)",
     ],
     functionalCompetencies: [
       { title: "Knowledge of Organization", desc: "" },
@@ -707,11 +701,7 @@ const jobFunctionalityList = [
     value: 10,
     text: "Education K-12",
     desc: [
-      "Academic Accreditation",
-      "Professional Development and knowledge management",
-      "Lack of development and investment funding",
-      "Organized Employment",
-      "Staffing demographic challenges",
+      "The assessment questionnaire helps in identifying how the standards of functional delivery of K-12 school profess are measured and assessed.  This helps with the overall evaluation and management process ensuring standardized quality of the education delivered to the students.",
     ],
     functionalCompetencies: [
       { title: "Knowledge Management", desc: "" },
@@ -1288,40 +1278,247 @@ const jobTitleData = [
     value: 78,
     jobFunc: 9,
     text: "Compensation & Benefits Office Manager",
-    functionalAssessment: "",
+    functionalAssessment: [
+      {
+        title: "Program Planning and Development",
+        desc: "Develops, implements, evaluates, and owns various HR programs.",
+      },
+      {
+        title: "Needs Analysis",
+        desc: "Conducts internal and external organizational analyses to determine root causes of issues and provide solutions. Considers organizational direction when identifying relevant industry trends.",
+      },
+      {
+        title: "Conflict Management",
+        desc: "Investigates and resolves conflicts by applying conflict resolution methodologies. Preserves relationships throughout the resolution process.",
+      },
+      {
+        title: "Managing Through Change and Uncertainty",
+        desc: "Adjusts thinking and behavior to resiliently face change and uses experience to fuel growth. Embraces failure as a learning opportunity for themselves and others. Enables the process of change and transition while helping others deal with the effects of change.",
+      },
+      {
+        title: "Customer Focus",
+        desc: "Prioritizes and takes action on the needs of both internal and external customers. Designs and delivers products and services with the customer experience top of mind.",
+      },
+      {
+        title: "Dynamic Learning Mindset",
+        desc: "Continuously seeks opportunities to learn, questions the applicability of past approaches in the current environment, owns growth, and embraces failure as a learning opportunity.",
+      },
+      {
+        title: "Technology Enablement",
+        desc: "Leverages existing and seeks out new technologies to navigate, create, and share information to deliver more effective, efficient solutions.",
+      },
+      {
+        title: "Influence",
+        desc: "Impacts others' thinking, decisions, or behavior through inclusive practices and relationship building. Drives action through influence, often without authority.",
+      },
+      {
+        title: "Relationship Building",
+        desc: "Develops internal and external professional, trusting relationships. Purposefully develops networks to build value through collaboration.",
+      },
+      {
+        title: "Business and Financial Acumen",
+        desc: "Makes decisions based on a solid understanding of the business and the wider industry. Maximizes results by understanding and aligning actions with the organization's goals, core functions, needs, and values. Applies financial knowledge to address organizational needs.",
+      },
+      {
+        title: "Data Literacy",
+        desc: "Identifies, collects, and interprets quality data that informs human capital decision making. Communicates and acts on information and insight from relevant data (including metrics, visualizations, and analytics).",
+      },
+      {
+        title: "Organizational Awareness",
+        desc: "Contributes to the organization by understanding and aligning actions with the organization's goals, core functions, needs, and values.",
+      },
+      {
+        title: "Communication",
+        desc: "Effectively and appropriately interacts with others to build relationships, influence others, and facilitate the sharing of ideas and information. Uses tact and diplomacy to navigate difficult situations. Relays key messages by creating a compelling story, targeted to specific audiences.",
+      },
+      {
+        title: "Inclusion",
+        desc: "Contributes to an environment in which all employees feel a sense of belonging, valued for their differences, and empowered to participate and contribute freely. ",
+      },
+      {
+        title: "Problem Solving and Decision Making",
+        desc: "Uses critical thinking to evaluate problems, gather information, understand causes, and identify best-possible solutions. Invests time in planning, discovery, and reflection to drive better decisions and more efficient implementations.",
+      },
+      {
+        title: "Project Management",
+        desc: "Manages the delivery of projects within the appropriate scope, time, and budget. Includes management of resources and risk.",
+      },
+      {
+        title: "Technical HR Expertise",
+        desc: "Demonstrates in-depth knowledge in specific HR areas. For example, training, recruitment, strategic workforce planning, diversity and inclusion, compensation, health and wellness, and policy and governance. Is able to communicate and apply relevant HR expertise to create and maintain effective human management practices.",
+      },
+    ],
   },
   {
     value: 79,
     jobFunc: 9,
     text: "Compensation Analyst",
-    functionalAssessment: "",
+    functionalAssessment: [
+      {
+        title: "Program Planning and Development",
+        desc: "Develops, implements, evaluates, and owns various HR programs.",
+      },
+      {
+        title: "Needs Analysis",
+        desc: "Conducts internal and external organizational analyses to determine root causes of issues and provide solutions. Considers organizational direction when identifying relevant industry trends.",
+      },
+      {
+        title: "Conflict Management",
+        desc: "Investigates and resolves conflicts by applying conflict resolution methodologies. Preserves relationships throughout the resolution process.",
+      },
+      {
+        title: "Managing Through Change and Uncertainty",
+        desc: "Adjusts thinking and behavior to resiliently face change and uses experience to fuel growth. Embraces failure as a learning opportunity for themselves and others. Enables the process of change and transition while helping others deal with the effects of change.",
+      },
+      {
+        title: "Customer Focus",
+        desc: "Prioritizes and takes action on the needs of both internal and external customers. Designs and delivers products and services with the customer experience top of mind.",
+      },
+      {
+        title: "Dynamic Learning Mindset",
+        desc: "Continuously seeks opportunities to learn, questions the applicability of past approaches in the current environment, owns growth, and embraces failure as a learning opportunity.",
+      },
+      {
+        title: "Technology Enablement",
+        desc: "Leverages existing and seeks out new technologies to navigate, create, and share information to deliver more effective, efficient solutions.",
+      },
+      {
+        title: "Influence",
+        desc: "Impacts others' thinking, decisions, or behavior through inclusive practices and relationship building. Drives action through influence, often without authority.",
+      },
+      {
+        title: "Relationship Building",
+        desc: "Develops internal and external professional, trusting relationships. Purposefully develops networks to build value through collaboration.",
+      },
+      {
+        title: "Business and Financial Acumen",
+        desc: "Makes decisions based on a solid understanding of the business and the wider industry. Maximizes results by understanding and aligning actions with the organization's goals, core functions, needs, and values. Applies financial knowledge to address organizational needs.",
+      },
+      {
+        title: "Data Literacy",
+        desc: "Identifies, collects, and interprets quality data that informs human capital decision making. Communicates and acts on information and insight from relevant data (including metrics, visualizations, and analytics).",
+      },
+      {
+        title: "Organizational Awareness",
+        desc: "Contributes to the organization by understanding and aligning actions with the organization's goals, core functions, needs, and values.",
+      },
+      {
+        title: "Communication",
+        desc: "Effectively and appropriately interacts with others to build relationships, influence others, and facilitate the sharing of ideas and information. Uses tact and diplomacy to navigate difficult situations. Relays key messages by creating a compelling story, targeted to specific audiences.",
+      },
+      {
+        title: "Inclusion",
+        desc: "Contributes to an environment in which all employees feel a sense of belonging, valued for their differences, and empowered to participate and contribute freely. ",
+      },
+      {
+        title: "Problem Solving and Decision Making",
+        desc: "Uses critical thinking to evaluate problems, gather information, understand causes, and identify best-possible solutions. Invests time in planning, discovery, and reflection to drive better decisions and more efficient implementations.",
+      },
+      {
+        title: "Project Management",
+        desc: "Manages the delivery of projects within the appropriate scope, time, and budget. Includes management of resources and risk.",
+      },
+      {
+        title: "Technical HR Expertise",
+        desc: "Demonstrates in-depth knowledge in specific HR areas. For example, training, recruitment, strategic workforce planning, diversity and inclusion, compensation, health and wellness, and policy and governance. Is able to communicate and apply relevant HR expertise to create and maintain effective human management practices.",
+      },
+    ],
   },
   {
     value: 80,
     jobFunc: 9,
     text: "Compensation Manager",
-    functionalAssessment: "",
+    functionalAssessment: [
+      {
+        title: "Program Planning and Development",
+        desc: "Develops, implements, evaluates, and owns various HR programs.",
+      },
+      {
+        title: "Needs Analysis",
+        desc: "Conducts internal and external organizational analyses to determine root causes of issues and provide solutions. Considers organizational direction when identifying relevant industry trends.",
+      },
+      {
+        title: "Conflict Management",
+        desc: "Investigates and resolves conflicts by applying conflict resolution methodologies. Preserves relationships throughout the resolution process.",
+      },
+      {
+        title: "Managing Through Change and Uncertainty",
+        desc: "Adjusts thinking and behavior to resiliently face change and uses experience to fuel growth. Embraces failure as a learning opportunity for themselves and others. Enables the process of change and transition while helping others deal with the effects of change.",
+      },
+      {
+        title: "Customer Focus",
+        desc: "Prioritizes and takes action on the needs of both internal and external customers. Designs and delivers products and services with the customer experience top of mind.",
+      },
+      {
+        title: "Dynamic Learning Mindset",
+        desc: "Continuously seeks opportunities to learn, questions the applicability of past approaches in the current environment, owns growth, and embraces failure as a learning opportunity.",
+      },
+      {
+        title: "Technology Enablement",
+        desc: "Leverages existing and seeks out new technologies to navigate, create, and share information to deliver more effective, efficient solutions.",
+      },
+      {
+        title: "Influence",
+        desc: "Impacts others' thinking, decisions, or behavior through inclusive practices and relationship building. Drives action through influence, often without authority.",
+      },
+      {
+        title: "Relationship Building",
+        desc: "Develops internal and external professional, trusting relationships. Purposefully develops networks to build value through collaboration.",
+      },
+      {
+        title: "Business and Financial Acumen",
+        desc: "Makes decisions based on a solid understanding of the business and the wider industry. Maximizes results by understanding and aligning actions with the organization's goals, core functions, needs, and values. Applies financial knowledge to address organizational needs.",
+      },
+      {
+        title: "Data Literacy",
+        desc: "Identifies, collects, and interprets quality data that informs human capital decision making. Communicates and acts on information and insight from relevant data (including metrics, visualizations, and analytics).",
+      },
+      {
+        title: "Organizational Awareness",
+        desc: "Contributes to the organization by understanding and aligning actions with the organization's goals, core functions, needs, and values.",
+      },
+      {
+        title: "Communication",
+        desc: "Effectively and appropriately interacts with others to build relationships, influence others, and facilitate the sharing of ideas and information. Uses tact and diplomacy to navigate difficult situations. Relays key messages by creating a compelling story, targeted to specific audiences.",
+      },
+      {
+        title: "Inclusion",
+        desc: "Contributes to an environment in which all employees feel a sense of belonging, valued for their differences, and empowered to participate and contribute freely. ",
+      },
+      {
+        title: "Problem Solving and Decision Making",
+        desc: "Uses critical thinking to evaluate problems, gather information, understand causes, and identify best-possible solutions. Invests time in planning, discovery, and reflection to drive better decisions and more efficient implementations.",
+      },
+      {
+        title: "Project Management",
+        desc: "Manages the delivery of projects within the appropriate scope, time, and budget. Includes management of resources and risk.",
+      },
+      {
+        title: "Technical HR Expertise",
+        desc: "Demonstrates in-depth knowledge in specific HR areas. For example, training, recruitment, strategic workforce planning, diversity and inclusion, compensation, health and wellness, and policy and governance. Is able to communicate and apply relevant HR expertise to create and maintain effective human management practices.",
+      },
+    ],
   },
   {
     value: 81,
     jobFunc: 9,
     text: "Corporate Recruiter",
     functionalAssessment: [
-      {title: "Communication Ability", desc: ""},
-      {title: "Building Relationship", desc: ""},
-      {title: "Empathy", desc: ""},
-      {title: "Influence & Persuasive ability", desc: ""},
-      {title: "Flexibility", desc: ""},
-      {title: "Result Orientation", desc: ""},
-      {title: "Planning & Organizing", desc: ""},
-      {title: "Domain Expertise", desc: ""},
-      {title: "Ability to use hiring tools", desc: ""},
-      {title: "Knowledge of HR Sub systems", desc: ""},
-      {title: "Strategic Orientation", desc: ""},
-      {title: "Knowledge of Business", desc: ""},
-      {title: "Market intelligence", desc: ""},
-      {title: "Talent Mindset", desc: ""},
-      {title: "Personal Credibility", desc: ""},
+      { title: "Communication Ability", desc: "" },
+      { title: "Building Relationship", desc: "" },
+      { title: "Empathy", desc: "" },
+      { title: "Influence & Persuasive ability", desc: "" },
+      { title: "Flexibility", desc: "" },
+      { title: "Result Orientation", desc: "" },
+      { title: "Planning & Organizing", desc: "" },
+      { title: "Domain Expertise", desc: "" },
+      { title: "Ability to use hiring tools", desc: "" },
+      { title: "Knowledge of HR Sub systems", desc: "" },
+      { title: "Strategic Orientation", desc: "" },
+      { title: "Knowledge of Business", desc: "" },
+      { title: "Market intelligence", desc: "" },
+      { title: "Talent Mindset", desc: "" },
+      { title: "Personal Credibility", desc: "" },
     ],
   },
   {
@@ -1430,7 +1627,76 @@ const jobTitleData = [
     value: 99,
     jobFunc: 9,
     text: "Intermediate Benefits Analyst",
-    functionalAssessment: "",
+    functionalAssessment: [
+      {
+        title: "Program Planning and Development",
+        desc: "Develops, implements, evaluates, and owns various HR programs.",
+      },
+      {
+        title: "Needs Analysis",
+        desc: "Conducts internal and external organizational analyses to determine root causes of issues and provide solutions. Considers organizational direction when identifying relevant industry trends.",
+      },
+      {
+        title: "Conflict Management",
+        desc: "Investigates and resolves conflicts by applying conflict resolution methodologies. Preserves relationships throughout the resolution process.",
+      },
+      {
+        title: "Managing Through Change and Uncertainty",
+        desc: "Adjusts thinking and behavior to resiliently face change and uses experience to fuel growth. Embraces failure as a learning opportunity for themselves and others. Enables the process of change and transition while helping others deal with the effects of change.",
+      },
+      {
+        title: "Customer Focus",
+        desc: "Prioritizes and takes action on the needs of both internal and external customers. Designs and delivers products and services with the customer experience top of mind.",
+      },
+      {
+        title: "Dynamic Learning Mindset",
+        desc: "Continuously seeks opportunities to learn, questions the applicability of past approaches in the current environment, owns growth, and embraces failure as a learning opportunity.",
+      },
+      {
+        title: "Technology Enablement",
+        desc: "Leverages existing and seeks out new technologies to navigate, create, and share information to deliver more effective, efficient solutions.",
+      },
+      {
+        title: "Influence",
+        desc: "Impacts others' thinking, decisions, or behavior through inclusive practices and relationship building. Drives action through influence, often without authority.",
+      },
+      {
+        title: "Relationship Building",
+        desc: "Develops internal and external professional, trusting relationships. Purposefully develops networks to build value through collaboration.",
+      },
+      {
+        title: "Business and Financial Acumen",
+        desc: "Makes decisions based on a solid understanding of the business and the wider industry. Maximizes results by understanding and aligning actions with the organization's goals, core functions, needs, and values. Applies financial knowledge to address organizational needs.",
+      },
+      {
+        title: "Data Literacy",
+        desc: "Identifies, collects, and interprets quality data that informs human capital decision making. Communicates and acts on information and insight from relevant data (including metrics, visualizations, and analytics).",
+      },
+      {
+        title: "Organizational Awareness",
+        desc: "Contributes to the organization by understanding and aligning actions with the organization's goals, core functions, needs, and values.",
+      },
+      {
+        title: "Communication",
+        desc: "Effectively and appropriately interacts with others to build relationships, influence others, and facilitate the sharing of ideas and information. Uses tact and diplomacy to navigate difficult situations. Relays key messages by creating a compelling story, targeted to specific audiences.",
+      },
+      {
+        title: "Inclusion",
+        desc: "Contributes to an environment in which all employees feel a sense of belonging, valued for their differences, and empowered to participate and contribute freely. ",
+      },
+      {
+        title: "Problem Solving and Decision Making",
+        desc: "Uses critical thinking to evaluate problems, gather information, understand causes, and identify best-possible solutions. Invests time in planning, discovery, and reflection to drive better decisions and more efficient implementations.",
+      },
+      {
+        title: "Project Management",
+        desc: "Manages the delivery of projects within the appropriate scope, time, and budget. Includes management of resources and risk.",
+      },
+      {
+        title: "Technical HR Expertise",
+        desc: "Demonstrates in-depth knowledge in specific HR areas. For example, training, recruitment, strategic workforce planning, diversity and inclusion, compensation, health and wellness, and policy and governance. Is able to communicate and apply relevant HR expertise to create and maintain effective human management practices.",
+      },
+    ],
   },
   {
     value: 100,
@@ -1467,22 +1733,22 @@ const jobTitleData = [
     jobFunc: 9,
     text: "Talent Development",
     functionalAssessment: [
-      {title: "Lifelong Learning", desc: ""},
-      {title: "Training Delivery and Facilitation", desc: ""},
-      {title: "Emotional intelligence and Decision Making", desc: ""},
-      {title: "Compliance and Ethical Behavior", desc: ""},
-      {title: "Cultural Awareness and Inclusion", desc: ""},
-      {title: "Project Management", desc: ""},
-      {title: "Collaboration and Leadership", desc: ""},
-      {title: "Consulting and Business Partnering", desc: ""},
-      {title: "Organization Development and Culture", desc: ""},
-      {title: "Business Insight", desc: ""},
-      {title: "Talent Strategy and Management", desc: ""},
-      {title: "Future Readiness", desc: ""},
-      {title: "Career and Leadership Development", desc: ""},
-      {title: "Coaching", desc: ""},
-      {title: "Performance Improvement", desc: ""},
-      {title: "Evaluating Impact", desc: ""},
+      { title: "Lifelong Learning", desc: "" },
+      { title: "Training Delivery and Facilitation", desc: "" },
+      { title: "Emotional intelligence and Decision Making", desc: "" },
+      { title: "Compliance and Ethical Behavior", desc: "" },
+      { title: "Cultural Awareness and Inclusion", desc: "" },
+      { title: "Project Management", desc: "" },
+      { title: "Collaboration and Leadership", desc: "" },
+      { title: "Consulting and Business Partnering", desc: "" },
+      { title: "Organization Development and Culture", desc: "" },
+      { title: "Business Insight", desc: "" },
+      { title: "Talent Strategy and Management", desc: "" },
+      { title: "Future Readiness", desc: "" },
+      { title: "Career and Leadership Development", desc: "" },
+      { title: "Coaching", desc: "" },
+      { title: "Performance Improvement", desc: "" },
+      { title: "Evaluating Impact", desc: "" },
     ],
   },
   {
@@ -2192,8 +2458,7 @@ const jobTitleData = [
     functionalAssessment: [
       { title: "Strong understanding of information security", desc: "" },
       {
-        title:
-          "Familiarity with security tools and technologies",
+        title: "Familiarity with security tools and technologies",
         desc: "Such as firewalls, intrusion detection and prevention systems (IDS/IPS), security information and event management (SIEM), and vulnerability scanning tools.",
       },
       {
@@ -2526,54 +2791,54 @@ const jobTitleData = [
     text: "Scheduling Officer",
     functionalAssessment: "",
   },
-  {
-    value: 247,
-    jobFunc: 10,
-    text: "Campus Police Lieutenant",
-    functionalAssessment: "",
-  },
-  {
-    value: 248,
-    jobFunc: 10,
-    text: "Campus Security Director",
-    functionalAssessment: "",
-  },
-  {
-    value: 249,
-    jobFunc: 10,
-    text: "General Maintenance Worker II",
-    functionalAssessment: "",
-  },
-  {
-    value: 250,
-    jobFunc: 10,
-    text: "Premises Officer",
-    functionalAssessment: "",
-  },
-  {
-    value: 251,
-    jobFunc: 10,
-    text: "Residence Hall Manager (Incl. Room, Board)",
-    functionalAssessment: "",
-  },
-  {
-    value: 252,
-    jobFunc: 10,
-    text: "Security Officer",
-    functionalAssessment: "",
-  },
-  {
-    value: 253,
-    jobFunc: 10,
-    text: "Academic Mentor",
-    functionalAssessment: "",
-  },
-  {
-    value: 254,
-    jobFunc: 10,
-    text: "Dining Facility Supervisor",
-    functionalAssessment: "",
-  },
+  // {
+  //   value: 247,
+  //   jobFunc: 10,
+  //   text: "Campus Police Lieutenant",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 248,
+  //   jobFunc: 10,
+  //   text: "Campus Security Director",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 249,
+  //   jobFunc: 10,
+  //   text: "General Maintenance Worker II",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 250,
+  //   jobFunc: 10,
+  //   text: "Premises Officer",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 251,
+  //   jobFunc: 10,
+  //   text: "Residence Hall Manager (Incl. Room, Board)",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 252,
+  //   jobFunc: 10,
+  //   text: "Security Officer",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 253,
+  //   jobFunc: 10,
+  //   text: "Academic Mentor",
+  //   functionalAssessment: "",
+  // },
+  // {
+  //   value: 254,
+  //   jobFunc: 10,
+  //   text: "Dining Facility Supervisor",
+  //   functionalAssessment: "",
+  // },
   {
     value: 255,
     jobFunc: 10,
