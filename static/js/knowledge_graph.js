@@ -16,7 +16,6 @@ form.addEventListener("submit", (event) => {
   const jobTitle = document.getElementById("Job-Title").value;
   const monthsInRole = document.getElementById("monthsInRole").value;
 
-  console.log(typeof jobTitle);
   let jobAssessmentArray = jobTitleData.find(
     (job) => job.value == jobTitle
   ).functionalAssessment;
@@ -34,12 +33,17 @@ form.addEventListener("submit", (event) => {
   const functionalCompetencies = assessmentArray.length;
   assessmentArray = assessmentArray.concat(coreCompetency);
 
-  const jobTitleName = jobTitleData.find((job) => job.value == jobTitle).text;
+  const jobTitleName = jobTitleData
+    .find((job) => job.value == jobTitle)
+    .text.toLowerCase();
+
   if (
-    jobTitleName.includes(
-      "Manager" || "Director" || "Vice President" || "Chief"
-    )
+    jobTitleName.includes("manager") ||
+    jobTitleName.includes("director") ||
+    jobTitleName.includes("vice president") ||
+    jobTitleName.includes("chief")
   ) {
+
     let LeadershipCompetency = {
       title: "Leadership",
       desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
