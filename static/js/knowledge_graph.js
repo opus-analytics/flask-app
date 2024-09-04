@@ -820,6 +820,10 @@ const coreCompetency = [
     title: "Ability to Influence",
     desc: "Uses interpersonal styles and techniques to gain acceptance of ideas or plans.  Effectively explains alternatives to reach outcomes that gain support of others.",
   },
+  {
+    title: "Design Thinking",
+    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
+  }
 ];
 populateDropdown(jobFunctionalityList, jobFunctionalityElement);
 
