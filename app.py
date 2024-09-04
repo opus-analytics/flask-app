@@ -809,5 +809,9 @@ def payment():
 def knowledge_graph():
     return (render_template("knowledge-graph-starting-form.html"))
 
+@app.route("/.well-known/pki-validation/godaddy.html")
+def goddadyVerification():
+    return (render_template("godaddy.html"))
+
 if __name__ == '__main__':
     app.run(debug=True)
