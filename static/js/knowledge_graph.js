@@ -85,7 +85,7 @@ form.addEventListener("submit", (event) => {
 
   submitButton = document.getElementById("submit-button");
 
-  submitButton.addEventListener("click", (event) => {
+  submitButton.addEventListener("click", async (event) => {
     event.preventDefault();
 
     // Get all slider input elements
@@ -150,7 +150,23 @@ form.addEventListener("submit", (event) => {
     }
 
     // Show result to add to database
-    console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
+    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
+    // Add the assessment to the database
+    const assessment = {
+      name: name,
+      jobFunction: jobFunctionality,
+      jobTitle: jobTitle,
+      monthsInRole: monthsInRole,
+      jobSkills: sliderValues,
+    };
+
+    await fetch("http://127.0.0.1:5000/add-competency", {
+      method: "POST",
+      body: JSON.stringify(assessment),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     sliderValues = sliderValues.filter((value) => value !== "0");
     const sum = sliderValues.reduce((a, b) => a + b, 0);

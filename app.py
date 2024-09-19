@@ -227,7 +227,7 @@ def confirmed_mail(token):
 def create_user():
     
     xml_data = request.data;
-     # Parse the XML data using xmltodict
+    # Parse the XML data using xmltodict
     parsed_data = xmltodict.parse(xml_data)
     # Access data as a Python dictionary
     user = parsed_data['properties']
@@ -240,7 +240,7 @@ def create_user():
     # user email
     email = user['email']
     
-    # USer type
+    # User type
     if (user['productId'] == '1'):
         userType = 'Free'
     elif (user['productId'] == '2'):
@@ -270,6 +270,17 @@ def create_user():
         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
     return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email ,"tempPassword": tempPassword}), mimetype='application/json')
 
+@app.route("/add-competency", methods = ["POST"])
+def add_competency():
+    data = request.get_json()
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor() 
+      
+    create = f"INSERT INTO competency_assessment (name, jobFunction, jobTitle, monthsInRole, jobSkills) VALUES('{data['name']}', '{data['jobFunction']}', '{data['jobTitle']}', '{data['monthsInRole']}', '{data['jobSkills']}');"
+    cursor.execute(create)
+    connection.commit()
+    connection.close()
+    return Response(status=200, response=json.dumps({"message":"Competency added successfully"}), mimetype='application/json')
 
 @app.route("/reset-password", methods = ["GET","POST"])
 def reset_password():
