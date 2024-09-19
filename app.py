@@ -155,7 +155,7 @@ def sign_in():
             print(session['token'])
             session['username'] = email
             session['type'] = r.json()['user_type']
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
         else:
             flash('Login Failed!','error')
     return (render_template("sign-in.html"))

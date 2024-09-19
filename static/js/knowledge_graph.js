@@ -31,7 +31,12 @@ form.addEventListener("submit", (event) => {
   }
 
   const functionalCompetencies = assessmentArray.length;
-  assessmentArray = assessmentArray.concat(coreCompetency);
+  if (jobFunctionalityList.find((job) => job.value == jobFunctionality).text == "Pharmaceutical"){
+    assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
+  }
+  else{
+    assessmentArray = assessmentArray.concat(coreCompetency);
+  }
 
   const jobTitleName = jobTitleData
     .find((job) => job.value == jobTitle)
@@ -93,7 +98,7 @@ form.addEventListener("submit", (event) => {
     sliders.forEach((slider) => {
       sliderValues.push(slider.value);
     });
-
+    
     // Calculation to the form
     // First get user experience
     let userExperience = 0;
@@ -139,7 +144,14 @@ form.addEventListener("submit", (event) => {
       } else if (answerValue == 5) {
         sliderValues[i] = parseInt(100);
       }
+      else {
+        sliderValues[i] = parseInt(0);
+      }
     }
+
+    // Show result to add to database
+    console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
+
     sliderValues = sliderValues.filter((value) => value !== "0");
     const sum = sliderValues.reduce((a, b) => a + b, 0);
     const average = sum / sliderValues.length;
@@ -167,6 +179,7 @@ form.addEventListener("submit", (event) => {
     )}%`;
     resultElement.style.display = "block"; // Show the result
   });
+
 
   const submitFormWrap = document.getElementById("start-button");
   submitFormWrap.style.display = "none"; // Hide the start button
@@ -328,36 +341,86 @@ const jobFunctionalityList = [
     ],
   },
   {
-    value: 2,
-    text: "Insurance",
+    value: 11,
+    text: "Business Development",
     desc: [
-      "A structured approach to capturing the skills of the industry specific requirements have been used.  The roles cover key tasks such as: Product innovation, Major product version updates, Claims and cost management, Sales production and customer service, Industry consolidation, mergers and acquisitions, Operational outsourcing, Compliance and quality (regulatory, quality, etc)",
+      "Use strategic planning to ensure sale of services, analyzing business developments and monitoring market trends, market characteristics, and cost markup factors. Identify main client groups and audiences, determine the best way to communicate publicity information to them, and develop and implement a communication plan on appropriate channels to promote products or services, and identify, collect, and report appropriate (KPIs). Consult with product development personnel on service specifications to meet demand and trends.",
     ],
     functionalCompetencies: [
-      { title: "Knowledge of Organization", desc: "" },
-      { title: "Service Excellence", desc: "" },
-      { title: "Business Ethics", desc: "" },
-      { title: "Office Support Tools", desc: "" },
+      {
+        title: "Analyze business trends",
+        desc: "Analyze business trends and identify opportunities for growth.",
+      },
+      { title: "Marketing", desc: "Develop and implement a marketing plan." },
+      { title: "Meet Demand", desc: "Identify and meet customer demand." },
+      {
+        title: "Business Intelligence",
+        desc: "Use business intelligence to make strategic decisions.",
+      },
+      { title: "Researching", desc: "Conduct market research." },
+      {
+        title: "Documentation of BDM activities",
+        desc: "Document business development activities.",
+      },
+    ],
+  },
+  {
+    value: 8,
+    text: "Business Operations",
+    desc: [
+      "The functional skills needed to perform a business operations job are mainly focused on the ability to perform the specific tasks.  A business operations role is not just tasked with ensuring the operational health, but is directly linked to the overall growth, and profitability strategies of the business.",
+    ],
+    functionalCompetencies: [
+      { title: "Asset Management", desc: "" },
+      { title: "Concern for Safety", desc: "" },
+      { title: "Global Business Perspective - Business Acumen", desc: "" },
+      { title: "Global Sourcing", desc: "" },
+      { title: "Information Management", desc: "" },
+      { title: "Inventory/Supply Management", desc: "" },
+      { title: "Logistic and transportation Management", desc: "" },
+      { title: "Management Project Communications", desc: "" },
+      { title: "Management Project Execution", desc: "" },
+      { title: "Negotiation", desc: "" },
+      { title: "Procurement Management", desc: "" },
+      { title: "Project Planning", desc: "" },
+      { title: "Project Risk & Change Management", desc: "" },
+      { title: "Requirement Analysis", desc: "" },
+      { title: "Sourcing", desc: "" },
+      { title: "Strategic Planning of Sourcing Requirements", desc: "" },
+      { title: "Supplier Relationship Management", desc: "" },
+      { title: "Vendor Management", desc: "" },
+      { title: "Warehouse/Stores Management", desc: "" },
+    ],
+  },
+  {
+    value: 10,
+    text: "Education K-12",
+    desc: [
+      "The assessment questionnaire helps in identifying how the standards of functional delivery of K-12 school profess are measured and assessed.  This helps with the overall evaluation and management process ensuring standardized quality of the education delivered to the students.",
+    ],
+    functionalCompetencies: [
+      { title: "Knowledge Management", desc: "" },
+      { title: "Standard Operating Procedures (SOP)", desc: "" },
+      { title: "Creativity", desc: "" },
       { title: "Flexibility and Adaptability", desc: "" },
-      { title: "Teamwork", desc: "" },
-      { title: "Accuracy and Attention to Detail", desc: "" },
-      { title: "Initiative", desc: "" },
-      { title: "Analytical Thinking", desc: "" },
-      { title: "Followership", desc: "" },
-      { title: "Insurance Legal and Regulatory Environment", desc: "" },
-      { title: "Insurance Finance and Actuarial Concepts", desc: "" },
-      { title: "Internet-Enabled Insurance Services", desc: "" },
-      { title: "Agency Support", desc: "" },
-      { title: "Knowledge of Underwriting", desc: "" },
-      { title: "Risk Analysis and Selection", desc: "" },
-      { title: "Pricing", desc: "" },
-      { title: "Book Management", desc: "" },
-      { title: "Producer Management", desc: "" },
-      { title: "Provider Management", desc: "" },
-      { title: "Medical Informatics", desc: "" },
-      { title: "Knowledge of Reinsurance", desc: "" },
-      { title: "Life Insurance", desc: "" },
-      { title: "Health Insurance", desc: "" },
+      { title: "Oral Communication", desc: "" },
+      { title: "Effective Communication", desc: "" },
+      { title: "Presentations", desc: "" },
+      { title: "Coaching", desc: "" },
+      { title: "Decision Making and Critical Thinking", desc: "" },
+      { title: "Educational Psychology", desc: "" },
+      { title: "Child Psychology", desc: "" },
+      { title: "Educational Professional Ethics Compliance", desc: "" },
+      { title: "Student Counseling", desc: "" },
+      { title: "Planning and Organizing", desc: "" },
+      { title: "Academic Counseling", desc: "" },
+      { title: "Academic Research", desc: "" },
+      { title: "Knowledge of a Specific Academic Discipline", desc: "" },
+      { title: "Academic Assessment", desc: "" },
+      { title: "Academic Support System Administration", desc: "" },
+      { title: "Educational Program Management", desc: "" },
+      { title: "Student Performance Management", desc: "" },
+      { title: "Lesson Planning and Delivery", desc: "" },
     ],
   },
   {
@@ -426,6 +489,26 @@ const jobFunctionalityList = [
         title: "Data Analysis",
         desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
       },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
+      }
     ],
   },
   {
@@ -440,120 +523,6 @@ const jobFunctionalityList = [
       " In addition to building their own systems, software engineers also test, improve, and maintain software built by other engineers",
     ],
     functionalCompetencies: [],
-  },
-  {
-    value: 5,
-    text: "Sales",
-    desc: [
-      "The skills needed to perform jobs in the Sales Function include subject knowledge and technical know-how, as well as  other functional skills related to a specific business.  The skills we identified are what is used by most organizations. The skills that are most valued, recognized for career advancement, and accordingly rewarded.",
-    ],
-    functionalCompetencies: [
-      {
-        title: "Business and Industry Analysis",
-        desc: "Includes knowledge of common pricing and promotions, forecasting competitors' behavior, industry trends and forecasting, and client needs and forecasting. ",
-      },
-      {
-        title: "Product Analysis",
-        desc: "Includes creating organizational product offerings, taking in product feedback, crafting the organizational value proposition and client-product alignment, and having knowledge of competitors' offerings.",
-      },
-      {
-        title: "Client Onboarding ",
-        desc: "Includes knowledge of the client-organization onboarding, creating a smooth client transition to the organization's account manager, and working through all referrals.",
-      },
-      {
-        title: "Overarching Sales Delivery",
-        desc: "Includes ensuring service delivery quality, having knowledge of the sales process, responding to client queries, working through customer relationship management (CRM), performing data collection, ensuring data integrity, performing activity management, and working through client satisfaction surveys and individual feedback.",
-      },
-      {
-        title: "Demand Generation",
-        desc: "Includes working through sales prospecting, handling sales calls, researching and identifying sales opportunities, and ensuring data integrity in the search process.",
-      },
-      {
-        title: "Development of Leads to Sales",
-        desc: "Includes handling objections, qualifying opportunities and gauging the client's stage in the buying process, and working through negotiations with buyers.",
-      },
-      {
-        title: "Sales Closing",
-        desc: "Includes the ability to close the sale. Further, it includes the ability to cross-sell and upgrade or up-sell products where appropriate.",
-      },
-      {
-        title: "Growing Accounts",
-        desc: "Includes upgrading or up-selling (or cross-selling) clients' accounts, handling objections, and working through negotiations in the account growth process.",
-      },
-      {
-        title: "Renewing Accounts",
-        desc: "Includes reviewing all accounts, asking the client to renew, and handling difficult renewals.",
-      },
-      {
-        title: "Data Analysis",
-        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
-      },
-    ],
-  },
-  {
-    value: 6,
-    text: "Marketing",
-    desc: [
-      "The role of marketing has transformed and evolved.  The fundamental marketing skills that cut across the variety of marketing roles are represented here and can be used by many organizations.The depth of a specific skill set is influenced by hands-on experience of practicing the skill and how it is combined with other skills over time.",
-    ],
-    functionalCompetencies: [
-      {
-        title: "Industry Analysis",
-        desc: "Includes the ability to forecast industry growth and examine trends in global and local markets. Further, it includes the ability to identify opportunities, conduct consumer segmentation analyses, collect competitor intelligence where possible, and have knowledge of the product lifecycle, product substitutes, and design best practices.",
-      },
-      {
-        title: "Consumer and Customer Analysis",
-        desc: "Includes the ability to identify target market selection, conduct analysis on consumer trends and buying power, develop insights on customers, and accurately forecast demand.",
-      },
-      {
-        title: "Campaign Planning and Execution",
-        desc: "Includes the ability to plan and develop marketing content, use different promotional mediums, disseminate marketing messages, conduct profitability analysis, plan for internal assessments around risk adoption, and manage external agencies where needed through an analysis of all campaign costs, both internal and external.",
-      },
-      {
-        title: "Marketing Operations",
-        desc: "Includes the ability to analyze and report on performance metrics, skills in customer relationship management (CRM), knowledge of data collection methods, knowledge of maintenance standards and integrity, and ability to develop project timelines, identify scope, and create budget.",
-      },
-      {
-        title: "Demand Generation and Lead Management",
-        desc: "Includes developing, qualifying, and nurturing promotions; identifying how to develop demand and lead management processes; knowledge of how to increase the speed of customer purchasing; and knowledge of when to offer promotional discounts to incent buyers.",
-      },
-      {
-        title: "Sales Support",
-        desc: "Includes knowledge of sales collateral and pipeline acceleration (i.e. accelerating the purchasing process for the buyer).",
-      },
-      {
-        title: "Distribution Channels Support and Analysis",
-        desc: "Includes the ability to analyze and support the distribution network, maintain distribution channel relationships, and support sales divisions with both direct and indirect sales channels.",
-      },
-      {
-        title: "Customer Experience and Engagement Creation",
-        desc: "Includes planning initial customer onboarding, developing word-of-mouth (WOM) initiatives, spearheading customer data initiatives, and developing customer loyalty programs.",
-      },
-      {
-        title: "Product Planning and Development",
-        desc: "Includes planning for new and existing product or service development through analyses of pricing, product packaging and design, product positioning, knowledge of the product lifecycle, and knowledge of merchandising and placement.",
-      },
-      {
-        title: "Communications Development",
-        desc: "Includes the ability to communicate internal/corporate marketing, external communication skills, crafting the organizational image, creating public and media relations campaigns, developing partnerships and sponsorships, and working with advertising agencies to aid in advertising development.",
-      },
-      {
-        title: "Event Planning and Development",
-        desc: "Includes planning event logistics, vendor management, coordinating with organization and party management, and working with third-party events",
-      },
-      {
-        title: "Brand Development",
-        desc: "Includes knowledge of brand development and positioning tactics, brand awareness and integrity, inventory of branded items, brand stewardship, and developing and measuring brand loyalty.",
-      },
-      {
-        title: "Online Channel Support and Analysis",
-        desc: "Includes social media marketing, knowledge of digital platforms and processes (webinars and teleconferencing), search engine marketing (SEM, SEO, and paid searches), mobile marketing, web development skills, and knowledge of marketing automation (email marketing, lead management automation, and enterprise marketing management).",
-      },
-      {
-        title: "Data Analysis",
-        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
-      },
-    ],
   },
   {
     value: 7,
@@ -599,34 +568,26 @@ const jobFunctionalityList = [
         title: "Data Analysis",
         desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
       },
-    ],
-  },
-  {
-    value: 8,
-    text: "Business Operations",
-    desc: [
-      "The functional skills needed to perform a business operations job are mainly focused on the ability to perform the specific tasks.  A business operations role is not just tasked with ensuring the operational health, but is directly linked to the overall growth, and profitability strategies of the business.",
-    ],
-    functionalCompetencies: [
-      { title: "Asset Management", desc: "" },
-      { title: "Concern for Safety", desc: "" },
-      { title: "Global Business Perspective - Business Acumen", desc: "" },
-      { title: "Global Sourcing", desc: "" },
-      { title: "Information Management", desc: "" },
-      { title: "Inventory/Supply Management", desc: "" },
-      { title: "Logistic and transportation Management", desc: "" },
-      { title: "Management Project Communications", desc: "" },
-      { title: "Management Project Execution", desc: "" },
-      { title: "Negotiation", desc: "" },
-      { title: "Procurement Management", desc: "" },
-      { title: "Project Planning", desc: "" },
-      { title: "Project Risk & Change Management", desc: "" },
-      { title: "Requirement Analysis", desc: "" },
-      { title: "Sourcing", desc: "" },
-      { title: "Strategic Planning of Sourcing Requirements", desc: "" },
-      { title: "Supplier Relationship Management", desc: "" },
-      { title: "Vendor Management", desc: "" },
-      { title: "Warehouse/Stores Management", desc: "" },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
+      }
     ],
   },
   {
@@ -715,58 +676,238 @@ const jobFunctionalityList = [
     ],
   },
   {
-    value: 10,
-    text: "Education K-12",
+    value: 2,
+    text: "Insurance",
     desc: [
-      "The assessment questionnaire helps in identifying how the standards of functional delivery of K-12 school profess are measured and assessed.  This helps with the overall evaluation and management process ensuring standardized quality of the education delivered to the students.",
+      "A structured approach to capturing the skills of the industry specific requirements have been used.  The roles cover key tasks such as: Product innovation, Major product version updates, Claims and cost management, Sales production and customer service, Industry consolidation, mergers and acquisitions, Operational outsourcing, Compliance and quality (regulatory, quality, etc)",
     ],
     functionalCompetencies: [
-      { title: "Knowledge Management", desc: "" },
-      { title: "Standard Operating Procedures (SOP)", desc: "" },
-      { title: "Creativity", desc: "" },
+      { title: "Knowledge of Organization", desc: "" },
+      { title: "Service Excellence", desc: "" },
+      { title: "Business Ethics", desc: "" },
+      { title: "Office Support Tools", desc: "" },
       { title: "Flexibility and Adaptability", desc: "" },
-      { title: "Oral Communication", desc: "" },
-      { title: "Effective Communication", desc: "" },
-      { title: "Presentations", desc: "" },
-      { title: "Coaching", desc: "" },
-      { title: "Decision Making and Critical Thinking", desc: "" },
-      { title: "Educational Psychology", desc: "" },
-      { title: "Child Psychology", desc: "" },
-      { title: "Educational Professional Ethics Compliance", desc: "" },
-      { title: "Student Counseling", desc: "" },
-      { title: "Planning and Organizing", desc: "" },
-      { title: "Academic Counseling", desc: "" },
-      { title: "Academic Research", desc: "" },
-      { title: "Knowledge of a Specific Academic Discipline", desc: "" },
-      { title: "Academic Assessment", desc: "" },
-      { title: "Academic Support System Administration", desc: "" },
-      { title: "Educational Program Management", desc: "" },
-      { title: "Student Performance Management", desc: "" },
-      { title: "Lesson Planning and Delivery", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Accuracy and Attention to Detail", desc: "" },
+      { title: "Initiative", desc: "" },
+      { title: "Analytical Thinking", desc: "" },
+      { title: "Followership", desc: "" },
+      { title: "Insurance Legal and Regulatory Environment", desc: "" },
+      { title: "Insurance Finance and Actuarial Concepts", desc: "" },
+      { title: "Internet-Enabled Insurance Services", desc: "" },
+      { title: "Agency Support", desc: "" },
+      { title: "Knowledge of Underwriting", desc: "" },
+      { title: "Risk Analysis and Selection", desc: "" },
+      { title: "Pricing", desc: "" },
+      { title: "Book Management", desc: "" },
+      { title: "Producer Management", desc: "" },
+      { title: "Provider Management", desc: "" },
+      { title: "Medical Informatics", desc: "" },
+      { title: "Knowledge of Reinsurance", desc: "" },
+      { title: "Life Insurance", desc: "" },
+      { title: "Health Insurance", desc: "" },
     ],
   },
   {
-    value: 11,
-    text: "Business Development",
+    value: 12,
+    text: "Manufacturing",
     desc: [
-      "Use strategic planning to ensure sale of services, analyzing business developments and monitoring market trends, market characteristics, and cost markup factors. Identify main client groups and audiences, determine the best way to communicate publicity information to them, and develop and implement a communication plan on appropriate channels to promote products or services, and identify, collect, and report appropriate (KPIs). Consult with product development personnel on service specifications to meet demand and trends.",
+      "Through a structured approach to understanding the skills and capabilities required, equipping those in this industry to ... - capture, recognize, and enhance innovation, - Enable product version updates, Keep track of vendor certification and support, - Be better prepared to compete for business and talent, - Management of costs and expenses, - Be equipped for compliance and quality (ISO, Regulatory, CMMI, Environmental), - Supply chain management ",
     ],
     functionalCompetencies: [
       {
-        title: "Analyze business trends",
-        desc: "Analyze business trends and identify opportunities for growth.",
+        title: "Operational Functions",
+        desc: "Understanding and managing core business processes.",
       },
-      { title: "Marketing", desc: "Develop and implement a marketing plan." },
-      { title: "Meet Demand", desc: "Identify and meet customer demand." },
+      { title: "Products and Services", desc: "Deep knowledge of the organization's offerings and market." },
+      { title: "Core Application Systems", desc: "Proficiency in key software tools and systems." },
       {
-        title: "Business Intelligence",
-        desc: "Use business intelligence to make strategic decisions.",
+        title: "Risk Management",
+        desc: "Identifying, assessing, and mitigating risks.",
       },
-      { title: "Researching", desc: "Conduct market research." },
+      { title: "Business Case Justification", desc: " Developing sound arguments for strategic decisions." },
       {
-        title: "Documentation of BDM activities",
-        desc: "Document business development activities.",
+        title: "Process Management",
+        desc: "Optimizing workflows and procedures.",
       },
+      {
+        title: "Employee Health and Safety",
+        desc: "Prioritizing employee well-being and compliance with regulations.",
+      },
+      {
+        title: "Problem Solving",
+        desc: "Effectively addressing challenges and finding solutions.",
+      },
+      {
+        title: "Effective Communications",
+        desc: "Communicating clearly and persuasively.",
+      },
+      {
+        title: "Decision Making and Critical Thinking",
+        desc: "Analyzing information and making informed choices.",
+      },
+    ],
+  },
+  {
+    value: 6,
+    text: "Marketing",
+    desc: [
+      "The role of marketing has transformed and evolved.  The fundamental marketing skills that cut across the variety of marketing roles are represented here and can be used by many organizations.The depth of a specific skill set is influenced by hands-on experience of practicing the skill and how it is combined with other skills over time.",
+    ],
+    functionalCompetencies: [
+      {
+        title: "Industry Analysis",
+        desc: "Includes the ability to forecast industry growth and examine trends in global and local markets. Further, it includes the ability to identify opportunities, conduct consumer segmentation analyses, collect competitor intelligence where possible, and have knowledge of the product lifecycle, product substitutes, and design best practices.",
+      },
+      {
+        title: "Consumer and Customer Analysis",
+        desc: "Includes the ability to identify target market selection, conduct analysis on consumer trends and buying power, develop insights on customers, and accurately forecast demand.",
+      },
+      {
+        title: "Campaign Planning and Execution",
+        desc: "Includes the ability to plan and develop marketing content, use different promotional mediums, disseminate marketing messages, conduct profitability analysis, plan for internal assessments around risk adoption, and manage external agencies where needed through an analysis of all campaign costs, both internal and external.",
+      },
+      {
+        title: "Marketing Operations",
+        desc: "Includes the ability to analyze and report on performance metrics, skills in customer relationship management (CRM), knowledge of data collection methods, knowledge of maintenance standards and integrity, and ability to develop project timelines, identify scope, and create budget.",
+      },
+      {
+        title: "Demand Generation and Lead Management",
+        desc: "Includes developing, qualifying, and nurturing promotions; identifying how to develop demand and lead management processes; knowledge of how to increase the speed of customer purchasing; and knowledge of when to offer promotional discounts to incent buyers.",
+      },
+      {
+        title: "Sales Support",
+        desc: "Includes knowledge of sales collateral and pipeline acceleration (i.e. accelerating the purchasing process for the buyer).",
+      },
+      {
+        title: "Distribution Channels Support and Analysis",
+        desc: "Includes the ability to analyze and support the distribution network, maintain distribution channel relationships, and support sales divisions with both direct and indirect sales channels.",
+      },
+      {
+        title: "Customer Experience and Engagement Creation",
+        desc: "Includes planning initial customer onboarding, developing word-of-mouth (WOM) initiatives, spearheading customer data initiatives, and developing customer loyalty programs.",
+      },
+      {
+        title: "Product Planning and Development",
+        desc: "Includes planning for new and existing product or service development through analyses of pricing, product packaging and design, product positioning, knowledge of the product lifecycle, and knowledge of merchandising and placement.",
+      },
+      {
+        title: "Communications Development",
+        desc: "Includes the ability to communicate internal/corporate marketing, external communication skills, crafting the organizational image, creating public and media relations campaigns, developing partnerships and sponsorships, and working with advertising agencies to aid in advertising development.",
+      },
+      {
+        title: "Event Planning and Development",
+        desc: "Includes planning event logistics, vendor management, coordinating with organization and party management, and working with third-party events",
+      },
+      {
+        title: "Brand Development",
+        desc: "Includes knowledge of brand development and positioning tactics, brand awareness and integrity, inventory of branded items, brand stewardship, and developing and measuring brand loyalty.",
+      },
+      {
+        title: "Online Channel Support and Analysis",
+        desc: "Includes social media marketing, knowledge of digital platforms and processes (webinars and teleconferencing), search engine marketing (SEM, SEO, and paid searches), mobile marketing, web development skills, and knowledge of marketing automation (email marketing, lead management automation, and enterprise marketing management).",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
+      }
+    ],
+  },
+  {
+    value: 13,
+    text: "Pharmaceutical",
+    desc: [
+      "The Pharmaceutical Competencies aims to harmonize workforce development efforts and establish internationally accepted set of best practices. This maximizes the benefit of collaboration and cooperation in the field of medical products regulatory management",
+    ],
+    functionalCompetencies: [],
+  },
+  {
+    value: 5,
+    text: "Sales",
+    desc: [
+      "The skills needed to perform jobs in the Sales Function include subject knowledge and technical know-how, as well as  other functional skills related to a specific business.  The skills we identified are what is used by most organizations. The skills that are most valued, recognized for career advancement, and accordingly rewarded.",
+    ],
+    functionalCompetencies: [
+      {
+        title: "Business and Industry Analysis",
+        desc: "Includes knowledge of common pricing and promotions, forecasting competitors' behavior, industry trends and forecasting, and client needs and forecasting. ",
+      },
+      {
+        title: "Product Analysis",
+        desc: "Includes creating organizational product offerings, taking in product feedback, crafting the organizational value proposition and client-product alignment, and having knowledge of competitors' offerings.",
+      },
+      {
+        title: "Client Onboarding ",
+        desc: "Includes knowledge of the client-organization onboarding, creating a smooth client transition to the organization's account manager, and working through all referrals.",
+      },
+      {
+        title: "Overarching Sales Delivery",
+        desc: "Includes ensuring service delivery quality, having knowledge of the sales process, responding to client queries, working through customer relationship management (CRM), performing data collection, ensuring data integrity, performing activity management, and working through client satisfaction surveys and individual feedback.",
+      },
+      {
+        title: "Demand Generation",
+        desc: "Includes working through sales prospecting, handling sales calls, researching and identifying sales opportunities, and ensuring data integrity in the search process.",
+      },
+      {
+        title: "Development of Leads to Sales",
+        desc: "Includes handling objections, qualifying opportunities and gauging the client's stage in the buying process, and working through negotiations with buyers.",
+      },
+      {
+        title: "Sales Closing",
+        desc: "Includes the ability to close the sale. Further, it includes the ability to cross-sell and upgrade or up-sell products where appropriate.",
+      },
+      {
+        title: "Growing Accounts",
+        desc: "Includes upgrading or up-selling (or cross-selling) clients' accounts, handling objections, and working through negotiations in the account growth process.",
+      },
+      {
+        title: "Renewing Accounts",
+        desc: "Includes reviewing all accounts, asking the client to renew, and handling difficult renewals.",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
+      }
     ],
   },
 ];
@@ -825,6 +966,55 @@ const coreCompetency = [
     desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
   }
 ];
+
+const coreCompetencyPharmaceutical = [
+  {
+    title: "Collaboration",
+    desc: "Promotes collaboration and open communication.  Establishes working relationships and communication inside and outside of the organization. Assumes additional responsibilities to achieve team goals.",
+  },
+  {
+    title: "Communication",
+    desc: "Listens calmly, diligently, and with empathy.  Responds using appropriate approaches.  Clarifies own understanding when necessary. Identifies audience appropriate communication strategies. Interprets and addresses questions effectively.",
+  },
+  {
+    title: "Decision making",
+    desc: "Recognizes implicit causes and consequences of actions and events. Uses logic and reasoning to identify strengths and weaknesses of alternative solutions.",
+  },
+  {
+    title: "Problem solving",
+    desc: "Adapts to new ideas and initiatives relevant to own area of work. Identifies risks and unknowns of each situation. Deals objectively with criticism of role/work. Achieves results through diplomatic handling of disagreements.",
+  },
+  {
+    title: "Evidence informed practices",
+    desc: "Interprets correctly national and international regulations, standards, guidelines and requirements.  Explains differences between primary source and secondary source  when citing professional literature. Makes business decisions based on frameworks and tools and considers risk, trade-off, timings, and available resources.",
+  },
+  {
+    title: "Personal conduct",
+    desc: "Complies with regulatory and technical requirements. Monitors procedures and methodologies accurately. Ensures integrity and compliance of work based on standards and regulations. Revises an existing control procedure in accordance with established change control systems.",
+  },
+  {
+    title: "Integrity",
+    desc: "Raises and escalates (as appropriate) significant organizational ethics and compliance issues. Makes decisions that are objective and reflect the just treatment of others.",
+  },
+  {
+    title: "Lifelong learning",
+    desc: "Uses newly learned knowledge and skills to complete specific tasks. Treats unexpected situations and tasks as an opportunity an opportunity to learn and grow. Takes charge of personal growth and development.",
+  },
+  {
+    title: "Results driven",
+    desc: "Monitors progress of activities against desired outcomes. Identifies needed adjustments in own area of responsibility. Takes responsibility of own decisions and actions. Develops ways to overcome obstacles.",
+  },
+  {
+    title: "Teamwork and Collaboration",
+    desc: "Actively participates as a member of a team to move the team towards completion of the goals.  Maintains strong, personal connections with team members and stakeholders.  Aligns personal work and performance with the broader team to achieve mutual outcomes.",
+  },
+  {
+    title: "Design Thinking",
+    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
+  }
+];
+
+
 populateDropdown(jobFunctionalityList, jobFunctionalityElement);
 
 const jobTitleData = [
@@ -2772,12 +2962,6 @@ const jobTitleData = [
       },
     ],
   },
-  // {
-  //   "value": 200,
-  //   "jobFunc": 4,
-  //   "text": "Software Development Engineer in Test (SDET)",
-  //   "functionalAssessment": ""
-  // },
   {
     value: 201,
     jobFunc: 4,
@@ -3157,54 +3341,6 @@ const jobTitleData = [
     text: "Scheduling Officer",
     functionalAssessment: "",
   },
-  // {
-  //   value: 247,
-  //   jobFunc: 10,
-  //   text: "Campus Police Lieutenant",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 248,
-  //   jobFunc: 10,
-  //   text: "Campus Security Director",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 249,
-  //   jobFunc: 10,
-  //   text: "General Maintenance Worker II",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 250,
-  //   jobFunc: 10,
-  //   text: "Premises Officer",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 251,
-  //   jobFunc: 10,
-  //   text: "Residence Hall Manager (Incl. Room, Board)",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 252,
-  //   jobFunc: 10,
-  //   text: "Security Officer",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 253,
-  //   jobFunc: 10,
-  //   text: "Academic Mentor",
-  //   functionalAssessment: "",
-  // },
-  // {
-  //   value: 254,
-  //   jobFunc: 10,
-  //   text: "Dining Facility Supervisor",
-  //   functionalAssessment: "",
-  // },
   {
     value: 255,
     jobFunc: 10,
@@ -3474,6 +3610,283 @@ const jobTitleData = [
     jobFunc: 11,
     text: "Vice President of Business Development",
     functionalAssessment: "",
+  },
+  {
+    value: 301,
+    jobFunc: 12,
+    text: "Facilities & Plant Management",
+    functionalAssessment: "",
+  },
+  {
+    value: 302,
+    jobFunc: 12,
+    text: "Manufacturing Research & Development",
+    functionalAssessment: "",
+  },
+  {
+    value: 303,
+    jobFunc: 12,
+    text: "Manufacturing Operations",
+    functionalAssessment: "",
+  },
+  {
+    value: 304,
+    jobFunc: 12,
+    text: "Quality Management",
+    functionalAssessment: "",
+  },
+  {
+    value: 305,
+    jobFunc: 12,
+    text: "Safety",
+    functionalAssessment: "",
+  },
+  {
+    value: 306,
+    jobFunc: 12,
+    text: "Supply Chain Management & Logistics",
+    functionalAssessment: "",
+  },
+  {
+    value: 307,
+    jobFunc: 12,
+    text: "Sourcing and Procurement",
+    functionalAssessment: "",
+  },
+  {
+    value: 308,
+    jobFunc: 12,
+    text: "3D Printing - Additive Manufacturing",
+    functionalAssessment: "",
+  },
+  {
+    value: 309,
+    jobFunc: 13,
+    text: "Regulatory Systems",
+    functionalAssessment: [
+      {
+        title: "Organizational awareness",
+        desc: "Understanding and applying formal rules and structures; identifying decision-makers and individuals who can influence them",
+      },
+      {
+        title:
+          "Regulatory decision-making",
+        desc: "Preparing for and providing recommendations for regulatory decisions on individual products",
+      },
+      {
+        title:
+          "QMS",
+        desc: "Applying principles of quality management in routine work",
+      },
+      {
+        title:
+          "Regulatory framework, policies and process",
+        desc: "Providing regulatory support and guidance to industry and other government departments on regulated issues",
+      },
+      {
+        title:
+          "Surveillance and enforcement",
+        desc: "Providing regulatory support and guidance to industry and other government departments on regulated issues",
+      }
+    ],
+  },
+  {
+    value: 310,
+    jobFunc: 13,
+    text: "Inspector",
+    functionalAssessment: [
+      {
+        title: "Data Management and Informatics",
+        desc: "Collecting data from various sources, such as clinical trials, production and quality control; managing, manipulating and querying the data through a locked database",
+      },
+      {
+        title:
+          "Evaluation of submitted documentation for compliance with regulations and requirements",
+        desc: "Assessing applications for manufacturing licenses and wholesale dealers’ licenses, along with variations to these licenses, for compliance with regulations and requirements",
+      },
+      {
+        title:
+          "Management of the inspectorate system",
+        desc: "Managing, maintaining and updating an inspectorate system in support of inspection activities",
+      },
+      {
+        title:
+          "Performance of regulatory inspections",
+        desc: "Performing regulatory inspections – such as pre-approval, routine and investigative regulatory inspections of manufacturing facilities, testing laboratories, clinical research organizations and distribution channels (throughout the supply chain) – for compliance with applicable national and international requirements (i.e. GxPs, as required)",
+      },
+      {
+        title:
+          "Product quality",
+        desc: "Applying scientific and regulatory requirements to chemistry, manufacturing and controls for a drug substance or drug product",
+      },
+      {
+        title:
+          "Regulatory decision-making",
+        desc: "Making or recommending regulatory decisions on facilities based on appropriate reviews of documentation, inspections (as applicable)",
+      }
+    ],
+  },
+  {
+    value: 311,
+    jobFunc: 13,
+    text: "The Reviewers",
+    functionalAssessment: [
+      {
+        title: "Bioavailability / bioequivalence",
+        desc: "Applying scientific principles, regulatory requirements and best practices to review bioavailability and bioequivalence data",
+      },
+      {
+        title:
+          "Review of clinical trial notifications and oversight of clinical trials",
+        desc: "",
+      },
+      {
+        title:
+          "Clinical Study Operations (GCP)",
+        desc: "Managing clinical studies (adverse event identification and reporting, post-market surveillance, and pharmacovigilance [PV]); handling of investigational product",
+      },
+      {
+        title:
+          "Data Management and Informatics",
+        desc: "Ensuring best practices and resources required for standardizing data collection, capture, management, analysis and reporting",
+      },
+      {
+        title:
+          "Design and analysis of clinical trials, and analysis of real-world and other sources of data",
+        desc: "",
+      },
+      {
+        title:
+          "Ethical and Participant Safety Considerations",
+        desc: "Considering the care of patients, aspects of human participant protection, and safety in the conduct of a clinical trial",
+      },
+      {
+        title:
+          "Investigational product development and regulation",
+        desc: "Concerns knowledge of the development and regulation of investigational products",
+      },
+      {
+        title:
+          "Data review on safety, efficacy and quality",
+        desc: "Reviewing data on safety, efficacy and quality in applications for clinical studies, marketing authorization and post-approval changes (variations)",
+      },
+      {
+        title:
+          "Maintenance of a register of approved products",
+        desc: "Maintaining a register of approved products, including periodic renewal and regulatory actions to suspend, withdraw or cancel registrations due to non-compliance with requirements",
+      }
+    ],
+  },
+  {
+    value: 312,
+    jobFunc: 13,
+    text: "Product Quality",
+    functionalAssessment: [
+      {
+        title: "Applying scientific and regulatory requirements to chemistry, manufacturing and controls for a drug substance or drug product",
+        desc: "",
+      }
+    ],
+  },
+  {
+    value: 313,
+    jobFunc: 13,
+    text: "Laboratory Analyst",
+    functionalAssessment: [
+      {
+        title: "Work environment safety",
+        desc: "Maintaining a safe and productive work environment",
+      },
+      {
+        title: "Laboratory systems and equipment",
+        desc: "Ensuring proper functioning of laboratory systems and equipment, including operation, maintenance and calibration of equipment and workflow",
+      },
+      {
+        title: "Analytical methods and reports",
+        desc: "Analyzing data, test results and reports using mathematical and statistical (if applicable) calculations",
+      },
+      {
+        title: "Routine laboratory operations",
+        desc: "Understanding and applying principles, procedures and standards of routine laboratory operations in compliance with the regulation of medicines",
+      }
+    ],
+  },
+  {
+    value: 314,
+    jobFunc: 13,
+    text: "Work Environment Safety",
+    functionalAssessment: [
+      {
+        title: "Routine laboratory operations maintenance of a safe and productive work environment",
+        desc: "",
+      }
+    ],
+  },
+  {
+    value: 315,
+    jobFunc: 13,
+    text: "Vigilance Personnel",
+    functionalAssessment: [
+      {
+        title: "Post-market surveillance",
+        desc: "Monitoring the safety of medicines on the market; assessing the effectiveness of risk mitigation/minimization measures",
+      },
+      {
+        title: "Pre-market vigilance",
+        desc: "Assessing pre-market risk management measures to ensure the safety of medicines",
+      },
+      {
+        title: "PV system strengthening",
+        desc: "Building and strengthening national capacity for PV of medicines",
+      },
+      {
+        title: "Regulatory actions",
+        desc: "Communicating risk of signals detected from PV activities, and evaluating the performance of the national PV system",
+      },
+    ],
+  },
+  {
+    value: 316,
+    jobFunc: 13,
+    text: "The Prescriber - Prescribing Governance",
+    functionalAssessment: [
+      {
+        title: "Prescribe Safely",
+        desc: "",
+      },
+      {
+        title: "Prescribe Professionally",
+        desc: "",
+      },
+      {
+        title: "Improve prescribing practices",
+        desc: "",
+      },
+      {
+        title: "Prescribe as part of a team",
+        desc: "",
+      },
+      {
+        title: "Data management",
+        desc: "",
+      },
+      {
+        title: "Product quality",
+        desc: "",
+      },
+      {
+        title: "Compliance with regulatory requirements",
+        desc: "",
+      },
+      {
+        title: "Product information and labeling",
+        desc: "",
+      },
+      {
+        title: "Maintenance of the product review system",
+        desc: "",
+      },
+    ],
   },
 ];
 
