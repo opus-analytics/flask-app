@@ -282,6 +282,60 @@ def add_competency():
     connection.close()
     return Response(status=200, response=json.dumps({"message":"Competency added successfully"}), mimetype='application/json')
 
+@app.route("/update-manager-competency", methods = ["POST"])
+def update_manager_competency():
+    data = request.get_json()
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor() 
+      
+    create = f"UPDATE competency_assessment_extra SET jobSkills = '{data['jobSkills']}', name = '{data['name']}' where token='{data['token']}';"
+    cursor.execute(create)
+    connection.commit()
+    connection.close()
+    return Response(status=200, response=json.dumps({"message":"Competency added successfully"}), mimetype='application/json')
+    
+@app.route("/get-competency", methods = ["POST"])
+def get_competencies():
+    data = request.get_json()
+    try:
+        # Establish database connection
+        connection = mysql.connector.connect(
+            host='opus-server.mysql.database.azure.com',
+            database='opus_prod',
+            user='opusadmin',
+            password='OAg@1234'
+        )
+
+        # Create cursor object
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+        # Execute query
+        cursor.execute(f"SELECT main.jobFunction, main.jobTitle, main.monthsInRole FROM competency_assessment_extra as extra inner join competency_assessment as main on main.Id = extra.competency_Id where token='{data['token']}';")
+
+        # Fetch results as a list of dictionaries
+        results = cursor.fetchall()
+
+        # Check if any results were found
+        if not results:
+            return json.dumps({"error": "No data found."})
+
+        # Convert to JSON
+        json_data = json.dumps(results[0])
+
+    except mysql.connector.Error as err:
+        # Handle database connection errors
+        return json.dumps({"error": f"Database connection error: {err}"})
+
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+    return json_data
+    
+    
 @app.route("/reset-password", methods = ["GET","POST"])
 def reset_password():
     email = request.form.get("Email")
@@ -819,6 +873,12 @@ def payment():
 @app.route("/knowledge-graph")
 def knowledge_graph():
     return (render_template("knowledge-graph-starting-form.html"))
+
+@app.route("/knowledge-graph-manager/<id>")
+def knowledge_graph_manager(id):
+
+    # Render the template with the fetched data
+    return (render_template("knowledge-graph-manager.html", id=id))
 
 @app.route("/.well-known/pki-validation/godaddy.html")
 def goddadyVerification():

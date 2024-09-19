@@ -1,206 +1,3 @@
-const form = document.getElementById("wf-form-Submission-Form");
-// Select the error message element
-const errorMessage = document.querySelector(".w-form-fail");
-const successMessage = document.querySelector(".w-form-done");
-const resultElement = document.getElementById("result");
-resultElement.style.display = "none"; // Hide the result initially
-
-let formElement = document.getElementById("assessmentForm");
-let submitButton = document.getElementById("submit-button");
-form.addEventListener("submit", (event) => {
-  event.preventDefault(); // Prevent default form submission
-
-  // Get form data
-  const name = document.getElementById("name").value;
-  const jobFunctionality = document.getElementById("Job-Function").value;
-  const jobTitle = document.getElementById("Job-Title").value;
-  const monthsInRole = document.getElementById("monthsInRole").value;
-
-  let jobAssessmentArray = jobTitleData.find(
-    (job) => job.value == jobTitle
-  ).functionalAssessment;
-
-  let assessmentArray = [];
-  if (jobAssessmentArray.length == 0) {
-    // Validate form data
-    assessmentArray = jobFunctionalityList.find(
-      (job) => job.value == jobFunctionality
-    ).functionalCompetencies;
-  } else {
-    assessmentArray = jobAssessmentArray;
-  }
-
-  const functionalCompetencies = assessmentArray.length;
-  if (jobFunctionalityList.find((job) => job.value == jobFunctionality).text == "Pharmaceutical"){
-    assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
-  }
-  else{
-    assessmentArray = assessmentArray.concat(coreCompetency);
-  }
-
-  const jobTitleName = jobTitleData
-    .find((job) => job.value == jobTitle)
-    .text.toLowerCase();
-
-  if (
-    jobTitleName.includes("manager") ||
-    jobTitleName.includes("director") ||
-    jobTitleName.includes("vice president") ||
-    jobTitleName.includes("chief")
-  ) {
-
-    let LeadershipCompetency = {
-      title: "Leadership",
-      desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
-    };
-    assessmentArray.push(LeadershipCompetency);
-  }
-
-  // Create the form and add it to the desired location (replace with your target element ID)
-  formElement = document.getElementById("assessmentForm");
-
-  // Create the form title section
-  const titleSection = document.createElement("div");
-  titleSection.classList.add("title-section");
-
-  const formTitle = document.createElement("h2");
-  formTitle.textContent = jobFunctionalityList.find(
-    (job) => job.value == jobFunctionality
-  ).text;
-  titleSection.appendChild(formTitle);
-  const formDescription = document.createElement("p");
-  formDescription.textContent = jobFunctionalityList.find(
-    (job) => job.value == jobFunctionality
-  ).desc;
-  titleSection.appendChild(formDescription);
-  const infoSpan = document.createElement("span");
-  infoSpan.textContent =
-    "Selecting (NA) for a question will not affect your overall assessment score.";
-  titleSection.appendChild(infoSpan);
-
-  formElement.appendChild(titleSection);
-  formElement.appendChild(
-    createFormAssessment(assessmentArray, functionalCompetencies)
-  );
-
-  submitButton = document.getElementById("submit-button");
-
-  submitButton.addEventListener("click", async (event) => {
-    event.preventDefault();
-
-    // Get all slider input elements
-    const sliders = document.querySelectorAll(
-      'assessmentForm input[type="range"]'
-    );
-
-    // Extract slider input values
-    let sliderValues = [];
-    sliders.forEach((slider) => {
-      sliderValues.push(slider.value);
-    });
-    
-    // Calculation to the form
-    // First get user experience
-    let userExperience = 0;
-    if (monthsInRole < 24) {
-      // If user has been in role for 1 year
-      userExperience = 0.5;
-    } else if (monthsInRole >= 24 && monthsInRole < 36) {
-      // If user has been in role for 2 years
-      userExperience = 0.75;
-    } else if (monthsInRole >= 36 && monthsInRole < 48) {
-      // If user has been in role for 3 years
-      userExperience = 0.9;
-    } else if (monthsInRole >= 48 && monthsInRole < 72) {
-      // If user has been in role for 4-5 years
-      userExperience = 1;
-    } else if (monthsInRole >= 72 && monthsInRole < 84) {
-      // If user has been in role for 6 years
-      userExperience = 0.95;
-    } else if (monthsInRole >= 84 && monthsInRole < 96) {
-      // If user has been in role for 7 years
-      userExperience = 0.9;
-    } else if (monthsInRole >= 96 && monthsInRole < 108) {
-      // If user has been in role for 8 years
-      userExperience = 0.8;
-    } else if (monthsInRole >= 108 && monthsInRole < 120) {
-      // If user has been in role for 9 years
-      userExperience = 0.75;
-    } else if (monthsInRole >= 120) {
-      // If user has been in role for 10 years or more
-      userExperience = 0.65;
-    }
-
-    for (let i = 0; i < sliderValues.length; i++) {
-      answerValue = parseInt(sliderValues[i]);
-      if (answerValue == 1) {
-        sliderValues[i] = parseInt(25);
-      } else if (answerValue == 2) {
-        sliderValues[i] = parseInt(50);
-      } else if (answerValue == 3) {
-        sliderValues[i] = parseInt(75);
-      } else if (answerValue == 4) {
-        sliderValues[i] = parseInt(85);
-      } else if (answerValue == 5) {
-        sliderValues[i] = parseInt(100);
-      }
-      else {
-        sliderValues[i] = parseInt(0);
-      }
-    }
-
-    // Show result to add to database
-    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
-    // Add the assessment to the database
-    const assessment = {
-      name: name,
-      jobFunction: jobFunctionality,
-      jobTitle: jobTitle,
-      monthsInRole: monthsInRole,
-      jobSkills: sliderValues,
-    };
-
-    await fetch("https://opus-app.azurewebsites.net/add-competency", {
-      method: "POST",
-      body: JSON.stringify(assessment),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    sliderValues = sliderValues.filter((value) => value !== "0");
-    const sum = sliderValues.reduce((a, b) => a + b, 0);
-    const average = sum / sliderValues.length;
-
-    const assessmentScore = average * userExperience;
-    let weightedAssessmentScore = 0;
-    if (assessmentScore >= 85) {
-      weightedAssessmentScore = 0.85;
-    } else if (assessmentScore >= 75 && assessmentScore < 85) {
-      weightedAssessmentScore = 0.75;
-    } else if (assessmentScore >= 70 && assessmentScore < 75) {
-      weightedAssessmentScore = 0.7;
-    } else if (assessmentScore >= 65 && assessmentScore < 70) {
-      weightedAssessmentScore = 0.65;
-    } else if (assessmentScore < 65) {
-      weightedAssessmentScore = 0.6;
-    }
-    weightedAssessmentScore = weightedAssessmentScore * 100;
-    submitButton.style.display = "none"; // Hide the submit button
-
-    // Display the result
-    const resultElement = document.getElementById("result");
-    resultElement.textContent = `Your assessment score is ${weightedAssessmentScore.toFixed(
-      2
-    )}%`;
-    resultElement.style.display = "block"; // Show the result
-  });
-
-
-  const submitFormWrap = document.getElementById("start-button");
-  submitFormWrap.style.display = "none"; // Hide the start button
-});
-
 function createFormAssessment(assessmentData, functionalCompetenciesLength) {
   // Create the form element
   const form = document.createElement("assessmentForm");
@@ -285,20 +82,6 @@ const jobFunctionalityElement = document.getElementById("Job-Function");
 const jobTitleElement = document.getElementById("Job-Title");
 const jobAssessmentElement = document.getElementById("job-assessment");
 
-// Function to populate dropdown with options from JSON data
-function populateDropdown(optionsList, dropdownElement) {
-  dropdownElement.innerHTML = ""; // Clear existing options
-  for (const option of optionsList) {
-    const optionElement = document.createElement("option");
-    optionElement.value = option.value;
-    optionElement.textContent = option.text;
-    if (option.value === "0") {
-      optionElement.disabled = true;
-      optionElement.selected = true;
-    }
-    dropdownElement.appendChild(optionElement);
-  }
-}
 
 function updateTextInput(val) {
   document.getElementById("textInput").value = val;
@@ -1029,9 +812,6 @@ const coreCompetencyPharmaceutical = [
     desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
   }
 ];
-
-
-populateDropdown(jobFunctionalityList, jobFunctionalityElement);
 
 const jobTitleData = [
   {
@@ -3906,13 +3686,230 @@ const jobTitleData = [
   },
 ];
 
-populateDropdown(jobTitleData, jobTitleElement);
-// Event listener for job functionality change
-jobFunctionalityElement.addEventListener("change", (event) => {
-  const selectedJobFunctionality = event.target.value;
-  const jobTitleList = jobTitleData.filter(
-    (value) => value.jobFunc === parseInt(selectedJobFunctionality)
+// Select the error message element
+const errorMessage = document.querySelector(".w-form-fail");
+const successMessage = document.querySelector(".w-form-done");
+const resultElement = document.getElementById("result");
+resultElement.style.display = "none"; // Hide the result initially
+
+let formElement = document.getElementById("assessmentForm");
+const form = document.getElementById("wf-form-Submission-Form");
+let submitButton = document.getElementById("submit-button");
+form.addEventListener("submit", async (event) => {
+  event.preventDefault(); // Prevent default form submission
+
+  var graphId = document.getElementById("graph_id").value;
+  console.log(graphId);
+
+  const dataBody = {
+    token: graphId,
+  };
+
+  var resp;
+  // Response to the form submission
+  await fetch("https://opus-app.azurewebsites.net/get-competency", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataBody),
+  }).then((response) => response.json())
+  .then((data) => {
+    // Assign to our production
+    console.log("success");
+    resp = data;
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
+  // Display the result
+  console.log(resp);
+  // Get form data from request
+  const name = document.getElementById("name").value;
+  const jobFunctionality = resp.jobFunction;
+  const jobTitle = resp.jobTitle;
+  const monthsInRole = resp.monthsInRole;
+
+  let jobAssessmentArray = jobTitleData.find(
+    (job) => job.value == jobTitle
+  ).functionalAssessment;
+
+  let assessmentArray = [];
+  if (jobAssessmentArray.length == 0) {
+    // Validate form data
+    assessmentArray = jobFunctionalityList.find(
+      (job) => job.value == jobFunctionality
+    ).functionalCompetencies;
+  } else {
+    assessmentArray = jobAssessmentArray;
+  }
+
+  const functionalCompetencies = assessmentArray.length;
+  if (jobFunctionalityList.find((job) => job.value == jobFunctionality).text == "Pharmaceutical"){
+    assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
+  }
+  else{
+    assessmentArray = assessmentArray.concat(coreCompetency);
+  }
+
+  const jobTitleName = jobTitleData
+    .find((job) => job.value == jobTitle)
+    .text.toLowerCase();
+
+  if (
+    jobTitleName.includes("manager") ||
+    jobTitleName.includes("director") ||
+    jobTitleName.includes("vice president") ||
+    jobTitleName.includes("chief")
+  ) {
+
+    let LeadershipCompetency = {
+      title: "Leadership",
+      desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
+    };
+    assessmentArray.push(LeadershipCompetency);
+  }
+
+  // Create the form and add it to the desired location (replace with your target element ID)
+  formElement = document.getElementById("assessmentForm");
+
+  // Create the form title section
+  const titleSection = document.createElement("div");
+  titleSection.classList.add("title-section");
+
+  const formTitle = document.createElement("h2");
+  formTitle.textContent = jobFunctionalityList.find(
+    (job) => job.value == jobFunctionality
+  ).text;
+  titleSection.appendChild(formTitle);
+  const formDescription = document.createElement("p");
+  formDescription.textContent = jobFunctionalityList.find(
+    (job) => job.value == jobFunctionality
+  ).desc;
+  titleSection.appendChild(formDescription);
+  const infoSpan = document.createElement("span");
+  infoSpan.textContent =
+    "Selecting (NA) for a question will not affect your overall assessment score.";
+  titleSection.appendChild(infoSpan);
+
+  formElement.appendChild(titleSection);
+  formElement.appendChild(
+    createFormAssessment(assessmentArray, functionalCompetencies)
   );
 
-  populateDropdown(jobTitleList, jobTitleElement);
+  submitButton = document.getElementById("submit-button");
+
+  submitButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    // Get all slider input elements
+    const sliders = document.querySelectorAll(
+      'assessmentForm input[type="range"]'
+    );
+
+    // Extract slider input values
+    let sliderValues = [];
+    sliders.forEach((slider) => {
+      sliderValues.push(slider.value);
+    });
+    
+    // Calculation to the form
+    // First get user experience
+    let userExperience = 0;
+    if (monthsInRole < 24) {
+      // If user has been in role for 1 year
+      userExperience = 0.5;
+    } else if (monthsInRole >= 24 && monthsInRole < 36) {
+      // If user has been in role for 2 years
+      userExperience = 0.75;
+    } else if (monthsInRole >= 36 && monthsInRole < 48) {
+      // If user has been in role for 3 years
+      userExperience = 0.9;
+    } else if (monthsInRole >= 48 && monthsInRole < 72) {
+      // If user has been in role for 4-5 years
+      userExperience = 1;
+    } else if (monthsInRole >= 72 && monthsInRole < 84) {
+      // If user has been in role for 6 years
+      userExperience = 0.95;
+    } else if (monthsInRole >= 84 && monthsInRole < 96) {
+      // If user has been in role for 7 years
+      userExperience = 0.9;
+    } else if (monthsInRole >= 96 && monthsInRole < 108) {
+      // If user has been in role for 8 years
+      userExperience = 0.8;
+    } else if (monthsInRole >= 108 && monthsInRole < 120) {
+      // If user has been in role for 9 years
+      userExperience = 0.75;
+    } else if (monthsInRole >= 120) {
+      // If user has been in role for 10 years or more
+      userExperience = 0.65;
+    }
+
+    for (let i = 0; i < sliderValues.length; i++) {
+      answerValue = parseInt(sliderValues[i]);
+      if (answerValue == 1) {
+        sliderValues[i] = parseInt(25);
+      } else if (answerValue == 2) {
+        sliderValues[i] = parseInt(50);
+      } else if (answerValue == 3) {
+        sliderValues[i] = parseInt(75);
+      } else if (answerValue == 4) {
+        sliderValues[i] = parseInt(85);
+      } else if (answerValue == 5) {
+        sliderValues[i] = parseInt(100);
+      }
+      else {
+        sliderValues[i] = parseInt(0);
+      }
+    }
+
+    // Show result to add to database
+    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
+    // Add the assessment to the database
+    const assessment = {
+      token: graphId,
+      name: name,
+      jobSkills: sliderValues
+    };
+
+    await fetch("https://opus-app.azurewebsites.net/update-manager-competency", {
+      method: "POST",
+      body: JSON.stringify(assessment),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    sliderValues = sliderValues.filter((value) => value !== "0");
+    const sum = sliderValues.reduce((a, b) => a + b, 0);
+    const average = sum / sliderValues.length;
+
+    const assessmentScore = average * userExperience;
+    let weightedAssessmentScore = 0;
+    if (assessmentScore >= 85) {
+      weightedAssessmentScore = 0.85;
+    } else if (assessmentScore >= 75 && assessmentScore < 85) {
+      weightedAssessmentScore = 0.75;
+    } else if (assessmentScore >= 70 && assessmentScore < 75) {
+      weightedAssessmentScore = 0.7;
+    } else if (assessmentScore >= 65 && assessmentScore < 70) {
+      weightedAssessmentScore = 0.65;
+    } else if (assessmentScore < 65) {
+      weightedAssessmentScore = 0.6;
+    }
+    weightedAssessmentScore = weightedAssessmentScore * 100;
+    submitButton.style.display = "none"; // Hide the submit button
+
+    // Display the result
+    const resultElement = document.getElementById("result");
+    resultElement.textContent = `Your assessment score is ${weightedAssessmentScore.toFixed(
+      2
+    )}%`;
+    resultElement.style.display = "block"; // Show the result
+  });
+
+
+  const submitFormWrap = document.getElementById("start-button");
+  submitFormWrap.style.display = "none"; // Hide the start button
 });
