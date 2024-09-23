@@ -335,6 +335,63 @@ def get_competencies():
 
     return json_data
     
+@app.route("/calculate-competency", methods = ["POST"])
+def calculate_competency_list():
+    data = request.get_json()
+    
+    answers = data['answers']
+    monthsInRole = data['monthsInRole']
+    
+    userExperience = 0;
+    if (monthsInRole < 24) :
+      # If user has been in role for 1 year
+      userExperience = 0.5;
+    elif (monthsInRole >= 24 and monthsInRole < 36) :
+      # If user has been in role for 2 years
+      userExperience = 0.75;
+    elif (monthsInRole >= 36 and monthsInRole < 48) :
+      # If user has been in role for 3 years
+      userExperience = 0.9;
+    elif (monthsInRole >= 48 and monthsInRole < 72) :
+      # If user has been in role for 4-5 years
+      userExperience = 1;
+    elif (monthsInRole >= 72 and monthsInRole < 84) :
+      # If user has been in role for 6 years
+      userExperience = 0.95;
+    elif (monthsInRole >= 84 and monthsInRole < 96) :
+      # If user has been in role for 7 years
+      userExperience = 0.9;
+    elif (monthsInRole >= 96 and monthsInRole < 108) :
+      # If user has been in role for 8 years
+      userExperience = 0.8;
+    elif (monthsInRole >= 108 and monthsInRole < 120) :
+      # If user has been in role for 9 years
+      userExperience = 0.75;
+    elif (monthsInRole >= 120) :
+      # If user has been in role for 10 years or more
+      userExperience = 0.65;
+
+    sum = 0;
+    count = 0;    
+    for answer in answers:
+        sum += answer
+        if (answer > 0):
+            count += 1;
+    
+    average = sum / count;
+    assessmentScore = average * userExperience;
+    if (assessmentScore >= 85) :
+      weightedAssessmentScore = 0.85;
+    elif (assessmentScore >= 75 and assessmentScore < 85) :
+      weightedAssessmentScore = 0.75;
+    elif (assessmentScore >= 70 and assessmentScore < 75) :
+      weightedAssessmentScore = 0.7;
+    elif (assessmentScore >= 65 and assessmentScore < 70) :
+      weightedAssessmentScore = 0.65;
+    elif (assessmentScore < 65) :
+      weightedAssessmentScore = 0.6;
+    
+    return Response(status=200, response=json.dumps({"message":"Competency calculated successfully", "score": weightedAssessmentScore*100}), mimetype='application/json')
     
 @app.route("/reset-password", methods = ["GET","POST"])
 def reset_password():
