@@ -149,6 +149,7 @@ form.addEventListener("submit", (event) => {
       }
     }
 
+    let userName = document.getElementById("username").value;
     // Show result to add to database
     // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
     // Add the assessment to the database
@@ -158,9 +159,10 @@ form.addEventListener("submit", (event) => {
       jobTitle: jobTitle,
       monthsInRole: monthsInRole,
       jobSkills: sliderValues,
+      username: userName,
     };
 
-    await fetch("https://opus-app.azurewebsites.net/add-competency", {
+    await fetch("http://127.0.0.1:5000/add-competency", {
       method: "POST",
       body: JSON.stringify(assessment),
       headers: {

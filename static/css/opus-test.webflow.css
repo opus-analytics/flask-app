@@ -5954,7 +5954,6 @@ figcaption {
   z-index: 0;
   width: 80%;
   max-width: 755px;
-  min-height: 300px;
   -webkit-text-fill-color: inherit;
   background-color: #fff;
   background-clip: border-box;
@@ -12268,7 +12267,6 @@ figcaption {
   .submit-form-wrap {
     width: 90%;
     max-width: 906px;
-    min-height: 300px;
     margin-bottom: 58px;
     padding-bottom: 48px;
   }

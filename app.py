@@ -276,12 +276,53 @@ def add_competency():
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor() 
       
-    create = f"INSERT INTO competency_assessment (name, jobFunction, jobTitle, monthsInRole, jobSkills) VALUES('{data['name']}', '{data['jobFunction']}', '{data['jobTitle']}', '{data['monthsInRole']}', '{data['jobSkills']}');"
+    create = f"INSERT INTO competency_assessment (name, jobFunction, jobTitle, monthsInRole, jobSkills, username) VALUES('{data['name']}', '{data['jobFunction']}', '{data['jobTitle']}', '{data['monthsInRole']}', '{data['jobSkills']}', '{data['username']}');"
     cursor.execute(create)
     connection.commit()
     connection.close()
     return Response(status=200, response=json.dumps({"message":"Competency added successfully"}), mimetype='application/json')
 
+@app.route("/get-my-competencies", methods = ["POST"])
+def get_my_competencies():
+    data = request.get_json()
+    try:
+        # Establish database connection
+        connection = mysql.connector.connect(
+            host='opus-server.mysql.database.azure.com',
+            database='opus_prod',
+            user='opusadmin',
+            password='OAg@1234'
+        )
+
+        # Create cursor object
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+        # Execute query
+        cursor.execute(f"SELECT * FROM competency_assessment where username='{data['username']}';")
+
+        # Fetch results as a list of dictionaries
+        results = cursor.fetchall()
+
+        # Check if any results were found
+        if not results:
+            return json.dumps({"error": "No data found."})
+
+        # Convert to JSON
+        json_data = json.dumps(results)
+        
+    except mysql.connector.Error as err:
+        # Handle database connection errors
+        return json.dumps({"error": f"Database connection error: {err}"})
+
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+            
+
+    return json_data
 @app.route("/update-manager-competency", methods = ["POST"])
 def update_manager_competency():
     data = request.get_json()
@@ -930,13 +971,138 @@ def payment():
 
 @app.route("/knowledge-graph")
 def knowledge_graph():
-    return (render_template("knowledge-graph-starting-form.html"))
+    username = session.get('username')
+    return (render_template("knowledge-graph-starting-form.html", username=username))
+
+@app.route("/knowledge-graph-portal")
+def knowledge_graph_portal():
+    username = session.get('username')
+
+    return (render_template("knowledge-graph-portal.html", username=username))
+
+@app.route("/get-my-competency", methods = ["POST"])
+def get_my_competency():
+    username = session.get('username')
+    try:
+        # Establish database connection
+        connection = mysql.connector.connect(
+            host='opus-server.mysql.database.azure.com',
+            database='opus_prod',
+            user='opusadmin',
+            password='OAg@1234'
+        )
+
+        # Create cursor object
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+        # Execute query
+        cursor.execute(f"SELECT comp.*, job_title.title FROM competency_assessment as comp inner join job_title on job_title.Id = comp.jobTitle where username='{username}';")
+
+        # Fetch results as a list of dictionaries
+        results = cursor.fetchall()
+
+        # Check if any results were found
+        if not results:
+            return json.dumps({"error": "No data found."})
+
+        # Convert to JSON
+        json_data = json.dumps(results)
+        
+    except mysql.connector.Error as err:
+        # Handle database connection errors
+        return json.dumps({"error": f"Database connection error: {err}"})
+
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+            
+    return results
 
 @app.route("/knowledge-graph-manager/<id>")
 def knowledge_graph_manager(id):
-
+    
     # Render the template with the fetched data
     return (render_template("knowledge-graph-manager.html", id=id))
+
+@app.route("/knowledge-graph-extra", methods = ["POST"])
+def knowledge_graph_extra():
+    
+    data = request.get_json()
+
+    try:
+        # Establish database connection
+        connection = mysql.connector.connect(
+            host='opus-server.mysql.database.azure.com',
+            database='opus_prod',
+            user='opusadmin',
+            password='OAg@1234'
+        )
+
+        # Create cursor object
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+        # Execute query
+        cursor.execute(f"INSERT INTO `competency_assessment_extra` (`competency_Id`, `email`) VALUES (%(competencyId)s, %(email)s);", data)
+
+        # Get the ID of the inserted row
+        inserted_id = cursor.lastrowid
+
+        # Commit the changes to the database
+        connection.commit()  # This is crucial to save the inserted data
+
+        # Return a success message with the inserted ID
+        return jsonify({"message": "Data inserted successfully", "inserted_id": inserted_id})
+
+    except mysql.connector.Error as err:
+        # Handle database connection errors
+        return json.dumps({"error": f"Database connection error: {err}"})
+
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+            
+@app.route("/knowledge-graph-extra-getId", methods = ["POST"])
+def knowledge_graph_extra_getId():
+    
+    data = request.get_json()
+
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+    # Execute query
+    cursor.execute(f"SELECT * FROM competency_assessment_extra where Id='{data['Id']}';")
+
+    # Fetch results as a list of dictionaries
+    results = cursor.fetchall()
+
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+        
+    return results[0]
+            
 
 @app.route("/.well-known/pki-validation/godaddy.html")
 def goddadyVerification():
