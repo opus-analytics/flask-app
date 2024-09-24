@@ -27,13 +27,13 @@ import xmltodict
 from python_random_strings import random_strings
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(32).hex()
+app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
-app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
+app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'Omar.Alaa@rightfoot.org'
+app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
 
-app.config['MAIL_PASSWORD'] = 'L)491117322543af'
+app.config['MAIL_PASSWORD'] = 'Opus @ 2023'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_DEFAULT_SENDER'] = 'Omar.Alaa@rightfoot.org'
@@ -167,61 +167,41 @@ def sign_in():
 
 @app.route("/sign-up", methods = ["GET","POST"])
 
-
 def sign_up():
-    connection = mysql.connector.connect(
-        host='opus-server.mysql.database.azure.com',
-        database='opus_prod',
-        user='opusadmin',
-        password='OAg@1234'
-    )
+    token = ''
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor()
-
     full_name = request.form.get("Full-Name")
     email = request.form.get("Email-3")
     password = request.form.get("Password-5")
+    
     company = request.form.get("Company-Name")
 
-    check_mail_query = f"SELECT email From users WHERE email = '{email}' AND verification_status != 'Pending'"
-
+    check_mail_query = f"SELECT email From users where email = '{email}' AND verification_status != 'Pending'"
+    
     if request.method == "POST":
         cursor.execute(check_mail_query)
         cursor.fetchall()
         count = cursor.rowcount
         if count > 0:
-            flash('email already exists!', 'error')
+            flash('email already exists!','error')
         else:
-            try:
-                password = bytes(password, encoding='utf-8')
-                salt = bcrypt.gensalt()
-                hashed_pwd = bcrypt.hashpw(password, salt)
-                hashed_pwd = hashed_pwd.decode()
+            password = bytes(password, encoding = 'utf-8')
+            salt = bcrypt.gensalt()
+            hashed_pwd = bcrypt.hashpw(password, salt)
+            hashed_pwd = hashed_pwd.decode()
+            insertion_query = f"REPLACE INTO users (username, password, email, full_name, company_name,verification_status) VALUES ('{email}','{hashed_pwd}','{email}', '{full_name}', '{company}', 'Pending')"
+            cursor.execute(insertion_query)
+            connection.commit()
+            connection.close()
+            token = s.dumps(email, salt= 'email-confirm')
+            msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=[email])
+            link = url_for('confirmed_mail',token=token, _external=True)
+            msg.html = render_template('verification.html',link = link)
+            mail.send(msg)
+            return (redirect(url_for('confirmation_mail')))
 
-                insertion_query = f"REPLACE INTO users (username, password, email, full_name, company_name, verification_status) VALUES ('{email}', '{hashed_pwd}', '{email}', '{full_name}', '{company}', 'Pending')"
-                cursor.execute(insertion_query)
-                connection.commit()
-                connection.close()
-
-                # Generate and send confirmation email
-                # s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-                # token = s.dumps(email, salt='email-confirm')
-
-                # msg = Message('Confirm Email', sender='Omar.Alaa@rightfoot.org', recipients=[email])
-                # link = url_for('confirmed_mail', token=token, _external=True)  # Ensure confirmed_mail route exists
-                # msg.html = render_template('verification.html', link=link)
-
-                # try:
-                #     with mail.connect() as conn:
-                #         conn.send(msg)
-                #     return jsonify({'message': 'Email sent successfully'})
-                # except Exception as e:
-                #     return jsonify({'error': str(e)})
-
-            except Exception as e:
-                print(f"Error during signup: {e}")
-                flash('An error occurred during signup. Please try again.', 'error')
-
-    return render_template("signup.html")
+    return (render_template("signup.html",token = token))
 
 
 @app.route("/confirmation-mail")
