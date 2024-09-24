@@ -65,15 +65,6 @@ function createFormAssessment(assessmentData, functionalCompetenciesLength) {
     form.appendChild(assessmentContainer);
   });
 
-  // Create a submit button
-  const submitButton = document.createElement("button");
-  submitButton.type = "submit";
-  submitButton.textContent = "Submit";
-  submitButton.id = "submit-button"; // Set the ID
-  // Add class names to the button
-  submitButton.classList.add("a-button-primary", "upload", "w-button"); // Using classList.add
-  form.appendChild(submitButton);
-
   return form;
 }
 
@@ -81,7 +72,6 @@ function createFormAssessment(assessmentData, functionalCompetenciesLength) {
 const jobFunctionalityElement = document.getElementById("Job-Function");
 const jobTitleElement = document.getElementById("Job-Title");
 const jobAssessmentElement = document.getElementById("job-assessment");
-
 
 function updateTextInput(val) {
   document.getElementById("textInput").value = val;
@@ -290,24 +280,24 @@ const jobFunctionalityList = [
       },
       {
         title: "Strategic Thinking",
-        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
       },
       {
         title: "Innovation",
-        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
       },
       {
         title: "Customer Service",
-        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
       },
       {
         title: "Financial Acumen",
-        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
       },
       {
         title: "Project Management",
-        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
-      }
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
     ],
   },
   {
@@ -369,24 +359,24 @@ const jobFunctionalityList = [
       },
       {
         title: "Strategic Thinking",
-        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
       },
       {
         title: "Innovation",
-        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
       },
       {
         title: "Customer Service",
-        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
       },
       {
         title: "Financial Acumen",
-        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
       },
       {
         title: "Project Management",
-        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
-      }
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
     ],
   },
   {
@@ -518,13 +508,22 @@ const jobFunctionalityList = [
         title: "Operational Functions",
         desc: "Understanding and managing core business processes.",
       },
-      { title: "Products and Services", desc: "Deep knowledge of the organization's offerings and market." },
-      { title: "Core Application Systems", desc: "Proficiency in key software tools and systems." },
+      {
+        title: "Products and Services",
+        desc: "Deep knowledge of the organization's offerings and market.",
+      },
+      {
+        title: "Core Application Systems",
+        desc: "Proficiency in key software tools and systems.",
+      },
       {
         title: "Risk Management",
         desc: "Identifying, assessing, and mitigating risks.",
       },
-      { title: "Business Case Justification", desc: " Developing sound arguments for strategic decisions." },
+      {
+        title: "Business Case Justification",
+        desc: " Developing sound arguments for strategic decisions.",
+      },
       {
         title: "Process Management",
         desc: "Optimizing workflows and procedures.",
@@ -612,24 +611,24 @@ const jobFunctionalityList = [
       },
       {
         title: "Strategic Thinking",
-        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
       },
       {
         title: "Innovation",
-        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
       },
       {
         title: "Customer Service",
-        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
       },
       {
         title: "Financial Acumen",
-        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
       },
       {
         title: "Project Management",
-        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
-      }
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
     ],
   },
   {
@@ -689,24 +688,24 @@ const jobFunctionalityList = [
       },
       {
         title: "Strategic Thinking",
-        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
       },
       {
         title: "Innovation",
-        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
       },
       {
         title: "Customer Service",
-        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
       },
       {
         title: "Financial Acumen",
-        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
       },
       {
         title: "Project Management",
-        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
-      }
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
     ],
   },
 ];
@@ -762,8 +761,8 @@ const coreCompetency = [
   },
   {
     title: "Design Thinking",
-    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
-  }
+    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda.",
+  },
 ];
 
 const coreCompetencyPharmaceutical = [
@@ -809,8 +808,8 @@ const coreCompetencyPharmaceutical = [
   },
   {
     title: "Design Thinking",
-    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda."
-  }
+    desc: "It is a creative problem-solving mindset and methodology which transforms complex problems into opportunities for development.The adoption of design thinking aims to promote greater collaboration amongst teams and supports organizations’ innovation agenda.",
+  },
 ];
 
 const jobTitleData = [
@@ -3465,25 +3464,21 @@ const jobTitleData = [
         desc: "Understanding and applying formal rules and structures; identifying decision-makers and individuals who can influence them",
       },
       {
-        title:
-          "Regulatory decision-making",
+        title: "Regulatory decision-making",
         desc: "Preparing for and providing recommendations for regulatory decisions on individual products",
       },
       {
-        title:
-          "QMS",
+        title: "QMS",
         desc: "Applying principles of quality management in routine work",
       },
       {
-        title:
-          "Regulatory framework, policies and process",
+        title: "Regulatory framework, policies and process",
         desc: "Providing regulatory support and guidance to industry and other government departments on regulated issues",
       },
       {
-        title:
-          "Surveillance and enforcement",
+        title: "Surveillance and enforcement",
         desc: "Providing regulatory support and guidance to industry and other government departments on regulated issues",
-      }
+      },
     ],
   },
   {
@@ -3501,25 +3496,21 @@ const jobTitleData = [
         desc: "Assessing applications for manufacturing licenses and wholesale dealers’ licenses, along with variations to these licenses, for compliance with regulations and requirements",
       },
       {
-        title:
-          "Management of the inspectorate system",
+        title: "Management of the inspectorate system",
         desc: "Managing, maintaining and updating an inspectorate system in support of inspection activities",
       },
       {
-        title:
-          "Performance of regulatory inspections",
+        title: "Performance of regulatory inspections",
         desc: "Performing regulatory inspections – such as pre-approval, routine and investigative regulatory inspections of manufacturing facilities, testing laboratories, clinical research organizations and distribution channels (throughout the supply chain) – for compliance with applicable national and international requirements (i.e. GxPs, as required)",
       },
       {
-        title:
-          "Product quality",
+        title: "Product quality",
         desc: "Applying scientific and regulatory requirements to chemistry, manufacturing and controls for a drug substance or drug product",
       },
       {
-        title:
-          "Regulatory decision-making",
+        title: "Regulatory decision-making",
         desc: "Making or recommending regulatory decisions on facilities based on appropriate reviews of documentation, inspections (as applicable)",
-      }
+      },
     ],
   },
   {
@@ -3537,13 +3528,11 @@ const jobTitleData = [
         desc: "",
       },
       {
-        title:
-          "Clinical Study Operations (GCP)",
+        title: "Clinical Study Operations (GCP)",
         desc: "Managing clinical studies (adverse event identification and reporting, post-market surveillance, and pharmacovigilance [PV]); handling of investigational product",
       },
       {
-        title:
-          "Data Management and Informatics",
+        title: "Data Management and Informatics",
         desc: "Ensuring best practices and resources required for standardizing data collection, capture, management, analysis and reporting",
       },
       {
@@ -3552,25 +3541,21 @@ const jobTitleData = [
         desc: "",
       },
       {
-        title:
-          "Ethical and Participant Safety Considerations",
+        title: "Ethical and Participant Safety Considerations",
         desc: "Considering the care of patients, aspects of human participant protection, and safety in the conduct of a clinical trial",
       },
       {
-        title:
-          "Investigational product development and regulation",
+        title: "Investigational product development and regulation",
         desc: "Concerns knowledge of the development and regulation of investigational products",
       },
       {
-        title:
-          "Data review on safety, efficacy and quality",
+        title: "Data review on safety, efficacy and quality",
         desc: "Reviewing data on safety, efficacy and quality in applications for clinical studies, marketing authorization and post-approval changes (variations)",
       },
       {
-        title:
-          "Maintenance of a register of approved products",
+        title: "Maintenance of a register of approved products",
         desc: "Maintaining a register of approved products, including periodic renewal and regulatory actions to suspend, withdraw or cancel registrations due to non-compliance with requirements",
-      }
+      },
     ],
   },
   {
@@ -3579,9 +3564,10 @@ const jobTitleData = [
     text: "Product Quality",
     functionalAssessment: [
       {
-        title: "Applying scientific and regulatory requirements to chemistry, manufacturing and controls for a drug substance or drug product",
+        title:
+          "Applying scientific and regulatory requirements to chemistry, manufacturing and controls for a drug substance or drug product",
         desc: "",
-      }
+      },
     ],
   },
   {
@@ -3604,7 +3590,7 @@ const jobTitleData = [
       {
         title: "Routine laboratory operations",
         desc: "Understanding and applying principles, procedures and standards of routine laboratory operations in compliance with the regulation of medicines",
-      }
+      },
     ],
   },
   {
@@ -3613,9 +3599,10 @@ const jobTitleData = [
     text: "Work Environment Safety",
     functionalAssessment: [
       {
-        title: "Routine laboratory operations maintenance of a safe and productive work environment",
+        title:
+          "Routine laboratory operations maintenance of a safe and productive work environment",
         desc: "",
-      }
+      },
     ],
   },
   {
@@ -3694,222 +3681,234 @@ resultElement.style.display = "none"; // Hide the result initially
 
 let formElement = document.getElementById("assessmentForm");
 const form = document.getElementById("wf-form-Submission-Form");
-let submitButton = document.getElementById("submit-button");
-form.addEventListener("submit", async (event) => {
-  event.preventDefault(); // Prevent default form submission
 
-  var graphId = document.getElementById("graph_id").value;
-  console.log(graphId);
+var graphId = document.getElementById("graph_id").value;
+console.log(graphId);
 
-  const dataBody = {
-    token: graphId,
-  };
+const dataBody = {
+  token: graphId,
+};
 
+let monthsInRole = 0;
+const LineLoader = document.getElementById("loader-line");
+
+window.onload = async () => {
+  console.log(LineLoader);
+  submitButton.style.display = "none";
+  LineLoader.style.display = "block";
   var resp;
   // Response to the form submission
-  await fetch("https://opus-app.azurewebsites.net/get-competency", {
+  await fetch("http://127.0.0.1:5000/get-competency", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dataBody),
-  }).then((response) => response.json())
-  .then((data) => {
-    // Assign to our production
-    console.log("success");
-    resp = data;
   })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      // Assign to our production
+      console.log("success");
+      resp = data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      window.location.href = "error.html";
+    });
 
-  // Display the result
-  console.log(resp);
+  LineLoader.style.display = "none";
+
   // Get form data from request
-  const name = document.getElementById("name").value;
   const jobFunctionality = resp.jobFunction;
   const jobTitle = resp.jobTitle;
-  const monthsInRole = resp.monthsInRole;
+  monthsInRole = resp.monthsInRole;
 
-  let jobAssessmentArray = jobTitleData.find(
-    (job) => job.value == jobTitle
-  ).functionalAssessment;
+  const infoSection = document.querySelector(".info-section");
+  const introductoryText = infoSection.querySelector("p");
 
-  let assessmentArray = [];
-  if (jobAssessmentArray.length == 0) {
-    // Validate form data
-    assessmentArray = jobFunctionalityList.find(
-      (job) => job.value == jobFunctionality
-    ).functionalCompetencies;
+  if (resp.jobSkills != null) {
+    introductoryText.textContent =  "Your results have been stored securely and can be accessed by "+resp.name +". This information will be used to evaluate skills and performance by the platform.This link is expired for security reasons. You can close this window now.";
+    const formToHide = document.getElementById("Submission-Form");
+    formToHide.style.display = "none";
   } else {
-    assessmentArray = jobAssessmentArray;
+    submitButton.style.display = "block";
+    // Update the elements based on user input or other conditions
+    introductoryText.textContent =
+      "You've been invited to access and review assessment shared by " +
+      resp.name +
+      ", This platform provides valuable insights into skills, competencies, and performance, helping you make informed decisions and support your team's development.";
+
+    let jobAssessmentArray = jobTitleData.find(
+      (job) => job.value == jobTitle
+    ).functionalAssessment;
+
+    let assessmentArray = [];
+    if (jobAssessmentArray.length == 0) {
+      // Validate form data
+      assessmentArray = jobFunctionalityList.find(
+        (job) => job.value == jobFunctionality
+      ).functionalCompetencies;
+    } else {
+      assessmentArray = jobAssessmentArray;
+    }
+
+    const functionalCompetencies = assessmentArray.length;
+    if (
+      jobFunctionalityList.find((job) => job.value == jobFunctionality).text ==
+      "Pharmaceutical"
+    ) {
+      assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
+    } else {
+      assessmentArray = assessmentArray.concat(coreCompetency);
+    }
+
+    const jobTitleName = jobTitleData
+      .find((job) => job.value == jobTitle)
+      .text.toLowerCase();
+
+    if (
+      jobTitleName.includes("manager") ||
+      jobTitleName.includes("director") ||
+      jobTitleName.includes("vice president") ||
+      jobTitleName.includes("chief")
+    ) {
+      let LeadershipCompetency = {
+        title: "Leadership",
+        desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
+      };
+      assessmentArray.push(LeadershipCompetency);
+    }
+
+    // Create the form and add it to the desired location (replace with your target element ID)
+    formElement = document.getElementById("assessmentForm");
+
+    // Create the form title section
+    const titleSection = document.createElement("div");
+    titleSection.classList.add("title-section");
+
+    const formTitle = document.createElement("h2");
+    formTitle.textContent =
+      jobFunctionalityList.find((job) => job.value == jobFunctionality).text +
+      " / " +
+      jobTitleData.find((job) => job.value == jobTitle).text;
+    titleSection.appendChild(formTitle);
+    const formDescription = document.createElement("p");
+    formDescription.textContent = jobFunctionalityList.find(
+      (job) => job.value == jobFunctionality
+    ).desc;
+    titleSection.appendChild(formDescription);
+    const infoSpan = document.createElement("span");
+    infoSpan.textContent =
+      "Selecting (NA) for a question will not affect your overall assessment score.";
+    titleSection.appendChild(infoSpan);
+
+    formElement.appendChild(titleSection);
+    formElement.appendChild(
+      createFormAssessment(assessmentArray, functionalCompetencies)
+    );
   }
+};
+submitButton = document.getElementById("submit-button");
+submitButton.addEventListener("click", async (event) => {
+  event.preventDefault();
 
-  const functionalCompetencies = assessmentArray.length;
-  if (jobFunctionalityList.find((job) => job.value == jobFunctionality).text == "Pharmaceutical"){
-    assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
-  }
-  else{
-    assessmentArray = assessmentArray.concat(coreCompetency);
-  }
-
-  const jobTitleName = jobTitleData
-    .find((job) => job.value == jobTitle)
-    .text.toLowerCase();
-
-  if (
-    jobTitleName.includes("manager") ||
-    jobTitleName.includes("director") ||
-    jobTitleName.includes("vice president") ||
-    jobTitleName.includes("chief")
-  ) {
-
-    let LeadershipCompetency = {
-      title: "Leadership",
-      desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
-    };
-    assessmentArray.push(LeadershipCompetency);
-  }
-
-  // Create the form and add it to the desired location (replace with your target element ID)
-  formElement = document.getElementById("assessmentForm");
-
-  // Create the form title section
-  const titleSection = document.createElement("div");
-  titleSection.classList.add("title-section");
-
-  const formTitle = document.createElement("h2");
-  formTitle.textContent = jobFunctionalityList.find(
-    (job) => job.value == jobFunctionality
-  ).text;
-  titleSection.appendChild(formTitle);
-  const formDescription = document.createElement("p");
-  formDescription.textContent = jobFunctionalityList.find(
-    (job) => job.value == jobFunctionality
-  ).desc;
-  titleSection.appendChild(formDescription);
-  const infoSpan = document.createElement("span");
-  infoSpan.textContent =
-    "Selecting (NA) for a question will not affect your overall assessment score.";
-  titleSection.appendChild(infoSpan);
-
-  formElement.appendChild(titleSection);
-  formElement.appendChild(
-    createFormAssessment(assessmentArray, functionalCompetencies)
+  // Get all slider input elements
+  const sliders = document.querySelectorAll(
+    'assessmentForm input[type="range"]'
   );
 
-  submitButton = document.getElementById("submit-button");
-
-  submitButton.addEventListener("click", async (event) => {
-    event.preventDefault();
-
-    // Get all slider input elements
-    const sliders = document.querySelectorAll(
-      'assessmentForm input[type="range"]'
-    );
-
-    // Extract slider input values
-    let sliderValues = [];
-    sliders.forEach((slider) => {
-      sliderValues.push(slider.value);
-    });
-    
-    // Calculation to the form
-    // First get user experience
-    let userExperience = 0;
-    if (monthsInRole < 24) {
-      // If user has been in role for 1 year
-      userExperience = 0.5;
-    } else if (monthsInRole >= 24 && monthsInRole < 36) {
-      // If user has been in role for 2 years
-      userExperience = 0.75;
-    } else if (monthsInRole >= 36 && monthsInRole < 48) {
-      // If user has been in role for 3 years
-      userExperience = 0.9;
-    } else if (monthsInRole >= 48 && monthsInRole < 72) {
-      // If user has been in role for 4-5 years
-      userExperience = 1;
-    } else if (monthsInRole >= 72 && monthsInRole < 84) {
-      // If user has been in role for 6 years
-      userExperience = 0.95;
-    } else if (monthsInRole >= 84 && monthsInRole < 96) {
-      // If user has been in role for 7 years
-      userExperience = 0.9;
-    } else if (monthsInRole >= 96 && monthsInRole < 108) {
-      // If user has been in role for 8 years
-      userExperience = 0.8;
-    } else if (monthsInRole >= 108 && monthsInRole < 120) {
-      // If user has been in role for 9 years
-      userExperience = 0.75;
-    } else if (monthsInRole >= 120) {
-      // If user has been in role for 10 years or more
-      userExperience = 0.65;
-    }
-
-    for (let i = 0; i < sliderValues.length; i++) {
-      answerValue = parseInt(sliderValues[i]);
-      if (answerValue == 1) {
-        sliderValues[i] = parseInt(25);
-      } else if (answerValue == 2) {
-        sliderValues[i] = parseInt(50);
-      } else if (answerValue == 3) {
-        sliderValues[i] = parseInt(75);
-      } else if (answerValue == 4) {
-        sliderValues[i] = parseInt(85);
-      } else if (answerValue == 5) {
-        sliderValues[i] = parseInt(100);
-      }
-      else {
-        sliderValues[i] = parseInt(0);
-      }
-    }
-
-    // Show result to add to database
-    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
-    // Add the assessment to the database
-    const assessment = {
-      token: graphId,
-      name: name,
-      jobSkills: sliderValues
-    };
-
-    await fetch("https://opus-app.azurewebsites.net/update-manager-competency", {
-      method: "POST",
-      body: JSON.stringify(assessment),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    sliderValues = sliderValues.filter((value) => value !== "0");
-    const sum = sliderValues.reduce((a, b) => a + b, 0);
-    const average = sum / sliderValues.length;
-
-    const assessmentScore = average * userExperience;
-    let weightedAssessmentScore = 0;
-    if (assessmentScore >= 85) {
-      weightedAssessmentScore = 0.85;
-    } else if (assessmentScore >= 75 && assessmentScore < 85) {
-      weightedAssessmentScore = 0.75;
-    } else if (assessmentScore >= 70 && assessmentScore < 75) {
-      weightedAssessmentScore = 0.7;
-    } else if (assessmentScore >= 65 && assessmentScore < 70) {
-      weightedAssessmentScore = 0.65;
-    } else if (assessmentScore < 65) {
-      weightedAssessmentScore = 0.6;
-    }
-    weightedAssessmentScore = weightedAssessmentScore * 100;
-    submitButton.style.display = "none"; // Hide the submit button
-
-    // Display the result
-    const resultElement = document.getElementById("result");
-    resultElement.textContent = `Your assessment score is ${weightedAssessmentScore.toFixed(
-      2
-    )}%`;
-    resultElement.style.display = "block"; // Show the result
+  // Extract slider input values
+  let sliderValues = [];
+  sliders.forEach((slider) => {
+    sliderValues.push(slider.value);
   });
 
+  // Calculation to the form
+  // First get user experience
+  let userExperience = 0;
+  if (monthsInRole < 24) {
+    // If user has been in role for 1 year
+    userExperience = 0.5;
+  } else if (monthsInRole >= 24 && monthsInRole < 36) {
+    // If user has been in role for 2 years
+    userExperience = 0.75;
+  } else if (monthsInRole >= 36 && monthsInRole < 48) {
+    // If user has been in role for 3 years
+    userExperience = 0.9;
+  } else if (monthsInRole >= 48 && monthsInRole < 72) {
+    // If user has been in role for 4-5 years
+    userExperience = 1;
+  } else if (monthsInRole >= 72 && monthsInRole < 84) {
+    // If user has been in role for 6 years
+    userExperience = 0.95;
+  } else if (monthsInRole >= 84 && monthsInRole < 96) {
+    // If user has been in role for 7 years
+    userExperience = 0.9;
+  } else if (monthsInRole >= 96 && monthsInRole < 108) {
+    // If user has been in role for 8 years
+    userExperience = 0.8;
+  } else if (monthsInRole >= 108 && monthsInRole < 120) {
+    // If user has been in role for 9 years
+    userExperience = 0.75;
+  } else if (monthsInRole >= 120) {
+    // If user has been in role for 10 years or more
+    userExperience = 0.65;
+  }
 
-  const submitFormWrap = document.getElementById("start-button");
-  submitFormWrap.style.display = "none"; // Hide the start button
+  for (let i = 0; i < sliderValues.length; i++) {
+    answerValue = parseInt(sliderValues[i]);
+    if (answerValue == 1) {
+      sliderValues[i] = parseInt(25);
+    } else if (answerValue == 2) {
+      sliderValues[i] = parseInt(50);
+    } else if (answerValue == 3) {
+      sliderValues[i] = parseInt(75);
+    } else if (answerValue == 4) {
+      sliderValues[i] = parseInt(85);
+    } else if (answerValue == 5) {
+      sliderValues[i] = parseInt(100);
+    } else {
+      sliderValues[i] = parseInt(0);
+    }
+  }
+
+  const assessment = {
+    token: graphId,
+    jobSkills: sliderValues,
+  };
+
+  await fetch("http://127.0.0.1:5000/update-manager-competency", {
+    method: "POST",
+    body: JSON.stringify(assessment),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  sliderValues = sliderValues.filter((value) => value !== "0");
+  const sum = sliderValues.reduce((a, b) => a + b, 0);
+  const average = sum / sliderValues.length;
+
+  const assessmentScore = average * userExperience;
+  let weightedAssessmentScore = 0;
+  if (assessmentScore >= 85) {
+    weightedAssessmentScore = 0.85;
+  } else if (assessmentScore >= 75 && assessmentScore < 85) {
+    weightedAssessmentScore = 0.75;
+  } else if (assessmentScore >= 70 && assessmentScore < 75) {
+    weightedAssessmentScore = 0.7;
+  } else if (assessmentScore >= 65 && assessmentScore < 70) {
+    weightedAssessmentScore = 0.65;
+  } else if (assessmentScore < 65) {
+    weightedAssessmentScore = 0.6;
+  }
+  weightedAssessmentScore = weightedAssessmentScore * 100;
+  submitButton.style.display = "none"; // Hide the submit button
+
+  // Display the result
+  const resultElement = document.getElementById("result");
+  resultElement.textContent = `Thank you for completing the assessment, the total score is ${weightedAssessmentScore.toFixed(
+    2
+  )}%`;
+  resultElement.style.display = "block"; // Show the result
 });

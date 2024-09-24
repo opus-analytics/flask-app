@@ -288,7 +288,7 @@ def update_manager_competency():
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor() 
       
-    create = f"UPDATE competency_assessment_extra SET jobSkills = '{data['jobSkills']}', name = '{data['name']}' where token='{data['token']}';"
+    create = f"UPDATE competency_assessment_extra SET jobSkills = '{data['jobSkills']}' where token='{data['token']}';"
     cursor.execute(create)
     connection.commit()
     connection.close()
@@ -310,7 +310,7 @@ def get_competencies():
         cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
 
         # Execute query
-        cursor.execute(f"SELECT main.jobFunction, main.jobTitle, main.monthsInRole FROM competency_assessment_extra as extra inner join competency_assessment as main on main.Id = extra.competency_Id where token='{data['token']}';")
+        cursor.execute(f"SELECT main.jobFunction, main.jobTitle, main.monthsInRole, main.name, extra.jobSkills FROM competency_assessment_extra as extra inner join competency_assessment as main on main.Id = extra.competency_Id where token='{data['token']}';")
 
         # Fetch results as a list of dictionaries
         results = cursor.fetchall()
@@ -321,7 +321,7 @@ def get_competencies():
 
         # Convert to JSON
         json_data = json.dumps(results[0])
-
+        
     except mysql.connector.Error as err:
         # Handle database connection errors
         return json.dumps({"error": f"Database connection error: {err}"})
@@ -332,6 +332,7 @@ def get_competencies():
             cursor.close()
         if connection:
             connection.close()
+            
 
     return json_data
     
