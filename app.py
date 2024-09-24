@@ -29,13 +29,17 @@ from python_random_strings import random_strings
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32).hex()
 app.config['UPLOAD_FOLDER'] = 'static/files'
-app.config['MAIL_SERVER'] = 'outlook.office365.com'
-app.config['MAIL_PORT'] = 993
+app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'Omar.Alaa@rightfoot.org'
 
 app.config['MAIL_PASSWORD'] = 'L)491117322543af'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEFAULT_SENDER'] = 'Omar.Alaa@rightfoot.org'
+# Add auth method OAuth2/Modern Auth
+app.config['MAIL_AUTH_METHOD'] = 'LOGIN'
+
 powerbi_blueprint = Blueprint('powerbi', __name__)
 
 
@@ -199,19 +203,19 @@ def sign_up():
                 connection.close()
 
                 # Generate and send confirmation email
-                s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-                token = s.dumps(email, salt='email-confirm')
+                # s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+                # token = s.dumps(email, salt='email-confirm')
 
-                msg = Message('Confirm Email', sender='Omar.Alaa@rightfoot.org', recipients=[email])
-                link = url_for('confirmed_mail', token=token, _external=True)  # Ensure confirmed_mail route exists
-                msg.html = render_template('verification.html', link=link)
+                # msg = Message('Confirm Email', sender='Omar.Alaa@rightfoot.org', recipients=[email])
+                # link = url_for('confirmed_mail', token=token, _external=True)  # Ensure confirmed_mail route exists
+                # msg.html = render_template('verification.html', link=link)
 
-                try:
-                    with mail.connect() as conn:
-                        conn.send(msg)
-                    return jsonify({'message': 'Email sent successfully'})
-                except Exception as e:
-                    return jsonify({'error': str(e)})
+                # try:
+                #     with mail.connect() as conn:
+                #         conn.send(msg)
+                #     return jsonify({'message': 'Email sent successfully'})
+                # except Exception as e:
+                #     return jsonify({'error': str(e)})
 
             except Exception as e:
                 print(f"Error during signup: {e}")
