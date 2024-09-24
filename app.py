@@ -33,13 +33,9 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
 
-app.config['MAIL_PASSWORD'] = 'Opus @ 2023'
+app.config['MAIL_PASSWORD'] = 'Opus_2024'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = 'Omar.Alaa@rightfoot.org'
-# Add auth method OAuth2/Modern Auth
-app.config['MAIL_AUTH_METHOD'] = 'LOGIN'
-
 powerbi_blueprint = Blueprint('powerbi', __name__)
 
 
@@ -260,7 +256,6 @@ def create_user():
     hashed_pwd = bcrypt.hashpw(password, salt)
     hashed_pwd = hashed_pwd.decode()
     try:
-        # insert into users (username,password,email,full_name,company_name,user_type,verification_status) values ("Nashaat","12345678","omarnashaat@gmail.com","Omar Nashaat", "Vodafone","Enable", "Verified");
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
         create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','{full_name}','{company_name}','{userType}','Verified');"
