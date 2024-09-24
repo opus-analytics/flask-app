@@ -3698,7 +3698,7 @@ window.onload = async () => {
   LineLoader.style.display = "block";
   var resp;
   // Response to the form submission
-  await fetch("http://127.0.0.1:5000/get-competency", {
+  await fetch("https://opus-app.azurewebsites.net/get-competency", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -3877,7 +3877,7 @@ submitButton.addEventListener("click", async (event) => {
     jobSkills: sliderValues,
   };
 
-  await fetch("http://127.0.0.1:5000/update-manager-competency", {
+  await fetch("https://opus-app.azurewebsites.net/update-manager-competency", {
     method: "POST",
     body: JSON.stringify(assessment),
     headers: {
