@@ -26,7 +26,9 @@ import datetime
 import xmltodict
 from python_random_strings import random_strings
 
+
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 app.config['MAIL_SERVER'] = 'smtp.office365.com'
@@ -446,7 +448,7 @@ def reset_password():
         mail.send(msg)
         flash('Reset mail has been sent!','success')
         
-    return (render_template('reset-Password.html',token=token))
+    return (render_template('reset-password.html',token=token))
             
 
 @app.route("/new-password/<token>", methods = ["GET","POST"])
