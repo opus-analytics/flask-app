@@ -6,7 +6,7 @@ const competency_link = document.getElementById("competency-link");
 window.onload = async () => {
   loader.style.display = "none";
   let resp;
-  await fetch("http://127.0.0.1:5000/get-my-competency", {
+  await fetch("https://opus-app.azurewebsites.net/get-my-competency", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +39,7 @@ sendBtn.addEventListener("click", async () => {
   };
   
   let resp;
-  await fetch("http://127.0.0.1:5000/knowledge-graph-extra", {
+  await fetch("https://opus-app.azurewebsites.net/knowledge-graph-extra", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -56,7 +56,7 @@ sendBtn.addEventListener("click", async () => {
     }
 
     let resp2;
-  await fetch("http://127.0.0.1:5000/knowledge-graph-extra-getId", {
+  await fetch("https://opus-app.azurewebsites.net/knowledge-graph-extra-getId", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -69,7 +69,7 @@ sendBtn.addEventListener("click", async () => {
     });
 
   loader.style.display = "none";
-  competency_link.href = "http://127.0.0.1:5000/knowledge-graph-manager/" + resp2.token;
+  competency_link.href = "https://opus-app.azurewebsites.net/knowledge-graph-manager/" + resp2.token;
   competency_link.style.display = "block";
   competency_link.innerHTML = "Click here to get the link of your competency assessment";
 

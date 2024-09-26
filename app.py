@@ -451,7 +451,7 @@ def reset_password():
         mail.send(msg)
         flash('Reset mail has been sent!','success')
         
-    return (render_template('reset-passowrd.html',token=token))
+    return (render_template('reset-Password.html',token=token))
             
 
 @app.route("/new-password/<token>", methods = ["GET","POST"])

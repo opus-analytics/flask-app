@@ -162,7 +162,7 @@ form.addEventListener("submit", (event) => {
       username: userName,
     };
 
-    await fetch("http://127.0.0.1:5000/add-competency", {
+    await fetch("https://opus-app.azurewebsites.net/add-competency", {
       method: "POST",
       body: JSON.stringify(assessment),
       headers: {

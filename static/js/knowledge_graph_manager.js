@@ -3698,7 +3698,7 @@ window.onload = async () => {
   LineLoader.style.display = "block";
   var resp;
   // Response to the form submission
-  await fetch("http://127.0.0.1:5000/get-competency", {
+  await fetch("https://opus-app.azurewebsites.net/get-competency", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -3774,7 +3774,7 @@ window.onload = async () => {
     ) {
       let LeadershipCompetency = {
         title: "Leadership",
-        desc: "Demonstrates inclusivity in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
+        desc: "Demonstrates inclusively in work processes and among working teams.Actively seeks out and invites alternative viewpoints. Listens attentively and respectfully. Builds highly effective and cohesive teams. Provides ongoing feedback. Leads with a growth mindset.",
       };
       assessmentArray.push(LeadershipCompetency);
     }
@@ -3877,7 +3877,7 @@ submitButton.addEventListener("click", async (event) => {
     jobSkills: sliderValues,
   };
 
-  await fetch("http://127.0.0.1:5000/update-manager-competency", {
+  await fetch("https://opus-app.azurewebsites.net/update-manager-competency", {
     method: "POST",
     body: JSON.stringify(assessment),
     headers: {
