@@ -10,8 +10,6 @@ window.onload = async () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "https://opusanalytics.ai/"
-
     },
     body: JSON.stringify({ username: username }),
   })

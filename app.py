@@ -25,12 +25,9 @@ from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
 from python_random_strings import random_strings
-from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
-# Apply CORS for all routes by default
-CORS(app)
 
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
@@ -52,6 +49,7 @@ class UploadFile(FlaskForm):
     submit = SubmitField("Submit File")
 
 @app.route("/")
+
 def home():
     username = ''
     if session.get('token') == None:
@@ -148,6 +146,7 @@ def terms_of_use():
 
 
 @app.route("/sign-in", methods = ["GET","POST"])
+
 def sign_in():
     email = request.form.get('User-Name')
     password = request.form.get("Password")
@@ -983,7 +982,6 @@ def knowledge_graph_portal():
     return (render_template("knowledge-graph-portal.html", username=username))
 
 @app.route("/get-my-competency", methods = ["POST"])
-@cross_origin(allow_headers=['Content-Type', 'x-access-token', 'Authorization'])
 def get_my_competency():
     username = session.get('username')
     try:
@@ -1113,6 +1111,3 @@ def goddadyVerification():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-app = Flask(__name__)
-CORS(app) 
