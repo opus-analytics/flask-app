@@ -14,3 +14,4 @@ PrettyTable
 datetime
 xmltodict
 python_random_strings
+flask_cors
