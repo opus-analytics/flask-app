@@ -6,11 +6,10 @@ const competency_link = document.getElementById("competency-link");
 window.onload = async () => {
   loader.style.display = "none";
   let resp;
-  await fetch("https://opus-app.azurewebsites.net/get-my-competency", {
+  await fetch(window.location.protocol+ "//" + window.location.host + "/get-my-competency", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "https://opusanalytics.ai"
     },
     body: JSON.stringify({ username: username }),
   })
@@ -20,12 +19,14 @@ window.onload = async () => {
       resp = data;
     });
   const selectElement = document.getElementById("competency-list");
-  resp.forEach((competency) => {
-    const option = document.createElement("option");
-    option.value = competency.Id;
-    option.text = competency.title;
-    selectElement.appendChild(option);
-  });
+  if (resp){
+    resp.forEach((competency) => {
+      const option = document.createElement("option");
+      option.value = competency.Id;
+      option.text = competency.title;
+      selectElement.appendChild(option);
+    });
+  }
 };
 
 
@@ -40,7 +41,7 @@ sendBtn.addEventListener("click", async () => {
   };
   
   let resp;
-  await fetch("https://opus-app.azurewebsites.net/knowledge-graph-extra", {
+  await fetch(window.location.protocol+ "//" + window.location.host + "/knowledge-graph-extra", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +58,7 @@ sendBtn.addEventListener("click", async () => {
     }
 
     let resp2;
-  await fetch("https://opus-app.azurewebsites.net/knowledge-graph-extra-getId", {
+  await fetch(window.location.protocol+ "//" + window.location.host + "/knowledge-graph-extra-getId", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -70,7 +71,7 @@ sendBtn.addEventListener("click", async () => {
     });
 
   loader.style.display = "none";
-  competency_link.href = "https://opus-app.azurewebsites.net/knowledge-graph-manager/" + resp2.token;
+  competency_link.href = window.location.protocol+ "//" + window.location.host + "/knowledge-graph-manager/" + resp2.token;
   competency_link.style.display = "block";
   competency_link.innerHTML = "Click here to get the link of your competency assessment";
 

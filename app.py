@@ -1001,6 +1001,8 @@ def get_my_competency():
 
         # Fetch results as a list of dictionaries
         results = cursor.fetchall()
+        
+        print(results)
 
         # Check if any results were found
         if not results:
