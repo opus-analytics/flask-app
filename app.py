@@ -943,7 +943,6 @@ def dashboard():
 
 
 @app.route("/payment", methods = ["GET","POST"])
-
 def payment():
         
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
@@ -981,6 +980,65 @@ def knowledge_graph_portal():
 
     return (render_template("knowledge-graph-portal.html", username=username))
 
+@app.route("/manage-users")
+def manage_users():
+
+
+    return (render_template("manage-users.html"))
+
+@app.route("/add-user", methods = ["POST"])
+def add_user():
+    
+    data = request.get_json()
+    username = session.get('username')
+    user_type = session.get('type')
+    
+    
+    # For user password
+    passwordGenerated = random_strings.random_letters(8)
+    tempPassword = passwordGenerated
+    password = bytes(passwordGenerated, encoding = 'utf-8')
+    salt = bcrypt.gensalt()
+    hashed_pwd = bcrypt.hashpw(password, salt)
+    hashed_pwd = hashed_pwd.decode()
+    
+    try:
+        # Establish database connection
+        connection = mysql.connector.connect(
+            host='opus-server.mysql.database.azure.com',
+            database='opus_prod',
+            user='opusadmin',
+            password='OAg@1234'
+        )
+
+        # Cursor and prepared statement
+        cursor = connection.cursor()
+        create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, manager_account) "
+                       "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
+        cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', username))
+
+        # Commit changes and close connection (important!)
+        connection.commit()
+
+        results = jsonify({"success": f"User Created successfully with password: {tempPassword}"})
+        print(results) 
+        return results, 201  # Created status code
+    
+        
+    except mysql.connector.Error as err:
+        # Handle database connection errors
+        return json.dumps({"error": f"Database connection error: {err}"})
+
+    finally:
+        # Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+            
+    return results
+
+
 @app.route("/get-my-competency", methods = ["POST"])
 def get_my_competency():
     username = session.get('username')
@@ -1001,15 +1059,10 @@ def get_my_competency():
 
         # Fetch results as a list of dictionaries
         results = cursor.fetchall()
-        
-        print(results)
 
         # Check if any results were found
         if not results:
             return json.dumps({"error": "No data found."})
-
-        # Convert to JSON
-        json_data = json.dumps(results)
         
     except mysql.connector.Error as err:
         # Handle database connection errors
