@@ -71,15 +71,6 @@ sendBtn.addEventListener("click", async () => {
     });
 
   loader.style.display = "none";
-  competency_link.href = window.location.protocol+ "//" + window.location.host + "/knowledge-graph-manager/" + resp2.token;
+  competency_link.textContent = "Email successfully sent to the user!";
   competency_link.style.display = "block";
-  competency_link.innerHTML = "Click here to get the link of your competency assessment";
-
-  // copy to clipboard
-  competency_link.addEventListener("click", (event) => {
-    event.preventDefault();
-    navigator.clipboard.writeText(competency_link.href);
-    competency_link.innerHTML = "Link copied to clipboard!";
-  });
-
 });

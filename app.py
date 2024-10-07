@@ -33,9 +33,9 @@ app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'eman.abdelhamied@rightfoot.org'
+app.config['MAIL_USERNAME'] = 'CustomerExperience@opusanalytics.ai'
 
-app.config['MAIL_PASSWORD'] = 'Opus_2024'
+app.config['MAIL_PASSWORD'] = 'Mog38103'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
@@ -154,7 +154,6 @@ def sign_in():
     if request.method == "POST":
         if r.status_code == 200:
             session['token'] = r.json()['token']
-            print(session['token'])
             session['username'] = email
             session['type'] = r.json()['user_type']
             return redirect(url_for('dashboard'))
@@ -193,7 +192,7 @@ def sign_up():
             connection.commit()
             connection.close()
             token = s.dumps(email, salt= 'email-confirm')
-            msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=[email])
+            msg = Message('Confirm Email', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
             link = url_for('confirmed_mail',token=token, _external=True)
             msg.html = render_template('verification.html',link = link)
             mail.send(msg)
@@ -201,6 +200,10 @@ def sign_up():
 
     return (render_template("signup.html",token = token))
 
+
+@app.route("/template")
+def template():
+        return render_template("email_template.html", link = "https://opus-analytics.azurewebsites.net/confirmed-mail/", title = "Welcome to Opus!", subTitle="Your Opus Account is Ready", message = "We're excited to welcome you to the Opus community! \nYour manager has created an Opus account for you.\nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
 
 @app.route("/confirmation-mail")
 def confirmation_mail():
@@ -440,7 +443,7 @@ def calculate_competency_list():
 def reset_password():
     email = request.form.get("Email")
     token = s.dumps(email, salt= 'email-confirm')
-    msg = Message('Confirm Email', sender='eman.abdelhamied@rightfoot.org', recipients=[email])
+    msg = Message('Confirm Email', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
     link = url_for('new_password',token=token, _external=True)
     #msg.body = 'Your Confirmation link is {}'.format(link)
     msg.html = render_template('reset_password_mail.html',link = link)
@@ -890,6 +893,7 @@ def dashboard():
             query = f"SELECT full_name,company_name FROM USERS WHERE email = '{username}'"
             cursor.execute(query)
             result = cursor.fetchone()
+            print(result)
             full_name = result[0]
             company_name = result[1]
             connection.commit()
@@ -982,9 +986,34 @@ def knowledge_graph_portal():
 
 @app.route("/manage-users")
 def manage_users():
+    username = session.get('username')
+     # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+    # Execute query
+    cursor.execute(f"SELECT username, full_name FROM opus_prod.users where company_name='Manager' and admin_account='{username}';")
+
+    # Fetch results as a list of dictionaries
+    results = cursor.fetchall()
+    
+    managers = json.dumps(results)
 
 
-    return (render_template("manage-users.html"))
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+
+    return (render_template("manage-users.html", username=username, managers=managers))
 
 @app.route("/add-user", methods = ["POST"])
 def add_user():
@@ -992,6 +1021,8 @@ def add_user():
     data = request.get_json()
     username = session.get('username')
     user_type = session.get('type')
+    manager = data['manager']
+    email = data['username']
     
     
     # For user password
@@ -1013,15 +1044,25 @@ def add_user():
 
         # Cursor and prepared statement
         cursor = connection.cursor()
-        create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, manager_account) "
-                       "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
-        cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', username))
+        if(manager):
+            create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, manager_account ,admin_account) "
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
+            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', data['manager'], username))
 
+        else:
+            create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, admin_account) "
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
+            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', username))
         # Commit changes and close connection (important!)
         connection.commit()
 
-        results = jsonify({"success": f"User Created successfully with password: {tempPassword}"})
-        print(results) 
+        results = jsonify({"success": f"Account Created successfully with password: {tempPassword}"})
+        msg = Message('Account Created', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+        subtitle= f"Your Opus Account is Ready with temporary password: {tempPassword}"
+        msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "We're excited to welcome you to the Opus community! \nYour manager has created an Opus account for you.\nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
+        mail.send(msg)
+        
+
         return results, 201  # Created status code
     
         
@@ -1141,7 +1182,7 @@ def knowledge_graph_extra_getId():
     cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
 
     # Execute query
-    cursor.execute(f"SELECT * FROM competency_assessment_extra where Id='{data['Id']}';")
+    cursor.execute(f"SELECT c.token, c.email, name FROM competency_assessment_extra as c inner join competency_assessment on c.competency_Id = competency_assessment.Id where c.Id='{data['Id']}';")
 
     # Fetch results as a list of dictionaries
     results = cursor.fetchall()
@@ -1156,6 +1197,15 @@ def knowledge_graph_extra_getId():
         cursor.close()
     if connection:
         connection.close()
+        
+        email = results[0]['email']
+        token = results[0]['token']
+        name = results[0]['name']
+    
+        msg = Message('Request for Reassessment', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+        subtitle= f"{name} has requested a reassessment of his skills."
+        msg.html = render_template("email_template.html", link = f"https://opusanalytics.ai/knowledge-graph-manager/{token}", title = "Opus Analytics Enable!", subTitle=subtitle, message = "Please click on the button below and you will be redirected:", btnText = "Assessment Link")
+        mail.send(msg)
         
     return results[0]
             

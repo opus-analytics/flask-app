@@ -1,21 +1,52 @@
 const sendBtn = document.getElementById("send-button");
 const loader = document.getElementById("loader-line");
+const managersList = JSON.parse(document.getElementById("managers").value);
+const selectElement = document.getElementById("managers-list");
+const managersListView = document.getElementById("managersList")
+const userAccess = document.getElementById("user-type")
+var managerSelected = false;
+
+if (managersList){
+  managersList.forEach((competency) => {
+    const option = document.createElement("option");
+    option.value = competency.username;
+    option.text = competency.full_name;
+    selectElement.appendChild(option);
+  });
+}
 
 loader.style.display = "none";
+managersListView.style.display = "none";
+
+userAccess.addEventListener("change",()=> {
+  if(userAccess.value == 'Contributor'){
+    managersListView.style.display= "block";
+    managerSelected = true;
+  }
+  else{
+    managersListView.style.display= "none";
+    managerSelected = false;
+  }
+})
 
 sendBtn.addEventListener("click", async () => {
 
   loader.style.display = "block";
   const email = document.getElementById("email").value;
   const fullName = document.getElementById("fullName").value
-  const userAccess = document.getElementById("user-type").value
 
   var userAcc = document.getElementById("userAcc");
-  
+  var managerToUser;
+  if (managerSelected)
+    managerToUser = selectElement.value
+  else
+    managerToUser = null
+
   const data = {
     username: email,
     fullname: fullName,
-    userAccess: userAccess
+    userAccess: userAccess.value,
+    manager: managerToUser
   };
   
   let resp;
@@ -36,10 +67,12 @@ sendBtn.addEventListener("click", async () => {
   
 
   if(resp.success){
+    userAcc.textContent = '';
     var text = document.createTextNode(resp.success);
     userAcc.appendChild(text);
   }
   else if(resp.error){
+    userAcc.textContent = '';
     var text = document.createTextNode("Cannot create user, please check your data!");
     userAcc.appendChild(text);
   }

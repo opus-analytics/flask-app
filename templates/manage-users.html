@@ -439,6 +439,16 @@
             <option> Contributor</option>
           </select>
           </div>
+          <div class="w-layout-blockcontainer container-20 w-container" id="managersList">
+            <div class="text-block-18">Manager</div>
+            <select
+              id="managers-list"
+              name="Managers-List"
+              data-name="Managers-List"
+              required="true"
+              class="text-field-2 w-select"
+            ></select>
+          </div>
           <div class="formInstructions">
             <p id="userAcc">
               
@@ -632,6 +642,7 @@
           </div>
         </div>
       </div>
+      <input type="hidden" id="managers" value="{{ managers }}" />
     </div>
     <script
       src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=64d3b6b81a1144c81630b849"
