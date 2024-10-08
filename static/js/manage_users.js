@@ -31,9 +31,17 @@ userAccess.addEventListener("change",()=> {
 
 sendBtn.addEventListener("click", async () => {
 
-  loader.style.display = "block";
   const email = document.getElementById("email").value;
   const fullName = document.getElementById("fullName").value
+
+  if (email == "" || fullName == ""){
+    userAcc.textContent = '';
+    var text = document.createTextNode("Please enter an email!");
+    userAcc.appendChild(text);
+    return;
+  }
+  
+  loader.style.display = "block";
 
   var userAcc = document.getElementById("userAcc");
   var managerToUser;

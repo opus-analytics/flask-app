@@ -35,6 +35,13 @@ sendBtn.addEventListener("click", async () => {
   loader.style.display = "block";
   const competencyId = document.getElementById("competency-list").value;
   const email = document.getElementById("email").value;
+
+  if (email == username){
+    loader.style.display = "none";
+    competency_link.textContent = "You cannot send an email to yourself!";
+    competency_link.style.display = "block";
+    return;
+  }
   const data = {
     competencyId: competencyId,
     email: email,

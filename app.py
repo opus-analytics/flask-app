@@ -280,7 +280,7 @@ def add_competency():
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor() 
       
-    create = f"INSERT INTO competency_assessment (name, jobFunction, jobTitle, monthsInRole, jobSkills, username) VALUES('{data['name']}', '{data['jobFunction']}', '{data['jobTitle']}', '{data['monthsInRole']}', '{data['jobSkills']}', '{data['username']}');"
+    create = f"INSERT INTO competency_assessment (name, jobFunction, jobTitle, monthsInRole, jobSkills, username, score) VALUES('{data['name']}', '{data['jobFunction']}', '{data['jobTitle']}', '{data['monthsInRole']}', '{data['jobSkills']}', '{data['username']}', '{data['score']}');"
     cursor.execute(create)
     connection.commit()
     connection.close()
@@ -333,7 +333,7 @@ def update_manager_competency():
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor() 
       
-    create = f"UPDATE competency_assessment_extra SET jobSkills = '{data['jobSkills']}' where token='{data['token']}';"
+    create = f"UPDATE competency_assessment_extra SET jobSkills = '{data['jobSkills']}', score='{data['score']}' where token='{data['token']}';"
     cursor.execute(create)
     connection.commit()
     connection.close()
@@ -893,9 +893,9 @@ def dashboard():
             query = f"SELECT full_name,company_name FROM USERS WHERE email = '{username}'"
             cursor.execute(query)
             result = cursor.fetchone()
-            print(result)
             full_name = result[0]
             company_name = result[1]
+            session['company_name'] = company_name
             connection.commit()
             connection.close()
         if type == 'Partner':
@@ -1208,7 +1208,60 @@ def knowledge_graph_extra_getId():
         mail.send(msg)
         
     return results[0]
+ 
+@app.route("/get-competency-results", methods = ["GET", "POST"]) 
+def get_competency_results():
+    username = session.get('username')
+    userType = session.get('company_name')
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    
+    if userType == 'Manager':
+        cursor.execute(f"CALL opus_prod.get_results_manager('{username}');")
+    elif userType == 'Contributor':
+        cursor.execute(f"CALL opus_prod.get_results('{username}');")
+    else:
+        cursor.execute(f"CALL opus_prod.get_results_admin('{username}');")
+    
+    # Fetch results
+    results = cursor.fetchall()
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(results)
+ 
             
+@app.route("/competency-results")
+def competency_results():
+    username = session.get('username')
+
+    return (render_template("competency-results.html", username=username))
+
+@app.route("/competency-results-manager")
+def competency_results_manager():
+    username = session.get('username')
+    userType = session.get('company_name')
+    
+    return (render_template("competency-results-manager.html", username=username, userType=userType))
 
 @app.route("/.well-known/pki-validation/godaddy.html")
 def goddadyVerification():

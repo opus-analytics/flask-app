@@ -336,26 +336,19 @@
               >
             </nav>
           </div>
-          <div
-            data-hover="true"
-            data-delay="0"
-            data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823"
-            class="brix---dropdown-wrapper w-dropdown"
-          >
+          <div data-hover="true" data-delay="0" data-w-id="e37efdbd-6d4f-b60c-3aa0-82522647e823"
+            class="brix---dropdown-wrapper w-dropdown">
+            <div class="brix---dropdown-toggle w-dropdown-toggle">
+              <div class="text-block-13">{{ username }}</div><img
+                src="../static/images/line-rounded-chevron-down-black-brix-templates.svg"
+                alt="Icon Rounded Chevron Dark - BRIX Templates" class="brix---dropdown-chevron-2">
+            </div>
             <nav class="brix---dropdown-column-wrapper w-dropdown-list">
               <div class="brix---dropdown-card">
                 <div class="brix---dropdown-pd">
                   <div class="w-layout-grid brix---dropdown-links-grid">
-                    <a
-                      href="{{ url_for('dashboard')}}"
-                      class="brix---dropdown-link w-dropdown-link"
-                      >Dashboard</a
-                    >
-                    <a
-                      href="{{ url_for('log_out') }}"
-                      class="brix---dropdown-link w-dropdown-link"
-                      >Log Out</a
-                    >
+                    <a href="{{ url_for('dashboard') }}" class="brix---dropdown-link w-dropdown-link">Dashboard</a>
+                    <a href="{{ url_for('log_out') }}" class="brix---dropdown-link w-dropdown-link">Log Out</a>
                   </div>
                 </div>
               </div>

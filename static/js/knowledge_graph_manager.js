@@ -3872,22 +3872,9 @@ submitButton.addEventListener("click", async (event) => {
     }
   }
 
-  const assessment = {
-    token: graphId,
-    jobSkills: sliderValues,
-  };
-
-  await fetch(window.location.protocol+ "//" + window.location.host + "/update-manager-competency", {
-    method: "POST",
-    body: JSON.stringify(assessment),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  sliderValues = sliderValues.filter((value) => value !== "0");
-  const sum = sliderValues.reduce((a, b) => a + b, 0);
-  const average = sum / sliderValues.length;
+  sliderValuesFiltered = sliderValues.filter((value) => value !== "0");
+  const sum = sliderValuesFiltered.reduce((a, b) => a + b, 0);
+  const average = sum / sliderValuesFiltered.length;
 
   const assessmentScore = average * userExperience;
   let weightedAssessmentScore = 0;
@@ -3903,6 +3890,19 @@ submitButton.addEventListener("click", async (event) => {
     weightedAssessmentScore = 0.6;
   }
   weightedAssessmentScore = weightedAssessmentScore * 100;
+  const assessment = {
+    token: graphId,
+    jobSkills: sliderValues,
+    score: weightedAssessmentScore,
+  };
+  
+  await fetch(window.location.protocol+ "//" + window.location.host + "/update-manager-competency", {
+    method: "POST",
+    body: JSON.stringify(assessment),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   submitButton.style.display = "none"; // Hide the submit button
 
   // Display the result

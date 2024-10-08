@@ -150,30 +150,12 @@ form.addEventListener("submit", (event) => {
     }
 
     let userName = document.getElementById("username").value;
-    // Show result to add to database
-    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
-    // Add the assessment to the database
-    const assessment = {
-      name: name,
-      jobFunction: jobFunctionality,
-      jobTitle: jobTitle,
-      monthsInRole: monthsInRole,
-      jobSkills: sliderValues,
-      username: userName,
-    };
-
-    await fetch(window.location.protocol+ "//" + window.location.host + "/add-competency", {
-      method: "POST",
-      body: JSON.stringify(assessment),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    sliderValues = sliderValues.filter((value) => value !== "0");
-    const sum = sliderValues.reduce((a, b) => a + b, 0);
-    const average = sum / sliderValues.length;
-
+    
+    
+    sliderValuesFiltered = sliderValues.filter((value) => value !== "0");
+    const sum = sliderValuesFiltered.reduce((a, b) => a + b, 0);
+    const average = sum / sliderValuesFiltered.length;
+    
     const assessmentScore = average * userExperience;
     let weightedAssessmentScore = 0;
     if (assessmentScore >= 85) {
@@ -188,6 +170,25 @@ form.addEventListener("submit", (event) => {
       weightedAssessmentScore = 0.6;
     }
     weightedAssessmentScore = weightedAssessmentScore * 100;
+    // Show result to add to database
+    // console.log(name, jobFunctionality, jobTitle, monthsInRole, sliderValues);
+    // Add the assessment to the database
+    const assessment = {
+      name: name,
+      jobFunction: jobFunctionality,
+      jobTitle: jobTitle,
+      monthsInRole: monthsInRole,
+      jobSkills: sliderValues,
+      username: userName,
+      score: weightedAssessmentScore,
+    };
+    await fetch(window.location.protocol+ "//" + window.location.host + "/add-competency", {
+      method: "POST",
+      body: JSON.stringify(assessment),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     submitButton.style.display = "none"; // Hide the submit button
 
     // Display the result

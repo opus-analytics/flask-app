@@ -183,31 +183,43 @@
                       <p class="f-paragraph-large">Gain insights and enhance skills by seeking feedback from others.</p>
                     </div>
                   </a>
-                <div id="enableManager">
-                  <a href="{{ url_for('knowledge_graph_portal') }}" class="link-block w-inline-block">
+                  <a href="{{ url_for('competency_results') }}" class="link-block w-inline-block enable">
                     <div class="f-feature-card-filled">
                       <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt=""
                           src="./static/images/KnowledgeGraph_logo.jpeg" loading="lazy"
                           srcset="./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg"
                           class="image-23"></div>
                       <div class="f-margin-bottom-16">
-                        <h5 class="f-h5-heading">Share Your Competency Assessment</h5>
+                        <h5 class="f-h5-heading">View All Competency Results</h5>
                       </div>
-                      <p class="f-paragraph-large">Gain insights and enhance skills by seeking feedback from others.</p>
+                      <p class="f-paragraph-large">See a comprehensive overview of your competencies.</p>
                     </div>
                   </a>
-                </div>
                   <div id="enableAdmin">
-                  <a href="{{ url_for('manage_users') }}" class="link-block w-inline-block" >
+                    <a href="{{ url_for('manage_users') }}" class="link-block w-inline-block" >
+                      <div class="f-feature-card-filled">
+                        <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt=""
+                            src="./static/images/KnowledgeGraph_logo.jpeg" loading="lazy"
+                            srcset="./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg"
+                            class="image-23"></div>
+                        <div class="f-margin-bottom-16">
+                          <h5 class="f-h5-heading">Collaborate and Grow</h5>
+                        </div>
+                        <p class="f-paragraph-large">Add users and managers to share knowledge and develop skills.</p>
+                      </div>
+                    </a>
+                  </div>
+                <div id="enableManager">
+                  <a href="{{ url_for('competency_results_manager') }}" class="link-block w-inline-block">
                     <div class="f-feature-card-filled">
                       <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt=""
                           src="./static/images/KnowledgeGraph_logo.jpeg" loading="lazy"
                           srcset="./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg, ./static/images/KnowledgeGraph_logo.jpeg"
                           class="image-23"></div>
                       <div class="f-margin-bottom-16">
-                        <h5 class="f-h5-heading">Collaborate and Grow</h5>
+                        <h5 class="f-h5-heading">View All Employee Results</h5>
                       </div>
-                      <p class="f-paragraph-large">Add users and managers to share knowledge and develop skills.</p>
+                      <p class="f-paragraph-large">See a comprehensive overview of your employees competencies.</p>
                     </div>
                   </a>
                 </div>
@@ -353,7 +365,7 @@
 
     start_element = document.getElementsByClassName("link-block w-inline-block start");
     advance_element = document.getElementById("advance");
-    enable_element = document.getElementById("enable");
+    enable_element = document.getElementsByClassName("link-block w-inline-block enable");
     enable_element_manager = document.getElementById("enableManager");
     enable_element_admin = document.getElementById("enableAdmin");
 
@@ -384,6 +396,7 @@
       advance_element.style.display = 'none';
       
       if (companyName == 'Manager'){
+        console.log('Manager')
         enable_element_admin.style.display = 'none'; 
         enable_element_manager.style.display = 'block'; 
         for (let i = 0; i < enable_element.length; i++) {
@@ -399,7 +412,7 @@
       }
       else{
         enable_element_admin.display= 'block';
-        enable_element_manager.style.display = 'none'; 
+        enable_element_manager.style.display = 'block'; 
         for (let i = 0; i < enable_element.length; i++) {
         enable_element[i].style.display = 'none';
       }
