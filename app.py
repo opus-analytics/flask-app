@@ -1059,7 +1059,10 @@ def add_user():
         results = jsonify({"success": f"Account created successfully. An email has been sent to with Password: {tempPassword}"})
         msg = Message('Account Created', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
         subtitle= f"Your Opus Account is Ready with temporary password: {tempPassword}"
-        msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "We're excited to welcome you to the Opus community! \nYour manager has created an Opus account for you.\nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
+        if(manager):
+            msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "\nWe're excited to welcome you to the Opus community! \nYour manager has created an Opus account for you.\nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
+        else:
+            msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "\nWe're excited to welcome you to the Opus community! \nA Manager Opus account has been created for you.\nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
         mail.send(msg)
         
 
