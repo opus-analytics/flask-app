@@ -6284,7 +6284,7 @@ figcaption {
   background-color: #fff;
   border-radius: 8px;
   margin-bottom: 24px;
-  padding: 4px 17px 16px 12px;
+  /* padding: 4px 17px 16px 12px; */
 }
 
 .f-margin-bottom-16 {
@@ -6322,7 +6322,7 @@ figcaption {
 }
 
 .image-23 {
-  width: auto;
+  width: 100%;
   margin-bottom: 0;
 }
 
