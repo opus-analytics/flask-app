@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import pandas as pd
 import requests, json
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from mysql.connector import Error
@@ -25,9 +25,17 @@ from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
 from python_random_strings import random_strings
+from Resume_analysis import OpusResume
+from opus_conn import create_conn
+from opus_conn import get_competencies_hamza,get_job_info_from_db
+import secrets
 
 
 app = Flask(__name__)
+
+# Hamza's code
+# Assuming you have imported the `OpusResume` class and helper functions
+opus_resume = OpusResume(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
 
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
@@ -77,7 +85,6 @@ def our_offerings():
 
 
 @app.route("/partners")
-
 def partners():
     username = ''
     if session.get('token') == None:
@@ -984,6 +991,12 @@ def knowledge_graph_portal():
 
     return (render_template("knowledge-graph-portal.html", username=username))
 
+@app.route("/knowledge-graph-resume")
+def knowledge_graph_resume():
+    username = session.get('username')
+
+    return (render_template("knowledge-graph-resume.html", username=username))
+
 @app.route("/manage-users")
 def manage_users():
     username = session.get('username')
@@ -1269,6 +1282,74 @@ def competency_results_manager():
 @app.route("/.well-known/pki-validation/godaddy.html")
 def goddadyVerification():
     return (render_template("godaddy.html"))
+
+
+@app.route('/analyze-resume-hamza', methods=['POST'])
+def analyze_resume_hamza():
+    resume_file = request.files['resume']
+    filename = secrets.token_hex(10) + '_' + resume_file.filename
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    
+    try:
+        resume_file.save(filepath)
+        print(filepath)
+    
+        try:
+            resume_filepath = filepath
+            user_id =  request.form['user_id']
+
+            if not resume_filepath or not user_id:
+                return jsonify({'error': 'Missing required parameters.'}), 400
+
+            # Step 1: Extract resume text
+            resume_text = opus_resume.extract_resume_text(resume_filepath)
+            
+
+            # Step 2: Create connection and get job info
+            connection = create_conn()
+            job_title, job_function, job_skills,monthsInRole = get_job_info_from_db(connection, user_id)
+
+            # Step 3: Get competencies
+            competencies_df = get_competencies_hamza(connection, job_title, job_function, job_skills,monthsInRole)
+            
+            # Step 4: Analyze resume to generate insights
+            analysis_results = opus_resume.analyze_resume(
+                resume_text=resume_text,
+                competencies=competencies_df["Title"].to_list()
+            )
+
+            education_insights = analysis_results["education_details"]
+            industry_and_job_insights = analysis_results["jobs_industory"]
+            promotions_insights = analysis_results["promotions_details"]
+            
+
+            # Step 5: Update competency scores
+            updated_df = opus_resume.update_scores_education(df=competencies_df, education_json=education_insights)
+            updated_df = opus_resume.update_scores_promotion_industory(
+                df=updated_df, promotion_json=promotions_insights, industory_json=industry_and_job_insights
+            )
+
+            # Step 6: Calculate overall competency score
+            finalScore = updated_df["scores"].mean()
+
+            # Step 7: Make final score two decimal places
+            finalScore = round(finalScore, 2)
+            
+            # Returning the updated competencies in JSON format
+            return jsonify({
+                'updated_competencies': updated_df.to_dict(orient='records'),
+                'finalScore': finalScore
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+        # I want to delete the file after the analysis is done
+        finally:
+            os.remove(filepath)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

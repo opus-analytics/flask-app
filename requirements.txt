@@ -14,3 +14,7 @@ PrettyTable
 datetime
 xmltodict
 python_random_strings
+openai
+PyPDF2
+docx2txt
+
