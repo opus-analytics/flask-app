@@ -5669,7 +5669,300 @@ const jobTitleData = [
       {title:"Sourcing Capability",desc:"The ability to access whatever resources are required to deliver the service targets."},
       {title:"KPI management",desc:"The ability to monitor, track, and report performance against the set key performance indicators.  The ability to identify key trends that need to be monitored."},
     ],
-  }
+  },
+  {
+    value: 384,
+    jobFunc: 13,
+    text: "Sales",
+    functionalAssessment: [
+      {
+        title: "Business and Industry Analysis",
+        desc: "Includes knowledge of common pricing and promotions, forecasting competitors' behavior, industry trends and forecasting, and client needs and forecasting. ",
+      },
+      {
+        title: "Product Analysis",
+        desc: "Includes creating organizational product offerings, taking in product feedback, crafting the organizational value proposition and client-product alignment, and having knowledge of competitors' offerings.",
+      },
+      {
+        title: "Client Onboarding ",
+        desc: "Includes knowledge of the client-organization onboarding, creating a smooth client transition to the organization's account manager, and working through all referrals.",
+      },
+      {
+        title: "Overarching Sales Delivery",
+        desc: "Includes ensuring service delivery quality, having knowledge of the sales process, responding to client queries, working through customer relationship management (CRM), performing data collection, ensuring data integrity, performing activity management, and working through client satisfaction surveys and individual feedback.",
+      },
+      {
+        title: "Demand Generation",
+        desc: "Includes working through sales prospecting, handling sales calls, researching and identifying sales opportunities, and ensuring data integrity in the search process.",
+      },
+      {
+        title: "Development of Leads to Sales",
+        desc: "Includes handling objections, qualifying opportunities and gauging the client's stage in the buying process, and working through negotiations with buyers.",
+      },
+      {
+        title: "Sales Closing",
+        desc: "Includes the ability to close the sale. Further, it includes the ability to cross-sell and upgrade or up-sell products where appropriate.",
+      },
+      {
+        title: "Growing Accounts",
+        desc: "Includes upgrading or up-selling (or cross-selling) clients' accounts, handling objections, and working through negotiations in the account growth process.",
+      },
+      {
+        title: "Renewing Accounts",
+        desc: "Includes reviewing all accounts, asking the client to renew, and handling difficult renewals.",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
+    ],
+  },
+  {
+    value: 385,
+    jobFunc: 13,
+    text: "Marketing",
+    functionalAssessment: [
+      {
+        title: "Industry Analysis",
+        desc: "Includes the ability to forecast industry growth and examine trends in global and local markets. Further, it includes the ability to identify opportunities, conduct consumer segmentation analyses, collect competitor intelligence where possible, and have knowledge of the product lifecycle, product substitutes, and design best practices.",
+      },
+      {
+        title: "Consumer and Customer Analysis",
+        desc: "Includes the ability to identify target market selection, conduct analysis on consumer trends and buying power, develop insights on customers, and accurately forecast demand.",
+      },
+      {
+        title: "Campaign Planning and Execution",
+        desc: "Includes the ability to plan and develop marketing content, use different promotional mediums, disseminate marketing messages, conduct profitability analysis, plan for internal assessments around risk adoption, and manage external agencies where needed through an analysis of all campaign costs, both internal and external.",
+      },
+      {
+        title: "Marketing Operations",
+        desc: "Includes the ability to analyze and report on performance metrics, skills in customer relationship management (CRM), knowledge of data collection methods, knowledge of maintenance standards and integrity, and ability to develop project timelines, identify scope, and create budget.",
+      },
+      {
+        title: "Demand Generation and Lead Management",
+        desc: "Includes developing, qualifying, and nurturing promotions; identifying how to develop demand and lead management processes; knowledge of how to increase the speed of customer purchasing; and knowledge of when to offer promotional discounts to incent buyers.",
+      },
+      {
+        title: "Sales Support",
+        desc: "Includes knowledge of sales collateral and pipeline acceleration (i.e. accelerating the purchasing process for the buyer).",
+      },
+      {
+        title: "Distribution Channels Support and Analysis",
+        desc: "Includes the ability to analyze and support the distribution network, maintain distribution channel relationships, and support sales divisions with both direct and indirect sales channels.",
+      },
+      {
+        title: "Customer Experience and Engagement Creation",
+        desc: "Includes planning initial customer onboarding, developing word-of-mouth (WOM) initiatives, spearheading customer data initiatives, and developing customer loyalty programs.",
+      },
+      {
+        title: "Product Planning and Development",
+        desc: "Includes planning for new and existing product or service development through analyses of pricing, product packaging and design, product positioning, knowledge of the product lifecycle, and knowledge of merchandising and placement.",
+      },
+      {
+        title: "Communications Development",
+        desc: "Includes the ability to communicate internal/corporate marketing, external communication skills, crafting the organizational image, creating public and media relations campaigns, developing partnerships and sponsorships, and working with advertising agencies to aid in advertising development.",
+      },
+      {
+        title: "Event Planning and Development",
+        desc: "Includes planning event logistics, vendor management, coordinating with organization and party management, and working with third-party events",
+      },
+      {
+        title: "Brand Development",
+        desc: "Includes knowledge of brand development and positioning tactics, brand awareness and integrity, inventory of branded items, brand stewardship, and developing and measuring brand loyalty.",
+      },
+      {
+        title: "Online Channel Support and Analysis",
+        desc: "Includes social media marketing, knowledge of digital platforms and processes (webinars and teleconferencing), search engine marketing (SEM, SEO, and paid searches), mobile marketing, web development skills, and knowledge of marketing automation (email marketing, lead management automation, and enterprise marketing management).",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
+    ],
+  },
+  {
+    value: 386,
+    jobFunc: 13,
+    text: "Finance",
+    functionalAssessment: [
+      {
+        title:
+          "Professional Accounting Standards, Requirements, and Procedures Understanding and Compliance ",
+        desc: "Includes knowledge of professional accounting standards, requirements, and procedures related to the business (i.e. IFRS or GAAP).",
+      },
+      {
+        title: "Organizational Finance Policies Compliance and Maintenance",
+        desc: "Includes knowledge and ability to develop policies such as travel, expenses, bad debt, refunds, and internal compliance.",
+      },
+      {
+        title: "Financial Accounting",
+        desc: "Includes numerous skills: financial statement preparation, compliance, and analysis; and reconciling operational processes and their underlying financial transactions. Further, it includes knowledge of processes supporting general accounting (i.e. sales, receivables, collection and purchase, payables, payment).",
+      },
+      {
+        title: "Management Accounting ",
+        desc: "Includes features such as cost management, revenue and profitability management, working with various accounting systems, reporting organizational performance measurements, and results benchmarking (both internally and externally).",
+      },
+      {
+        title: "Internal Control",
+        desc: "Includes knowledge of and ability to work with different types of control systems. Further, it includes the ability to identify fraud and errors while conducting internal audits, and the ability to communicate all internal audits and compare them to external audits.",
+      },
+      {
+        title: "Finance",
+        desc: "Includes knowledge of working capital management, cash management, capital structures, treasury management, financing sources and initiatives (i.e. debt and equity), M&A deals, valuations, risk management, foreign exchange management, and macroeconomic analyses.",
+      },
+      {
+        title: "Financial Planning",
+        desc: "Includes skills such as budget development, forecasting, and analysis; also includes the ability to set financial goals and manage financial resources.",
+      },
+      {
+        title: "Taxation",
+        desc: "Includes skills surrounding tax: compliance, audits, knowledge of implications of different business decisions, classes of tax, taxation law, tax planning, and tax accounting.",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
+    ],
+  },
+  {
+    value: 387,
+    jobFunc: 13,
+    text: "IT",
+    functionalAssessment: [
+      {
+        title: "Project Management",
+        desc: "Includes knowledge of: IT project frameworks and their corresponding lifecycle; project management concepts, tools, and best practices; project reporting standards; and developing project plans.",
+      },
+      {
+        title: "Requirements Gathering",
+        desc: "Includes ability to identify key players and knowledge of requirements gathering techniques (i.e. brainstorming, document analysis, focus groups, interviews, prototyping, surveys, observation, reverse engineering, and workshops).",
+      },
+      {
+        title: "Business Analysis",
+        desc: "Includes knowledge of business functions and processes, business decision-making processes, and business case methodologies and measurement.",
+      },
+      {
+        title: "Documentation and Measurement ",
+        desc: "Includes knowledge of documentation procedures and the ability to track changes, make updates, and relay other important information related to IT systems.",
+      },
+      {
+        title: "Troubleshooting and Support",
+        desc: "Includes knowledge of troubleshooting and support processes, knowledge of troubleshooting techniques, and the ability to be responsive to key issues.",
+      },
+      {
+        title: "Policy and Compliance",
+        desc: "Includes knowledge of relevant external policy and compliance procedures and relevant organizational policy and compliance procedures.",
+      },
+      {
+        title: "Security and Data Protection",
+        desc: "Includes knowledge of relevant security legislation and laws, security procedures and practices, and information management (i.e. information quality, accessibility, security, accuracy, and integrity).",
+      },
+      {
+        title: "Modeling",
+        desc: "Includes knowledge of tools and methodologies (UML, BPMN, etc.); systems and business architecture modeling; and modeling abilities for applications, IT systems, business systems, system integration, and data.",
+      },
+      {
+        title: "Programming",
+        desc: "Includes knowledge of relevant programming languages and programming abilities for application development (C++, java), web design (HTML), database and warehouse development (SQL), etc. Further, knowledge of problem and system decomposition, along with code organization and the ability to develop readable code.",
+      },
+      {
+        title: "Testing and Quality Assurance",
+        desc: "Includes the ability to test for quality assurance and control, and the ability to develop test cases, strategies, methodologies, and standards. Further, includes the ability to test different types (volume, unit, stress) and develop testing tools (scripts, reports).",
+      },
+      {
+        title: "Installation and Integration",
+        desc: "Includes knowledge of installation and integration procedures, and knowledge of common installation and integration tools and techniques.",
+      },
+      {
+        title: "Vendor Selection and Management",
+        desc: "Includes knowledge of the process to get information on vendor offerings, vendor management, and vendor selection.",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans.",
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value.",
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders.",
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis.",
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully.",
+      },
+    ],
+  },
 ];
 
 populateDropdown(jobTitleData, jobTitleElement);
