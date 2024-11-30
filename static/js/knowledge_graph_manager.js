@@ -6118,6 +6118,121 @@ const jobTitleData = [
       },
     ],
   },
+  {
+    value: 388,
+    jobFunc: 15,
+    text: "Project Leader",
+    functionalAssessment: [],
+  },
+  {
+    value: 389,
+    jobFunc: 15,
+    text: "Process Consultant",
+    functionalAssessment: [],
+  },
+  {
+    value: 390,
+    jobFunc: 15,
+    text: "Process Coordinator",
+    functionalAssessment: [],
+  },
+  {
+    value: 391,
+    jobFunc: 15,
+    text: "Process Owner",
+    functionalAssessment: [],
+  },
+  {
+    value: 392,
+    jobFunc: 15,
+    text: "Process Controller",
+    functionalAssessment: [],
+  },
+  {
+    value: 393,
+    jobFunc: 15,
+    text: "Process Staff",
+    functionalAssessment: [],
+  },
+  {
+    value: 394,
+    jobFunc: 15,
+    text: "IT",
+    functionalAssessment: [
+      {
+        title: "Project Management",
+        desc: "Includes knowledge of: IT project frameworks and their corresponding lifecycle; project management concepts, tools, and best practices; project reporting standards; and developing project plans.",
+      },
+      {
+        title: "Requirements Gathering",
+        desc: "Includes ability to identify key players and knowledge of requirements gathering techniques (i.e. brainstorming, document analysis, focus groups, interviews, prototyping, surveys, observation, reverse engineering, and workshops).",
+      },
+      {
+        title: "Business Analysis",
+        desc: "Includes knowledge of business functions and processes, business decision-making processes, and business case methodologies and measurement.",
+      },
+      {
+        title: "Documentation and Measurement ",
+        desc: "Includes knowledge of documentation procedures and the ability to track changes, make updates, and relay other important information related to IT systems.",
+      },
+      {
+        title: "Troubleshooting and Support",
+        desc: "Includes knowledge of troubleshooting and support processes, knowledge of troubleshooting techniques, and the ability to be responsive to key issues.",
+      },
+      {
+        title: "Policy and Compliance",
+        desc: "Includes knowledge of relevant external policy and compliance procedures and relevant organizational policy and compliance procedures.",
+      },
+      {
+        title: "Security and Data Protection",
+        desc: "Includes knowledge of relevant security legislation and laws, security procedures and practices, and information management (i.e. information quality, accessibility, security, accuracy, and integrity).",
+      },
+      {
+        title: "Modeling",
+        desc: "Includes knowledge of tools and methodologies (UML, BPMN, etc.); systems and business architecture modeling; and modeling abilities for applications, IT systems, business systems, system integration, and data.",
+      },
+      {
+        title: "Programming",
+        desc: "Includes knowledge of relevant programming languages and programming abilities for application development (C++, java), web design (HTML), database and warehouse development (SQL), etc. Further, knowledge of problem and system decomposition, along with code organization and the ability to develop readable code.",
+      },
+      {
+        title: "Testing and Quality Assurance",
+        desc: "Includes the ability to test for quality assurance and control, and the ability to develop test cases, strategies, methodologies, and standards. Further, includes the ability to test different types (volume, unit, stress) and develop testing tools (scripts, reports).",
+      },
+      {
+        title: "Installation and Integration",
+        desc: "Includes knowledge of installation and integration procedures, and knowledge of common installation and integration tools and techniques.",
+      },
+      {
+        title: "Vendor Selection and Management",
+        desc: "Includes knowledge of the process to get information on vendor offerings, vendor management, and vendor selection.",
+      },
+      {
+        title: "Data Analysis",
+        desc: "Analyzes and draws insights from relevant data to identify organizational challenges and opportunities. Uses storytelling to effectively communicate insights and actionable, data-informed recommendations.",
+      },
+      {
+        title: "Strategic Thinking",
+        desc: "The ability to analyze complex situations, anticipate future trends, and develop effective long-term plans." 
+      },
+      {
+        title: "Innovation",
+        desc: "The capacity to generate new ideas, approaches, or products that improve efficiency, effectiveness, or value." 
+      },
+      {
+        title: "Customer Service",
+        desc: "The skills and behaviors necessary to provide exceptional service to customers, clients, or stakeholders." 
+      },
+      {
+        title: "Financial Acumen",
+        desc: "The knowledge and understanding of financial concepts, including budgeting, forecasting, and analysis." 
+      },
+      {
+        title: "Project Management",
+        desc: "The skills and abilities required to plan, organize, and execute projects successfully." 
+      }
+    ],
+  },
 ];
 
 // Select the error message element
