@@ -940,6 +940,22 @@ const jobFunctionalityList = [
     ],
     functionalCompetencies: [],
   },
+  {
+    value: 15,
+    text: "Business Process Outsourcing",
+    desc: [
+      "The business processes include contact centers, such as help desks, and various types of back office work, such as accounting, market research, tax preparation, airline and hotel reservations. They also include professional services such as medical transcription, data entry, digitizing, animation and multi-media.",
+    ],
+    functionalCompetencies: [
+      {title:"Language proficiency",desc:"The ability to deliver the work required at the required level of delivery in the specific language needed to perform the work"},
+      {title:"Domain expertise",desc:"The ability to apply and build knowledge of what the topic, it's target process, and the ability to retain knowledge sufficiently."},
+      {title:"Customer care",desc:"The ability and willingness to work with the client to deliver quality customer experience."},
+      {title:"Dispute resolution",desc:"The ability to deal well with conflict situations, avoiding escalations and negative customer experience."},
+      {title:"Knowing your client",desc:"The ability and willingness to find out what the customer wants and needs and to act accordingly, taking the organization's costs and benefits into account."},
+      {title:"Building rapport",desc:"The ability to identify common interests or common ground that all parties can agree upon.  The existence of a defined common ground to indicate trust and understanding."},
+      {title:"Building trust",desc:"Gaining others' confidence by acting with integrity and following through on commitments, while sharing own perspective."},
+    ],
+  },
 ];
 
 const coreCompetency = [
@@ -1063,12 +1079,12 @@ const coreCompetencyTravel = [
   {title:"Global Mindset",desc:"Awareness of diversity across global cultures and markets. Seek opportunities to adopt successful practices and ideas."},
   {title:"Interpersonal Skills",desc:"Manage relationships efficiently and communicate with others effectively to achieve mutual consensus and outcomes."},
   {title:"Leadership",desc:"Lead others to achieve objectives in the most effective way. Provide an inclusive workplace that cultivates workplace relationships and teamwork, and foster the development of others."},
-  {title:"Lifelong Learning",desc:"Seek out opportunities to enhance one\u2019s knowledge and skills. Access and acquire new knowledge and skills actively for continual learning."},
+  {title:"Lifelong Learning",desc:"Seek out opportunities to enhance one's knowledge and skills. Access and acquire new knowledge and skills actively for continual learning."},
   {title:"Managing Diversity",desc:"Work well with people from different ethnic, social, cultural and educational backgrounds and understand the concerns and interests of diverse work groups."},
   {title:"Problem Solving",desc:"Generate feasible and efficient solutions to solve problems and capitalise on new opportunities.Generate feasible and efficient solutions to solve problems and capitalise on new opportunities."},
   {title:"Resource Management",desc:"Efficient and effective deployment and allocation of resources when and where they are needed. Include planning, allocating and scheduling of resources to tasks, which typically include manpower, machines, money and materials.Efficient and effective deployment and allocation of resources when and where they are needed. Include planning, allocating and scheduling of resources to tasks, which typically include manpower, machines, money and materials."},
   {title:"Sense Making",desc:"Organise and analyse data and information accurately to identify relationships and detect patterns and trends to gain insights for decision-making"},
-  {title:"Service Orientation",desc:"Commit to exceeding both internal and external customers\u2019 needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.Commit to exceeding both internal and external customers\u2019 needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation."},
+  {title:"Service Orientation",desc:"Commit to exceeding both internal and external customers' needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.Commit to exceeding both internal and external customers' needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation."},
   {title:"Teamwork",desc:"Work collaboratively and effectively with others to contribute to group efforts to achieve identified objectives."},
   {title:"Transdisciplinary Thinking",desc:"Understanding of concepts across multiple disciplines, with the capacity to synthesise the knowledge and insights to guide decisions and foster cooperation."},
   {title:"Virtual Collaboration",desc:"Use online collaborative communication tools to work as teams to accomplish tasks or projects."},
@@ -5602,6 +5618,58 @@ const jobTitleData = [
       {title:"Tour Leading Operations",desc:"Manage overseas travel operations including performance of emergency responses and recovery procedures where necessary"}
       ],                                                                                                                                      
   },
+  {
+    value: 377,
+    jobFunc: 15,
+    text: "Customer Service",
+    functionalAssessment: [],                                                                                                                                      
+  },
+  {
+    value: 378,
+    jobFunc: 15,
+    text: "Technical Support",
+    functionalAssessment: [],
+  },
+  {
+    value: 379,
+    jobFunc: 15,
+    text: "Tele-marketing",
+    functionalAssessment: [],
+  },
+  {
+    value: 380,
+    jobFunc: 15,
+    text: "Lead Generation",
+    functionalAssessment: [],
+  },
+  {
+    value: 381,
+    jobFunc: 15,
+    text: "Administrative back-office services",
+    functionalAssessment: [],
+  },
+  {
+    value: 382,
+    jobFunc: 15,
+    text: "Digitization Clerk",
+    functionalAssessment: [],
+  },
+  {
+    value: 383,
+    jobFunc: 15,
+    text: "Customer care management",
+    functionalAssessment: [
+      {title:"Language proficiency",desc:"The ability to deliver the work required at the required level of delivery in the specific language needed to perform the work"},
+      {title:"Domain expertise",desc:"The ability to apply and build knowledge of what the topic, it's target process, and the ability to retain knowledge sufficiently."},
+      {title:"Customer care",desc:"The ability and willingness to work with the client to deliver quality customer experience."},
+      {title:"Dispute resolution",desc:"The ability to deal well with conflict situations, avoiding escalations and negative customer experience."},
+      {title:"Knowing your client",desc:"The ability and willingness to find out what the customer wants and needs and to act accordingly, taking the organization's costs and benefits into account."},
+      {title:"Building rapport",desc:"The ability to identify common interests or common ground that all parties can agree upon.  The existence of a defined common ground to indicate trust and understanding."},
+      {title:"Building trust",desc:"Gaining others' confidence by acting with integrity and following through on commitments, while sharing own perspective."},
+      {title:"Sourcing Capability",desc:"The ability to access whatever resources are required to deliver the service targets."},
+      {title:"KPI management",desc:"The ability to monitor, track, and report performance against the set key performance indicators.  The ability to identify key trends that need to be monitored."},
+    ],
+  }
 ];
 
 populateDropdown(jobTitleData, jobTitleElement);

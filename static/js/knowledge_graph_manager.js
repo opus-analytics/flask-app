@@ -716,6 +716,22 @@ const jobFunctionalityList = [
     ],
     functionalCompetencies: [],
   },
+  {
+    value: 15,
+    text: "Business Process Outsourcing",
+    desc: [
+      "The business processes include contact centers, such as help desks, and various types of back office work, such as accounting, market research, tax preparation, airline and hotel reservations. They also include professional services such as medical transcription, data entry, digitizing, animation and multi-media.",
+    ],
+    functionalCompetencies: [
+      {title:"Language proficiency",desc:"The ability to deliver the work required at the required level of delivery in the specific language needed to perform the work"},
+      {title:"Domain expertise",desc:"The ability to apply and build knowledge of what the topic, it's target process, and the ability to retain knowledge sufficiently."},
+      {title:"Customer care",desc:"The ability and willingness to work with the client to deliver quality customer experience."},
+      {title:"Dispute resolution",desc:"The ability to deal well with conflict situations, avoiding escalations and negative customer experience."},
+      {title:"Knowing your client",desc:"The ability and willingness to find out what the customer wants and needs and to act accordingly, taking the organization's costs and benefits into account."},
+      {title:"Building rapport",desc:"The ability to identify common interests or common ground that all parties can agree upon.  The existence of a defined common ground to indicate trust and understanding."},
+      {title:"Building trust",desc:"Gaining others' confidence by acting with integrity and following through on commitments, while sharing own perspective."},
+    ],
+  },
 ];
 
 const coreCompetency = [
@@ -5757,6 +5773,58 @@ const jobTitleData = [
       },
     ],
   },
+  {
+    value: 377,
+    jobFunc: 15,
+    text: "Customer Service",
+    functionalAssessment: [],                                                                                                                                      
+  },
+  {
+    value: 378,
+    jobFunc: 15,
+    text: "Technical Support",
+    functionalAssessment: [],
+  },
+  {
+    value: 379,
+    jobFunc: 15,
+    text: "Tele-marketing",
+    functionalAssessment: [],
+  },
+  {
+    value: 380,
+    jobFunc: 15,
+    text: "Lead Generation",
+    functionalAssessment: [],
+  },
+  {
+    value: 381,
+    jobFunc: 15,
+    text: "Administrative back-office services",
+    functionalAssessment: [],
+  },
+  {
+    value: 382,
+    jobFunc: 15,
+    text: "Digitization Clerk",
+    functionalAssessment: [],
+  },
+  {
+    value: 383,
+    jobFunc: 15,
+    text: "Customer care management",
+    functionalAssessment: [
+      {title:"Language proficiency",desc:"The ability to deliver the work required at the required level of delivery in the specific language needed to perform the work"},
+      {title:"Domain expertise",desc:"The ability to apply and build knowledge of what the topic, it's target process, and the ability to retain knowledge sufficiently."},
+      {title:"Customer care",desc:"The ability and willingness to work with the client to deliver quality customer experience."},
+      {title:"Dispute resolution",desc:"The ability to deal well with conflict situations, avoiding escalations and negative customer experience."},
+      {title:"Knowing your client",desc:"The ability and willingness to find out what the customer wants and needs and to act accordingly, taking the organization's costs and benefits into account."},
+      {title:"Building rapport",desc:"The ability to identify common interests or common ground that all parties can agree upon.  The existence of a defined common ground to indicate trust and understanding."},
+      {title:"Building trust",desc:"Gaining others' confidence by acting with integrity and following through on commitments, while sharing own perspective."},
+      {title:"Sourcing Capability",desc:"The ability to access whatever resources are required to deliver the service targets."},
+      {title:"KPI management",desc:"The ability to monitor, track, and report performance against the set key performance indicators.  The ability to identify key trends that need to be monitored."},
+    ],
+  }
 ];
 
 // Select the error message element
