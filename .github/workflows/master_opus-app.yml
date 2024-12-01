@@ -23,8 +23,6 @@ jobs:
           python-version: '3.11'
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
-      - name: Upgrade pip 3
-        run: pip install --upgrade pip
 
       - name: Create and start virtual environment
         run: |
@@ -33,13 +31,6 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-        
-      - name: Install Open Ai last version
-        run: pip install openai==0.28
-
-      - name: Install Open Ai Latest version
-        run: pip install openai --upgrade
-      
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
