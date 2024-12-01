@@ -372,6 +372,7 @@ class OpusJDAnalyzer(OpusResume):
         :param competencies: List of competencies fetched based on the job role
         :return: Dictionary of results containing insights for each section
         """
+        
         # Step 1: Extract the text from the JD file (PDF or DOCX)
         resume_text = self.extract_resume_text(filepath)
         
@@ -383,7 +384,7 @@ class OpusJDAnalyzer(OpusResume):
         prompts = self.generate_prompts(resume_text, competencies)
 
         # Step 3: Analyze the job description using LLM (Opus GPT) insights
-        responsibilities = self.get_insights(prompts["Job_description"])
+        responsibilities = self.get_insights(prompts["Job_description"]) 
 
         # Step 4: Store and return the results in a dictionary
         analysis_results = {
@@ -403,6 +404,7 @@ class OpusJDAnalyzer(OpusResume):
         """
         # Parse the job description JSON
         jd = ast.literal_eval(job_description_json)
+        
         if type(jd) == list:
             jd = jd[0]
         competencies = []

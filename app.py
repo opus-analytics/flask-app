@@ -25,7 +25,7 @@ from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
 from python_random_strings import random_strings
-from Resume_analysis import OpusResume
+from Resume_analysis import OpusResume, OpusJDAnalyzer
 from opus_conn import create_conn
 from opus_conn import get_competencies_hamza,get_job_info_from_db
 import secrets
@@ -36,6 +36,7 @@ app = Flask(__name__)
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
 opus_resume = OpusResume(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
+opus_jd_analyzer = OpusJDAnalyzer(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
 
 app.config['SECRET_KEY'] = 'test123'
 app.config['UPLOAD_FOLDER'] = 'static/files'
@@ -997,6 +998,12 @@ def knowledge_graph_resume():
 
     return (render_template("knowledge-graph-resume.html", username=username))
 
+@app.route("/knowledge-graph-jd")
+def knowledge_graph_jd():
+    username = session.get('username')
+
+    return (render_template("knowledge-graph-jd.html", username=username))
+
 @app.route("/manage-users")
 def manage_users():
     username = session.get('username')
@@ -1292,7 +1299,6 @@ def analyze_resume_hamza():
     
     try:
         resume_file.save(filepath)
-        print(filepath)
     
         try:
             resume_filepath = filepath
@@ -1350,6 +1356,62 @@ def analyze_resume_hamza():
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/analyze_jd_hamza', methods=['POST'])
+def analyze_jd_hamza():
+    resume_file = request.files['resume']
+    filename = secrets.token_hex(10) + '_' + resume_file.filename
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+     
+    try:
+        resume_file.save(filepath)
+    
+        try:
+            resume_filepath = filepath
+            user_id =  request.form['user_id']
+            
+            # Step 2: Create connection and get job info
+            connection = create_conn()
+            job_title, job_function, job_skills,monthsInRole = get_job_info_from_db(connection, user_id)
+
+            # Step 3: Get competencies
+            competencies_df = get_competencies_hamza(connection, job_title, job_function, job_skills,monthsInRole)
+            
+            # Step 4: Analyze resume to generate insights
+            analysis_results = opus_jd_analyzer.analyze_jd(
+                filepath=resume_filepath,
+                competencies=competencies_df["Title"].to_list()
+            )
+            
+            # Make this a string
+            analysis_results = json.dumps(analysis_results)
+            
+            # Step 5: Update competency scores
+            updated_df = opus_jd_analyzer.update_scores_job_description(df=competencies_df, job_description_json=analysis_results)
+            
+            # Step 6: Calculate overall competency score
+            finalScore = updated_df["scores"].mean()
+            
+            # Step 7: Make final score two decimal places
+            
+            finalScore = round(finalScore, 2)
+            
+            return jsonify({
+                'updated_competencies': updated_df.to_dict(orient='records'),
+                'finalScore': finalScore
+            })
+            
+
+        except Exception as e:
+                return jsonify({'error': str(e)}), 500
+            
+        # I want to delete the file after the analysis is done
+        finally:
+            os.remove(filepath)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        
 
 if __name__ == '__main__':
     app.run(debug=True)
