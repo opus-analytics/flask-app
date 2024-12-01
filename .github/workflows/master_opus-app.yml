@@ -34,8 +34,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      - name: Upgrade Open Ai
+      - name: Install Open Ai last version
         run: pip install openai==0.28
+
+      - name: Install Open Ai Latest version
+        run: pip install openai --upgrade
+      
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
