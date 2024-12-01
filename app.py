@@ -1412,6 +1412,37 @@ def analyze_jd_hamza():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
         
+@app.route("/add-competency-resume-jd", methods = ["POST"])
+def add_competency_resume_jd():
+    username = session.get('username')
+    
+    data = request.get_json()
+    analysis_type = data['analysis_type']
+    score = data['score']
+    competencyId = data['competencyId']
+    
+     # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for easy JSON conversion
+
+    # Execute query
+    cursor.execute(f"INSERT INTO competency_assessment_resume_jd (name,type,score,competencyId) VALUES ('{username}', '{analysis_type}', '{score}', '{competencyId}');")
+    connection.commit()
+    
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+
+    return jsonify({"message": "Data inserted successfully"}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)

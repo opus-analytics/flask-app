@@ -66,4 +66,16 @@ sendBtn.addEventListener("click", async () => {
   loader.style.display = "none";
   competency_link.textContent = "Your score upon job description has been analyzed. And your score is: " + resp.finalScore;
   competency_link.style.display = "block";
+
+  await fetch(window.location.protocol+ "//" + window.location.host + "/add-competency-resume-jd", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ analysis_type: "Job Description", score: resp.finalScore , competencyId: competencyId}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 });
