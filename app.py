@@ -29,9 +29,10 @@ from Resume_analysis import OpusResume, OpusJDAnalyzer
 from opus_conn import create_conn
 from opus_conn import get_competencies_hamza,get_job_info_from_db
 import secrets
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
