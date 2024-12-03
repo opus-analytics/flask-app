@@ -32,7 +32,7 @@ import secrets
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=['http://localhost:5173/'])
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
