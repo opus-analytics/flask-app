@@ -32,7 +32,7 @@ import secrets
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/'])
+CORS(app, origins=['http://localhost:5173/', "https://opus-backend.azurewebsites.net/"])
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
@@ -45,7 +45,7 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'CustomerExperience@opusanalytics.ai'
 
-app.config['MAIL_PASSWORD'] = 'R*145568865662uY'
+app.config['MAIL_PASSWORD'] = 'G&829989609587oG'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
@@ -167,6 +167,7 @@ def sign_in():
             session['type'] = r.json()['user_type']
             return redirect(url_for('dashboard'))
         else:
+            print(r.status_code)
             flash('Login Failed!','error')
     return (render_template("sign-in.html"))
 
