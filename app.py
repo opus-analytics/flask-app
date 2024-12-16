@@ -257,7 +257,7 @@ def create_user():
     
     # User type
     if (user['productId'] == '1'):
-        userType = 'Free'
+        userType = 'Start'
     elif (user['productId'] == '2'):
         userType = 'Advance'
     else:

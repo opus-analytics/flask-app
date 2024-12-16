@@ -393,7 +393,7 @@
     enable_element_manager = document.getElementById("enableManager");
     enable_element_admin = document.getElementById("enableAdmin");
 
-    if (userType == 'Free') {
+    if (userType == 'Free' || userType == 'Start') {
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'block';
       }
