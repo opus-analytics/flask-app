@@ -147,7 +147,7 @@
                       <p class="f-paragraph-large">Upload a resume to get insights about where this candidate fits.</p>
                     </div>
                   </a>
-                  <a href="{{ url_for('analyze_company_data') }}" class="link-block w-inline-block" id="advance">
+                  <a href="{{ url_for('analyze_company_data') }}" class="link-block w-inline-block advance">
                     <div class="f-feature-card-filled">
                       <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt=""
                           src="./static/images/Zero2One.png" loading="lazy"
@@ -157,6 +157,18 @@
                         <h5 class="f-h5-heading">Analyze Your Current Employee Data</h5>
                       </div>
                       <p class="f-paragraph-large">Upload a file containing organizational data to identify trends and gain deeper insights.</p>
+                    </div>
+                  </a>
+                  <a href="{{ url_for('salaries_functionality') }}" class="link-block w-inline-block advance">
+                    <div class="f-feature-card-filled">
+                      <div class="f-feature-icon-wrapper-white"><img width="53" sizes="64px" alt=""
+                          src="./static/images/Zero2One.png" loading="lazy"
+                          srcset="./static/images/Zero2One.png, ./static/images/Zero2One.png, ./static/images/Zero2One.png, ./static/images/Zero2One.png, ./static/images/Zero2One.png, ./static/images/Zero2One.png, ./static/images/Zero2One.png"
+                          class="image-23"></div>
+                      <div class="f-margin-bottom-16">
+                        <h5 class="f-h5-heading">View Updated Salary Analysis</h5>
+                      </div>
+                      <p class="f-paragraph-large">Choose job title and filter by years of experience to view salary trend over the years.</p>
                     </div>
                   </a>
                   <a href="{{ url_for('knowledge_graph') }}" class="link-block w-inline-block enable">
@@ -388,7 +400,7 @@
     let companyName = "{{ company_name }}"
 
     start_element = document.getElementsByClassName("link-block w-inline-block start");
-    advance_element = document.getElementById("advance");
+    advance_element = document.getElementsByClassName("link-block w-inline-block advance");
     enable_element = document.getElementsByClassName("link-block w-inline-block enable");
     enable_element_manager = document.getElementById("enableManager");
     enable_element_admin = document.getElementById("enableAdmin");
@@ -397,7 +409,9 @@
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'block';
       }
-      advance_element.style.display = 'none';
+      for (let i = 0; i < advance_element.length; i++) {
+        start_element[i].style.display = 'none';
+      }
       for (let i = 0; i < enable_element.length; i++) {
         enable_element[i].style.display = 'none';
       }
@@ -407,7 +421,9 @@
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'block';
       }
-      advance_element.style.display = 'block';
+      for (let i = 0; i < start_element.length; i++) {
+        start_element[i].style.display = 'block';
+      }
       for (let i = 0; i < enable_element.length; i++) {
         enable_element[i].style.display = 'none';
       }
@@ -417,7 +433,9 @@
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'none';
       }
-      advance_element.style.display = 'none';
+      for (let i = 0; i < start_element.length; i++) {
+        start_element[i].style.display = 'none';
+      }
       
       if (companyName == 'Manager'){
         console.log('Manager')
