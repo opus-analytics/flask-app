@@ -180,7 +180,7 @@ sendBtn.addEventListener("click", async () => {
       labels: ['2020', '2021', '2022', '2023', '2024'],
       datasets: [
       {
-        label: 'Low Salary',
+        label: 'Min Salary',
         data: lowSalary,
         backgroundColor: [
           'rgba(64, 64, 64, 0.2)',
@@ -191,7 +191,7 @@ sendBtn.addEventListener("click", async () => {
         borderWidth: 1
       },
       {
-        label: 'High Salary',
+        label: 'Max Salary',
         data: highSalary,
         backgroundColor: [
           'rgba(181, 82, 159, 0.2)',
