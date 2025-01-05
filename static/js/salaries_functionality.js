@@ -169,8 +169,8 @@ sendBtn.addEventListener("click", async () => {
     for (let i = 4; i < resp.length; i+=2){
       let high = parseFloat(resp[i].replace(/,/g, ''));
       let low = parseFloat(resp[i+1].replace(/,/g, ''));
-      highSalary.push(high);
-      lowSalary.push(low);
+      highSalary.push(high/12);
+      lowSalary.push(low/12);
     }
 
     console.log(highSalary);
@@ -178,25 +178,26 @@ sendBtn.addEventListener("click", async () => {
 
     const data = {
       labels: ['2020', '2021', '2022', '2023', '2024'],
-      datasets: [{
-        label: 'High Salary',
-        data: highSalary,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-        ],
-        borderWidth: 1
-      },
+      datasets: [
       {
         label: 'Low Salary',
         data: lowSalary,
         backgroundColor: [
-          'rgba(54, 162, 235, 0.2)',
+          'rgba(64, 64, 64, 0.2)',
         ],
         borderColor: [
-          'rgba(54, 162, 235, 1)',
+          'rgba(64, 64, 64, 1)',
+        ],
+        borderWidth: 1
+      },
+      {
+        label: 'High Salary',
+        data: highSalary,
+        backgroundColor: [
+          'rgba(181, 82, 159, 0.2)',
+        ],
+        borderColor: [
+          'rgba(181, 82, 159, 1)',
         ],
         borderWidth: 1
       }]
@@ -219,7 +220,7 @@ sendBtn.addEventListener("click", async () => {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Salary in USD/year' 
+              text: 'Salary in EGP/month NET' 
             }
           }
         }
