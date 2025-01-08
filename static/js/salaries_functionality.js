@@ -5,6 +5,8 @@ const jobFamily_link = document.getElementById("job-family-list");
 const job_list = document.getElementById("job-title-list");
 const year_list = document.getElementById("years-of-experience");
 
+// Reset Chart
+
 window.onload = async () => {
   loader.style.display = "block";
   let resp;
@@ -65,6 +67,7 @@ jobFamily_link.addEventListener("change", async () => {
 
     job_list.innerHTML = "";
     year_list.innerHTML = "";
+
     const selectElement = document.getElementById("job-title-list");
 
     // Create first option to be empty and disabled
@@ -162,7 +165,12 @@ sendBtn.addEventListener("click", async () => {
       resp = data;
     });
 
-
+    // Reset the chart for new data
+    document.getElementById("myChart").remove();
+    const canvas = document.createElement("canvas");
+    canvas.id = "myChart";
+    document.getElementById("chart-container").appendChild(canvas);
+    
     let highSalary = [];
     let lowSalary = [];
 
@@ -172,9 +180,6 @@ sendBtn.addEventListener("click", async () => {
       highSalary.push(high/12);
       lowSalary.push(low/12);
     }
-
-    console.log(highSalary);
-    console.log(lowSalary);
 
     const data = {
       labels: ['2020', '2021', '2022', '2023', '2024'],
