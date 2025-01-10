@@ -78,6 +78,7 @@ def our_offerings():
     username = ''
     if session.get('token') == None:
         return render_template("our-offerings.html")
+    
     else:
         if session.get('username') == None:
             return render_template("our-offerings.html")
