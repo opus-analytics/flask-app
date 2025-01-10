@@ -170,19 +170,26 @@ sendBtn.addEventListener("click", async () => {
     const canvas = document.createElement("canvas");
     canvas.id = "myChart";
     document.getElementById("chart-container").appendChild(canvas);
-    
+
     let highSalary = [];
     let lowSalary = [];
+    let labelsArray = [];
 
+    let year = 2020;
     for (let i = 4; i < resp.length; i+=2){
       let high = parseFloat(resp[i].replace(/,/g, ''));
       let low = parseFloat(resp[i+1].replace(/,/g, ''));
-      highSalary.push(high/12);
-      lowSalary.push(low/12);
+
+      if(low != 0 && high != 0){
+        labelsArray.push(year);
+        highSalary.push(high/12);
+        lowSalary.push(low/12);
+      }
+      year++;
     }
 
     const data = {
-      labels: ['2020', '2021', '2022', '2023', '2024'],
+      labels: labelsArray,
       datasets: [
       {
         label: 'Min Salary',
