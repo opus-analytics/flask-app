@@ -1452,9 +1452,8 @@ def add_competency_resume_jd():
 
     return jsonify({"message": "Data inserted successfully"}), 201
 
-
-@app.route("/get-salaries-family", methods = ["GET", "POST"]) 
-def get_salaries_family():
+@app.route("/get-salaries-country", methods = ["GET", "POST"]) 
+def get_salaries_country():
 
     # Establish database connection
     connection = mysql.connector.connect(
@@ -1469,7 +1468,50 @@ def get_salaries_family():
 
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_family();")
+    cursor.execute(f"CALL opus_prod.get_salaries_country();")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+    
+    # Add all results to a single list
+    familyJobs = []
+    for result in results:
+        familyJobs.append(result[0])
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(familyJobs)
+
+@app.route("/get-salaries-family", methods = ["GET", "POST"]) 
+def get_salaries_family():
+    
+    data = request.get_json()
+    country = data['countryName']
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    cursor.execute(f"CALL opus_prod.get_salaries_family('{country}');")
     
     
     # Fetch results
@@ -1498,6 +1540,7 @@ def get_salaries_jobs():
     
     data = request.get_json()
     jobFamily = data['jobFamily']
+    country = data['countryName']
 
 
     # Establish database connection
@@ -1513,7 +1556,7 @@ def get_salaries_jobs():
 
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_job('{ jobFamily }');")
+    cursor.execute(f"CALL opus_prod.get_salaries_job('{ jobFamily }', '{country}');")
     
     
     # Fetch results
@@ -1542,6 +1585,8 @@ def get_salaries_experience():
     
     data = request.get_json()
     jobTitle = data['jobTitle']
+    country = data['countryName']
+    
 
     # Establish database connection
     connection = mysql.connector.connect(
@@ -1556,7 +1601,7 @@ def get_salaries_experience():
 
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_experience('{ jobTitle }');")
+    cursor.execute(f"CALL opus_prod.get_salaries_experience('{ jobTitle }', '{country}');")
     
     
     # Fetch results
@@ -1588,6 +1633,7 @@ def get_salaries_chart():
     familyJob = data['familyJob']
     jobTitle = data['jobTitle']
     experience = data['experience']
+    country = data['countryName']
 
     # Establish database connection
     connection = mysql.connector.connect(
@@ -1603,7 +1649,7 @@ def get_salaries_chart():
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
 
-    cursor.execute(f"CALL opus_prod.get_salaries_chart('{ familyJob }','{ jobTitle }','{ experience }');")
+    cursor.execute(f"CALL opus_prod.get_salaries_chart('{ familyJob }','{ jobTitle }','{ experience }', '{country}');")
     
     
     # Fetch results

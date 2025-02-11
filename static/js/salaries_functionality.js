@@ -1,6 +1,7 @@
 var username = document.getElementById("username").value;
 const sendBtn = document.getElementById("send-button");
 const loader = document.getElementById("loader-line");
+const country_list = document.getElementById("country-list");
 const jobFamily_link = document.getElementById("job-family-list");
 const job_list = document.getElementById("job-title-list");
 const year_list = document.getElementById("years-of-experience");
@@ -10,11 +11,54 @@ const year_list = document.getElementById("years-of-experience");
 window.onload = async () => {
   loader.style.display = "block";
   let resp;
+  await fetch(window.location.protocol+ "//" + window.location.host + "/get-salaries-country", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      resp = data;
+    });
+  
+    const selectElement = document.getElementById("country-list");
+
+    // Create first option to be empty and disabled
+    const option = document.createElement("option");
+    option.value = "";
+    option.text = "Select Job Country";
+    option.disabled = true;
+    option.selected = true;
+    selectElement.appendChild(option);
+
+
+  if (resp){
+    resp.forEach((country) => {
+      const option = document.createElement("option");
+      option.value = country;
+      option.text = country;
+      selectElement.appendChild(option);
+    });
+  }
+
+  loader.style.display = "none";
+};
+
+country_list.addEventListener("change", async () => {
+  loader.style.display = "block";
+  const country = document.getElementById("country-list").value;
+  const data = {
+    countryName: country,
+  };
+  let resp;
   await fetch(window.location.protocol+ "//" + window.location.host + "/get-salaries-family", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(data),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -43,14 +87,16 @@ window.onload = async () => {
   }
 
   loader.style.display = "none";
-};
+});
 
 
 jobFamily_link.addEventListener("change", async () => {
   loader.style.display = "block";
   const jobFamily = document.getElementById("job-family-list").value;
+  const country = document.getElementById("country-list").value;
   const data = {
     jobFamily: jobFamily,
+    countryName: country,
   };
   let resp;
   await fetch(window.location.protocol+ "//" + window.location.host + "/get-salaries-jobs", {
@@ -93,8 +139,10 @@ jobFamily_link.addEventListener("change", async () => {
 job_list.addEventListener("change", async () => {
   loader.style.display = "block";
   const jobTitle = document.getElementById("job-title-list").value;
+  const country = document.getElementById("country-list").value;
   const data = {
     jobTitle: jobTitle,
+    countryName: country,
   };
   let resp;
   await fetch(window.location.protocol+ "//" + window.location.host + "/get-salaries-experience", {
@@ -140,8 +188,9 @@ sendBtn.addEventListener("click", async () => {
   const jobFamily = document.getElementById("job-family-list").value;
   const jobTitle = document.getElementById("job-title-list").value;
   const yearsOfExperience = document.getElementById("years-of-experience").value;
+  const country = document.getElementById("country-list").value;
 
-  if (!jobFamily || !jobTitle || !yearsOfExperience){
+  if (!jobFamily || !jobTitle || !yearsOfExperience || !country) {
     loader.style.display = "none";
     return;
   }
@@ -150,6 +199,7 @@ sendBtn.addEventListener("click", async () => {
     familyJob: jobFamily,
     jobTitle: jobTitle,
     experience: yearsOfExperience,
+    countryName: country,
   };
   
   let resp;
@@ -176,7 +226,10 @@ sendBtn.addEventListener("click", async () => {
     let labelsArray = [];
 
     let year = 2020;
-    for (let i = 4; i < resp.length; i+=2){
+    for (let i = 4; i < resp.length-1; i+=2){
+      if (resp[i] == null || resp[i+1] == null){
+        continue;
+      }
       let high = parseFloat(resp[i].replace(/,/g, ''));
       let low = parseFloat(resp[i+1].replace(/,/g, ''));
 
@@ -215,6 +268,15 @@ sendBtn.addEventListener("click", async () => {
       }]
     };
 
+    let chartLabel = 'Salary in EGP/month NET' ;
+
+    if (country == "Egypt"){
+      chartLabel = 'Salary in EGP/month NET' ;
+    } 
+    else if (country == "UAE"){
+      chartLabel = 'Salary in USD/month NET' ;
+    }
+
     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
       type: 'bar',
@@ -232,7 +294,7 @@ sendBtn.addEventListener("click", async () => {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Salary in EGP/month NET' 
+              text: chartLabel
             }
           }
         }
