@@ -498,6 +498,14 @@ const jobFunctionalityList = [
     ],
   },
   {
+    value: 14,
+    text: "Logistics",
+    desc: [
+      "The functional skills needed to perform a logistics job are mainly focused on the ability to perform the specific tasks.  A logistics role is not just tasked with ensuring the operational health, but is directly linked to the overall growth, and profitability strategies of the business.",
+    ],
+    functionalCompetencies: [],
+  },
+  {
     value: 12,
     text: "Manufacturing",
     desc: [
@@ -6450,19 +6458,19 @@ submitButton.addEventListener("click", async (event) => {
   const average = sum / sliderValuesFiltered.length;
 
   const assessmentScore = average * userExperience;
-  let weightedAssessmentScore = 0;
-  if (assessmentScore >= 85) {
-    weightedAssessmentScore = 0.85;
-  } else if (assessmentScore >= 75 && assessmentScore < 85) {
-    weightedAssessmentScore = 0.75;
-  } else if (assessmentScore >= 70 && assessmentScore < 75) {
-    weightedAssessmentScore = 0.7;
-  } else if (assessmentScore >= 65 && assessmentScore < 70) {
-    weightedAssessmentScore = 0.65;
-  } else if (assessmentScore < 65) {
-    weightedAssessmentScore = 0.6;
-  }
-  weightedAssessmentScore = weightedAssessmentScore * 100;
+  // let weightedAssessmentScore = 0;
+  // if (assessmentScore >= 85) {
+  //   weightedAssessmentScore = 0.85;
+  // } else if (assessmentScore >= 75 && assessmentScore < 85) {
+  //   weightedAssessmentScore = 0.75;
+  // } else if (assessmentScore >= 70 && assessmentScore < 75) {
+  //   weightedAssessmentScore = 0.7;
+  // } else if (assessmentScore >= 65 && assessmentScore < 70) {
+  //   weightedAssessmentScore = 0.65;
+  // } else if (assessmentScore < 65) {
+  //   weightedAssessmentScore = 0.6;
+  // }
+  weightedAssessmentScore = assessmentScore;
   const assessment = {
     token: graphId,
     jobSkills: sliderValues,

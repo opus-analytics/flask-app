@@ -284,6 +284,55 @@ def create_user():
         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
     return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email ,"tempPassword": tempPassword}), mimetype='application/json')
 
+@app.route("/getState", methods = ["POST"])
+def getUserState():
+    xml_data = request.data
+    try:
+        parsed_data = xmltodict.parse(xml_data)
+        user = parsed_data['properties']
+        userInfo = user['userInfo'].split('@')
+        full_name = userInfo[0]
+        company_name = userInfo[1]
+        user_type = userInfo[2]
+        email = user['email']
+
+        try:
+            connection = mysql.connector.connect(
+                host='opus-server.mysql.database.azure.com',
+                database='opus_prod',
+                user='opusadmin',
+                password='OAg@1234'
+            )
+            cursor = connection.cursor()
+            statusQuery = f"select verification_status from users where email = '{email}';"
+            cursor.execute(statusQuery)
+            status = cursor.fetchone()
+
+            if status is None:
+                # The user does not exist, throw an error
+                xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+                return Response(status=404, response=xml_error, mimetype='application/xml')
+
+            elif status[0] == 'Verified':
+                state = 'Active'
+            else:
+                state = 'Inactive'
+
+            connection.commit()
+            connection.close()
+
+            xml_response = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>200</code><error></error><resourceId>{user['resourceId']}</resourceId><status>{state}</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=200, response=xml_response, mimetype='application/xml')
+
+        except Error as e:
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>500</code><error>{e}</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=500, response=xml_error, mimetype='application/xml')
+
+    except Exception as e:
+        xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>400</code><error>Invalid XML or data: {e}</error><resourceId>N/A</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+        return Response(status=400, response=xml_error, mimetype='application/xml')
+
+
 @app.route("/add-competency", methods = ["POST"])
 def add_competency():
     data = request.get_json()
