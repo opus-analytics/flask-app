@@ -238,6 +238,12 @@ def confirmed_mail(token):
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
 
+def create_subscription(connection, email, subscription):
+    cursor = connection.cursor()
+    create = f"INSERT INTO subscription (email, subscription, subscription_status) VALUES ('{email}','{subscription}','Active');"
+    cursor.execute(create)
+    
+
 @app.route("/create", methods = ["POST"])
 def create_user():
     
@@ -252,8 +258,13 @@ def create_user():
     company_name = userInfo[1]
     user_type = userInfo[2]
     
+    phoneNumber = user['msisdn']
+    
     # user email
     email = user['email']
+    
+    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
+        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
     
     # User type
     if (user['productId'] == '1'):
@@ -263,26 +274,241 @@ def create_user():
     else:
         userType = 'Enable'
         
-    # For user password
-    passwordGenerated = random_strings.random_letters(8)
-    tempPassword = passwordGenerated
-    password = bytes(passwordGenerated, encoding = 'utf-8')
-    salt = bcrypt.gensalt()
-    hashed_pwd = bcrypt.hashpw(password, salt)
-    hashed_pwd = hashed_pwd.decode()
     try:
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
-        create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','{full_name}','{company_name}','{userType}','Verified');"
-        cursor.execute(create)
-        connection.commit()
-        connection.close()
+        # Step 1: Check if the email already exists in subscription table
+        subscription_query = f"SELECT subscription FROM subscription WHERE email = '{email}';"
+        cursor.execute(subscription_query)
+        subscriptions = cursor.fetchall()
+
+        if len(subscriptions) == 0:
+            # New user, insert user in user and subscription table
+            # For user password
+            passwordGenerated = random_strings.random_letters(8)
+            tempPassword = passwordGenerated
+            password = bytes(passwordGenerated, encoding = 'utf-8')
+            salt = bcrypt.gensalt()
+            hashed_pwd = bcrypt.hashpw(password, salt)
+            hashed_pwd = hashed_pwd.decode()
+            create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status, phoneNo) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','{full_name}','{company_name}','{userType}','Verified', '{phoneNumber}');"
+            cursor.execute(create)
+            
+            create_subscription(connection, email, userType)
+
+            connection.commit()
+            connection.close()
+            
+            return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password": tempPassword, "Subscription": userType}), mimetype='application/json')
+        # Check if the userType is in the subscriptions
+        else:
+            for sub in subscriptions:
+                print(sub[0])
+                if sub[0] == userType:
+                    connection.commit()
+                    connection.close()
+                    return Response(status=500, response=json.dumps({"message":"User subscription already exists"}), mimetype='application/json')
+            else:
+                # User subscription does not exist, create a new subscription
+                create_subscription(connection, email, userType)
+                connection.commit()
+                connection.close()
+                return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password":'Same User Account Password'  ,"Subscription": userType}), mimetype='application/json')
 
     except Error as e:
         if(e.errno == 1062):
             return Response(status=500, response=json.dumps({"message":"Email already exists"}), mimetype='application/json')
         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
-    return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email ,"tempPassword": tempPassword}), mimetype='application/json')
+    return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "Subscription": userType}), mimetype='application/json')
+
+# @app.route("/update", methods = ["POST"])
+# def update_user():
+#     xml_data = request.data;
+#     # Parse the XML data using xmltodict
+#     parsed_data = xmltodict.parse(xml_data)
+#     # Access data as a Python dictionary
+#     user = parsed_data['properties']
+    
+#     userInfo = user['userInfo'].split('@')
+#     full_name = userInfo[0]
+#     company_name = userInfo[1]
+#     user_type = userInfo[2]
+    
+#     phoneNumber = user['msisdn']
+    
+#     # user email
+#     email = user['email']
+    
+#     if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
+#         return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
+    
+#     # User type
+#     if (user['productId'] == '1'):
+#         userType = 'Start'
+#     elif (user['productId'] == '2'):
+#         userType = 'Advance'
+#     else:
+#         userType = 'Enable'
+        
+#     try:
+#         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+#         cursor = connection.cursor()   
+#             # Find if the user subscription 
+
+#             connection.commit()
+#             connection.close()
+            
+#             return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password": tempPassword, "Subscription": userType}), mimetype='application/json')
+#     except Error as e:
+#         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
+        
+            
+@app.route("/suspend", methods = ["POST"])
+def suspend_user():
+    xml_data = request.data;
+    # Parse the XML data using xmltodict
+    parsed_data = xmltodict.parse(xml_data)
+    # Access data as a Python dictionary
+    user = parsed_data['properties']
+    
+    # user email
+    email = user['email']
+    
+    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
+        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
+    
+    # User type
+    if (user['productId'] == '1'):
+        userType = 'Start'
+    elif (user['productId'] == '2'):
+        userType = 'Advance'
+    else:
+        userType = 'Enable'
+        
+    try:
+        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+        cursor = connection.cursor()   
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        cursor.execute(statusQuery)
+        status = cursor.fetchone()
+        if status is None:
+            # The user does not exist, throw an error
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User subscription not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=404, response=xml_error, mimetype='application/xml')
+        if status[0] == 'Terminated':
+            # The user subscription is already terminated
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>400</code><error>User subscription already terminated</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=400, response=xml_error, mimetype='application/xml')
+        
+        #  Update the subscription status to suspended
+        update = f"UPDATE subscription SET subscription_status = 'Suspended' WHERE email = '{email}' and subscription = '{userType}';"
+        cursor.execute(update)
+        connection.commit()
+        connection.close()
+        # Return XML Success message
+        xml_response = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>200</code><error></error><resourceId>{user['resourceId']}</resourceId><status>Success</status><url>https://opusanalytics.ai/</url></feedback>"
+        return Response(status=200, response=xml_response, mimetype='application/xml')
+    except Error as e:
+        return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
+    
+@app.route("/reactivate", methods = ["POST"])
+def reactivate_user():
+    xml_data = request.data;
+    # Parse the XML data using xmltodict
+    parsed_data = xmltodict.parse(xml_data)
+    # Access data as a Python dictionary
+    user = parsed_data['properties']
+    
+    # user email
+    email = user['email']
+    
+    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
+        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
+    
+    # User type
+    if (user['productId'] == '1'):
+        userType = 'Start'
+    elif (user['productId'] == '2'):
+        userType = 'Advance'
+    else:
+        userType = 'Enable'
+        
+    try:
+        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+        cursor = connection.cursor()   
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        cursor.execute(statusQuery)
+        status = cursor.fetchone()
+        if status is None:
+            # The user does not exist, throw an error
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User subscription not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=404, response=xml_error, mimetype='application/xml')
+        if status[0] == 'Terminated':
+            # The user subscription is already terminated
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>400</code><error>User subscription already terminated</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=400, response=xml_error, mimetype='application/xml')
+        
+        #  Update the subscription status to suspended
+        update = f"UPDATE subscription SET subscription_status = 'Active' WHERE email = '{email}' and subscription = '{userType}';"
+        cursor.execute(update)
+        connection.commit()
+        connection.close()
+        # Return XML Success message
+        xml_response = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>200</code><error></error><resourceId>{user['resourceId']}</resourceId><status>Success</status><url>https://opusanalytics.ai/</url></feedback>"
+        return Response(status=200, response=xml_response, mimetype='application/xml')
+    except Error as e:
+        return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
+    
+            
+@app.route("/terminate", methods = ["POST"])
+def terminate_user():
+    xml_data = request.data;
+    # Parse the XML data using xmltodict
+    parsed_data = xmltodict.parse(xml_data)
+    # Access data as a Python dictionary
+    user = parsed_data['properties']
+    
+    # user email
+    email = user['email']
+    
+    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
+        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
+    
+    # User type
+    if (user['productId'] == '1'):
+        userType = 'Start'
+    elif (user['productId'] == '2'):
+        userType = 'Advance'
+    else:
+        userType = 'Enable'
+        
+    try:
+        connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+        cursor = connection.cursor()   
+        # Check if the subscription status is not already terminated
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        cursor.execute(statusQuery)
+        status = cursor.fetchone()
+        if status is None:
+            # The user does not exist, throw an error
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User subscription not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=404, response=xml_error, mimetype='application/xml')
+        if status[0] == 'Terminated':
+            # The user subscription is already terminated
+            xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>400</code><error>User subscription already terminated</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+            return Response(status=400, response=xml_error, mimetype='application/xml')
+        
+        #  Update the subscription status to suspended
+        update = f"UPDATE subscription SET subscription_status = 'Terminated' WHERE email = '{email}' and subscription = '{userType}';"
+        cursor.execute(update)
+        connection.commit()
+        connection.close()
+        # Return XML Success message
+        xml_response = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>200</code><error></error><resourceId>{user['resourceId']}</resourceId><status>Success</status><url>https://opusanalytics.ai/</url></feedback>"
+        return Response(status=200, response=xml_response, mimetype='application/xml')
+    except Error as e:
+        return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
+    
 
 @app.route("/getState", methods = ["POST"])
 def getUserState():
@@ -295,6 +521,14 @@ def getUserState():
         company_name = userInfo[1]
         user_type = userInfo[2]
         email = user['email']
+        
+        # User type
+        if (user['productId'] == '1'):
+            userType = 'Start'
+        elif (user['productId'] == '2'):
+            userType = 'Advance'
+        else:
+            userType = 'Enable'
 
         try:
             connection = mysql.connector.connect(
@@ -304,19 +538,16 @@ def getUserState():
                 password='OAg@1234'
             )
             cursor = connection.cursor()
-            statusQuery = f"select verification_status from users where email = '{email}';"
+            statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
             cursor.execute(statusQuery)
             status = cursor.fetchone()
 
             if status is None:
                 # The user does not exist, throw an error
-                xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
+                xml_error = f"<?xml version='1.0' encoding='UTF-8' standalone='yes'?><feedback><code>404</code><error>User subscription not found</error><resourceId>{user['resourceId']}</resourceId><status>Failed</status><url>https://opusanalytics.ai/</url></feedback>"
                 return Response(status=404, response=xml_error, mimetype='application/xml')
 
-            elif status[0] == 'Verified':
-                state = 'Active'
-            else:
-                state = 'Inactive'
+            state = status[0]
 
             connection.commit()
             connection.close()
@@ -1719,3 +1950,4 @@ def get_salaries_chart():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    print("Server is running")
