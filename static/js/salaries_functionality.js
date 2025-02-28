@@ -276,6 +276,9 @@ sendBtn.addEventListener("click", async () => {
     else if (country == "UAE"){
       chartLabel = 'Salary in USD/month NET' ;
     }
+    else if (country == "Saudi Arabia"){
+      chartLabel = 'Salary in SAR/month Gross' ;
+    }
 
     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
