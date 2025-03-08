@@ -238,9 +238,9 @@ def confirmed_mail(token):
         return (render_template('404.html'))
     return (render_template('confirm-email.html'))
 
-def create_subscription(connection, email, subscription):
+def create_subscription(connection, email, subscription, resourceId):
     cursor = connection.cursor()
-    create = f"INSERT INTO subscription (email, subscription, subscription_status) VALUES ('{email}','{subscription}','Active');"
+    create = f"INSERT INTO subscription (email, subscription, subscription_status, resource_id) VALUES ('{email}','{subscription}','Active', '{resourceId}');"
     cursor.execute(create)
     
 
@@ -273,6 +273,9 @@ def create_user():
         userType = 'Advance'
     else:
         userType = 'Enable'
+    
+    # Unique Resource ID for each subscription
+    resourceId = user['resourceId']
         
     try:
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
@@ -294,7 +297,7 @@ def create_user():
             create = f"INSERT INTO users (username,password,email,full_name,company_name,user_type,verification_status, phoneNo) VALUES ('{user['email']}','{hashed_pwd}','{user['email']}','{full_name}','{company_name}','{userType}','Verified', '{phoneNumber}');"
             cursor.execute(create)
             
-            create_subscription(connection, email, userType)
+            create_subscription(connection, email, userType, resourceId)
 
             connection.commit()
             connection.close()
@@ -303,14 +306,13 @@ def create_user():
         # Check if the userType is in the subscriptions
         else:
             for sub in subscriptions:
-                print(sub[0])
                 if sub[0] == userType:
                     connection.commit()
                     connection.close()
                     return Response(status=500, response=json.dumps({"message":"User subscription already exists"}), mimetype='application/json')
             else:
                 # User subscription does not exist, create a new subscription
-                create_subscription(connection, email, userType)
+                create_subscription(connection, email, userType, resourceId)
                 connection.commit()
                 connection.close()
                 return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password":'Same User Account Password'  ,"Subscription": userType}), mimetype='application/json')
@@ -319,50 +321,7 @@ def create_user():
         if(e.errno == 1062):
             return Response(status=500, response=json.dumps({"message":"Email already exists"}), mimetype='application/json')
         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
-    return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "Subscription": userType}), mimetype='application/json')
 
-# @app.route("/update", methods = ["POST"])
-# def update_user():
-#     xml_data = request.data;
-#     # Parse the XML data using xmltodict
-#     parsed_data = xmltodict.parse(xml_data)
-#     # Access data as a Python dictionary
-#     user = parsed_data['properties']
-    
-#     userInfo = user['userInfo'].split('@')
-#     full_name = userInfo[0]
-#     company_name = userInfo[1]
-#     user_type = userInfo[2]
-    
-#     phoneNumber = user['msisdn']
-    
-#     # user email
-#     email = user['email']
-    
-#     if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
-#         return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
-    
-#     # User type
-#     if (user['productId'] == '1'):
-#         userType = 'Start'
-#     elif (user['productId'] == '2'):
-#         userType = 'Advance'
-#     else:
-#         userType = 'Enable'
-        
-#     try:
-#         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-#         cursor = connection.cursor()   
-#             # Find if the user subscription 
-
-#             connection.commit()
-#             connection.close()
-            
-#             return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password": tempPassword, "Subscription": userType}), mimetype='application/json')
-#     except Error as e:
-#         return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
-        
-            
 @app.route("/suspend", methods = ["POST"])
 def suspend_user():
     xml_data = request.data;
@@ -373,22 +332,12 @@ def suspend_user():
     
     # user email
     email = user['email']
-    
-    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
-        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
-    
-    # User type
-    if (user['productId'] == '1'):
-        userType = 'Start'
-    elif (user['productId'] == '2'):
-        userType = 'Advance'
-    else:
-        userType = 'Enable'
+    resourceID = user['resourceId']
         
     try:
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
-        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(statusQuery)
         status = cursor.fetchone()
         if status is None:
@@ -401,7 +350,7 @@ def suspend_user():
             return Response(status=400, response=xml_error, mimetype='application/xml')
         
         #  Update the subscription status to suspended
-        update = f"UPDATE subscription SET subscription_status = 'Suspended' WHERE email = '{email}' and subscription = '{userType}';"
+        update = f"UPDATE subscription SET subscription_status = 'Suspended' WHERE email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(update)
         connection.commit()
         connection.close()
@@ -425,18 +374,12 @@ def reactivate_user():
     if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
         return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
     
-    # User type
-    if (user['productId'] == '1'):
-        userType = 'Start'
-    elif (user['productId'] == '2'):
-        userType = 'Advance'
-    else:
-        userType = 'Enable'
+    resourceID = user['resourceId']
         
     try:
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
-        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(statusQuery)
         status = cursor.fetchone()
         if status is None:
@@ -449,7 +392,7 @@ def reactivate_user():
             return Response(status=400, response=xml_error, mimetype='application/xml')
         
         #  Update the subscription status to suspended
-        update = f"UPDATE subscription SET subscription_status = 'Active' WHERE email = '{email}' and subscription = '{userType}';"
+        update = f"UPDATE subscription SET subscription_status = 'Active' WHERE email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(update)
         connection.commit()
         connection.close()
@@ -474,19 +417,13 @@ def terminate_user():
     if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
         return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
     
-    # User type
-    if (user['productId'] == '1'):
-        userType = 'Start'
-    elif (user['productId'] == '2'):
-        userType = 'Advance'
-    else:
-        userType = 'Enable'
+    resourceID = user['resourceId']
         
     try:
         connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
         cursor = connection.cursor()   
         # Check if the subscription status is not already terminated
-        statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+        statusQuery = f"select subscription_status from subscription where email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(statusQuery)
         status = cursor.fetchone()
         if status is None:
@@ -499,7 +436,7 @@ def terminate_user():
             return Response(status=400, response=xml_error, mimetype='application/xml')
         
         #  Update the subscription status to suspended
-        update = f"UPDATE subscription SET subscription_status = 'Terminated' WHERE email = '{email}' and subscription = '{userType}';"
+        update = f"UPDATE subscription SET subscription_status = 'Terminated' WHERE email = '{email}' and resource_id = '{resourceID}';"
         cursor.execute(update)
         connection.commit()
         connection.close()
@@ -522,13 +459,7 @@ def getUserState():
         user_type = userInfo[2]
         email = user['email']
         
-        # User type
-        if (user['productId'] == '1'):
-            userType = 'Start'
-        elif (user['productId'] == '2'):
-            userType = 'Advance'
-        else:
-            userType = 'Enable'
+        resourceID = user['resourceId']
 
         try:
             connection = mysql.connector.connect(
@@ -538,7 +469,7 @@ def getUserState():
                 password='OAg@1234'
             )
             cursor = connection.cursor()
-            statusQuery = f"select subscription_status from subscription where email = '{email}' and subscription = '{userType}';"
+            statusQuery = f"select subscription_status from subscription where email = '{email}' and resource_id = '{resourceID}';"
             cursor.execute(statusQuery)
             status = cursor.fetchone()
 
