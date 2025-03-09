@@ -370,10 +370,6 @@ def reactivate_user():
     
     # user email
     email = user['email']
-    
-    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
-        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
-    
     resourceID = user['resourceId']
         
     try:
@@ -413,10 +409,6 @@ def terminate_user():
     
     # user email
     email = user['email']
-    
-    if (user['productId'] != '1' and user['productId'] != '2' and user['productId'] != '3'):
-        return Response(status=500, response=json.dumps({"message":"Invalid product ID"}), mimetype='application/json')
-    
     resourceID = user['resourceId']
         
     try:
