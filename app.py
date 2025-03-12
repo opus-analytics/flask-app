@@ -652,19 +652,40 @@ def calculate_competency_list():
     
     return Response(status=200, response=json.dumps({"message":"Competency calculated successfully", "score": weightedAssessmentScore*100}), mimetype='application/json')
     
-@app.route("/reset-password", methods = ["GET","POST"])
+@app.route("/reset-password", methods=["GET", "POST"])
 def reset_password():
-    email = request.form.get("Email")
-    token = s.dumps(email, salt= 'email-confirm')
-    msg = Message('Confirm Email', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
-    link = url_for('new_password',token=token, _external=True)
-    #msg.body = 'Your Confirmation link is {}'.format(link)
-    msg.html = render_template('reset_password_mail.html',link = link)
     if request.method == "POST":
-        mail.send(msg)
-        flash('Reset mail has been sent!','success')
-        
-    return (render_template('reset-password.html',token=token))
+        email = request.form.get("Email")
+
+        try:
+            connection = mysql.connector.connect(
+                host='opus-server.mysql.database.azure.com',
+                database='opus_prod',
+                user='opusadmin',
+                password='OAg@1234'
+            )
+            cursor = connection.cursor()
+            check_mail_query = "SELECT email FROM users WHERE email = %s AND verification_status = 'Verified'"
+            cursor.execute(check_mail_query, (email,))
+            result = cursor.fetchone()
+            if result:
+                token = s.dumps(email, salt='email-confirm')
+
+                msg = Message('Confirm Email', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+                link = url_for('new_password', token=token, _external=True)
+                msg.html = render_template('reset_password_mail.html', link=link)
+                mail.send(msg)
+                flash('Reset mail has been sent!', 'success')
+            else:
+                flash('Email does not exist!', 'error')
+        except mysql.connector.Error as err:
+            flash(f'Database error: {err}', 'error')
+        finally:
+            if connection and connection.is_connected():
+                cursor.close()
+                connection.close()
+
+    return render_template('reset-password.html')
             
 
 @app.route("/new-password/<token>", methods = ["GET","POST"])
