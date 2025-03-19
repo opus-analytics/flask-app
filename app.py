@@ -301,6 +301,13 @@ def create_user():
 
             connection.commit()
             connection.close()
+            try:
+                msg = Message('Account Created', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+                subtitle= f"Your Opus Account is Ready with temporary password: {tempPassword}"
+                msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "\nWe're excited to welcome you to the Opus community! \nTo activate your account, please click on the button below:", btnText = "Activate Your Account")
+                mail.send(msg)
+            except Exception as e:
+                return Response(status=500, response=json.dumps({"message":"Error"}), mimetype='application/json')
             
             return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password": tempPassword, "Subscription": userType}), mimetype='application/json')
         # Check if the userType is in the subscriptions
@@ -315,6 +322,11 @@ def create_user():
                 create_subscription(connection, email, userType, resourceId)
                 connection.commit()
                 connection.close()
+                
+                msg = Message('Account Created', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+                subtitle= f"Your new Opus Account is Ready"
+                msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome Again to Opus!", subTitle=subtitle, message = "\nWe're excited to activate your new subscription! \nYou can access your new subscription with the same Opus account you do have, please click on the button below:", btnText = "Activate Your Account")
+                mail.send(msg)
                 return Response(status=200, response=json.dumps({"message":"Generated successfully", "userEmail": email, "password":'Same User Account Password'  ,"Subscription": userType}), mimetype='application/json')
 
     except Error as e:
