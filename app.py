@@ -165,6 +165,7 @@ def sign_in():
             session['token'] = r.json()['token']
             session['username'] = email
             session['type'] = r.json()['user_type']
+            
             return redirect(url_for('dashboard'))
         else:
             print(r.status_code)
@@ -1142,13 +1143,24 @@ def dashboard():
             full_name = result[0]
             company_name = result[1]
             session['company_name'] = company_name
+            
+            subscriptions_array = f"SELECT subscription FROM subscription WHERE email = '{username}';"
+            subscriptions = cursor.execute(subscriptions_array)
+            subscriptions = cursor.fetchall()
+            # I want to concatenate the subscriptions into a single string
+            subscriptions = [i[0] for i in subscriptions]
+            subscriptions = ' '.join(subscriptions)
+            # Concatenate the type with them
+            if type not in subscriptions:
+                subscriptions = type + subscriptions
+
             connection.commit()
             connection.close()
         if type == 'Partner':
-            return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name))
+            return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name, subscriptions = subscriptions))
         
         # account-not-premium.html
-    return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name))
+    return (render_template("account.html",username=username,type=type,full_name=full_name,company_name=company_name, subscriptions = subscriptions))
 
 # """
 # def dashboard():

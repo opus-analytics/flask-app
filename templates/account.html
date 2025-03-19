@@ -70,7 +70,7 @@
         <div class="a-banner-text-wrapper">
           <div class="a-banner-right-wrapper"><img width="57" height="40" alt=""
               src="./static/images/crown-star-svgrepo-com.svg" loading="lazy" class="image-28"></div>
-          <div class="a-paragraph-small-6">Wohoo, You are on the <span class="text-span-5">{{type}}</span> plan!
+          <div class="a-paragraph-small-6">Wohoo, You are on the <span class="text-span-5">{{subscriptions}}</span> plan/s!
           </div>
         </div>
       </div>
@@ -397,48 +397,46 @@
 
   <script>
     let userType = "{{ type }}"
+    let subscriptions = "{{ subscriptions }}"
+    userType = subscriptions
     let companyName = "{{ company_name }}"
 
     start_element = document.getElementsByClassName("link-block w-inline-block start");
     advance_element = document.getElementsByClassName("link-block w-inline-block advance");
     enable_element = document.getElementsByClassName("link-block w-inline-block enable");
-    enable_element_manager = document.getElementById("enableManager");
     enable_element_admin = document.getElementById("enableAdmin");
+    enable_element_manager = document.getElementById("enableManager");
 
-    if (userType == 'Free' || userType == 'Start') {
+    for (let i = 0; i < start_element.length; i++) {
+        start_element[i].style.display = 'none';
+    }
+    for (let i = 0; i < advance_element.length; i++) {
+      advance_element[i].style.display = 'none';
+    }
+    for (let i = 0; i < enable_element.length; i++) {
+        enable_element[i].style.display = 'none';
+    }
+    enable_element_admin.style.display= 'none';
+    enable_element_manager.style.display = 'none'; 
+
+    if (userType.includes('Free') || userType.includes('Start')) {
+      console.log("One")
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'block';
       }
-      for (let i = 0; i < advance_element.length; i++) {
-        advance_element[i].style.display = 'none';
-      }
-      for (let i = 0; i < enable_element.length; i++) {
-        enable_element[i].style.display = 'none';
-      }
-      enable_element_manager.style.display = 'none';
-      enable_element_admin.style.display = 'none';
-    } else if (userType == 'Advance') {
+    } 
+    if (userType.includes('Advance')) {
+      console.log("Two")
       for (let i = 0; i < start_element.length; i++) {
         start_element[i].style.display = 'block';
       }
       for (let i = 0; i < advance_element.length; i++) {
         advance_element[i].style.display = 'block';
       }
-      for (let i = 0; i < enable_element.length; i++) {
-        enable_element[i].style.display = 'none';
-      }
-      enable_element_manager.style.display = 'none'; 
-      enable_element_admin.style.display = 'none'; 
-    } else if (userType == "Enable") {
-      for (let i = 0; i < start_element.length; i++) {
-        start_element[i].style.display = 'none';
-      }
-      for (let i = 0; i < advance_element.length; i++) {
-        advance_element[i].style.display = 'none';
-      }
-      
+    } 
+    if (userType.includes("Enable")) {
+      console.log("Three")
       if (companyName == 'Manager'){
-        console.log('Manager')
         enable_element_admin.style.display = 'none'; 
         enable_element_manager.style.display = 'block'; 
         for (let i = 0; i < enable_element.length; i++) {
@@ -453,7 +451,7 @@
       }
       }
       else{
-        enable_element_admin.display= 'block';
+        enable_element_admin.style.display= 'block';
         enable_element_manager.style.display = 'block'; 
         for (let i = 0; i < enable_element.length; i++) {
         enable_element[i].style.display = 'none';
