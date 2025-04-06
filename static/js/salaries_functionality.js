@@ -226,7 +226,7 @@ sendBtn.addEventListener("click", async () => {
     let labelsArray = [];
 
     let year = 2020;
-    for (let i = 4; i < resp.length-1; i+=2){
+    for (let i = 4; i < resp.length-2; i+=2){
       if (resp[i] == null || resp[i+1] == null){
         continue;
       }

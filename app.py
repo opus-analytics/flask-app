@@ -286,6 +286,7 @@ def create_user():
         cursor.execute(subscription_query)
         subscriptions = cursor.fetchall()
 
+
         if len(subscriptions) == 0:
             # New user, insert user in user and subscription table
             # For user password
@@ -1849,7 +1850,7 @@ def get_salaries_experience():
 
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_experience('{ jobTitle }', '{country}');")
+    cursor.execute(f"CALL opus_prod.get_salaries_yexperience('{ jobTitle }', '{country}');")
     
     
     # Fetch results
@@ -1897,7 +1898,7 @@ def get_salaries_chart():
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
 
-    cursor.execute(f"CALL opus_prod.get_salaries_chart('{ familyJob }','{ jobTitle }','{ experience }', '{country}');")
+    cursor.execute(f"CALL opus_prod.get_salaries_ychart('{ familyJob }','{ jobTitle }','{ experience }', '{country}');")
     
     
     # Fetch results
@@ -1915,6 +1916,140 @@ def get_salaries_chart():
         connection.close()
     
     return jsonify(results[0])
+
+@app.route("/add-salary-toDB", methods = ["GET", "POST"])
+def add_salary_toDB():
+    try:
+        # 1. Read Excel into a Pandas DataFrame
+        df = pd.read_csv('2025_EgyptSalary_4_6_2025.csv')
+
+        # 2. Connect to the Database
+        connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+        )
+
+        cursor = connection.cursor()
+
+        for index, row in df.iterrows():
+            job = row['Job']
+            family = row['Family']
+            years_experience = row[' Years of Experience ']
+            L_20 = row[' L_20 ']
+            H_20 = row[' H_20 ']
+            L_21 = row[' L_21 ']
+            H_21 = row[' H_21 ']
+            L_22 = row[' L_22 ']
+            H_22 = row[' H_22 ']
+            L_23 = row[' L_23 ']
+            H_23 = row[' H_23 ']
+            L_24 = row[' L_24 ']
+            H_24 = row[' H_24 ']
+            L_25 = row[' L_25 ']
+            H_25 = row[' H_25 ']
+            
+            if L_20 == "-":
+                L_20 = 0
+            if L_21 == "-":
+                L_21 = 0
+            if L_22 == "-":
+                L_22 = 0
+            if L_23 == "-":
+                L_23 = 0
+            if L_24 == "-":
+                L_24 = 0
+            if L_25 == "-":
+                L_25 = 0
+            if H_20 == "-":
+                H_20 = 0
+            if H_21 == "-":
+                H_21 = 0
+            if H_22 == "-":
+                H_22 = 0
+            if H_23 == "-":
+                H_23 = 0
+            if H_24 == "-":
+                H_24 = 0
+            if H_25 == "-":
+                H_25 = 0
+            
+            
+            print(job, family, years_experience)
+
+            # 3. Check if a matching record exists in the database
+            query = """
+                SELECT  L_20, L_21, L_22, L_23, L_24, L_25, H_20, H_21, H_22, H_23, H_24, H_25, DataPoints
+                FROM salarydatabse
+                WHERE Job = %s AND Family = %s AND Years_of_Experience = %s
+            """
+            cursor.execute(query, (job, family, years_experience))
+            result = cursor.fetchone()
+            
+            print(result)
+
+            if result:
+                # 4a. Update existing record (average salary, increase data points)
+                existing_data_points = result[12]
+                
+                existing_L20 = float(result[0]) if result[0] is not None and result[0] != "-" else 0
+                existing_L21 = float(result[1]) if result[1] is not None and result[1] != "-" else 0
+                existing_L22 = float(result[2]) if result[2] is not None and result[2] != "-" else 0
+                existing_L23 = float(result[3]) if result[3] is not None and result[3] != "-" else 0
+                existing_L24 = float(result[4]) if result[4] is not None and result[4] != "-" else 0
+                existing_L25 = float(result[5]) if result[5] is not None and result[5] != "-" else 0
+                existing_H20 = float(result[6]) if result[6] is not None and result[6] != "-" else 0
+                existing_H21 = float(result[7]) if result[7] is not None and result[7] != "-" else 0
+                existing_H22 = float(result[8]) if result[8] is not None and result[8] != "-" else 0
+                existing_H23 = float(result[9]) if result[9] is not None and result[9] != "-" else 0
+                existing_H24 = float(result[10]) if result[10] is not None and result[10] != "-" else 0
+                existing_H25 = float(result[11]) if result[11] is not None and result[11] != "-" else 0
+                                   
+                new_L20 = (existing_L20 + L_20) / 2
+                new_L21 = (existing_L21 + L_21) / 2
+                new_L22 = (existing_L22 + L_22) / 2
+                new_L23 = (existing_L23 + L_23) / 2
+                new_L24 = (existing_L24 + L_24) / 2
+                new_L25 = (existing_L25 + L_25) / 2
+                new_H20 = (existing_H20 + H_20) / 2 
+                new_H21 = (existing_H21 + H_21) / 2
+                new_H22 = (existing_H22 + H_22) / 2
+                new_H23 = (existing_H23 + H_23) / 2
+                new_H24 = (existing_H24 + H_24) / 2
+                new_H25 = (existing_H25 + H_25) / 2
+                
+                new_data_points = existing_data_points + 1
+
+                update_query = """
+                    UPDATE salarydatabse
+                    SET L_20 = %s, L_21 = %s,L_22 = %s,L_23 = %s,L_24 = %s,L_25 = %s, H_20 = %s, H_21 = %s,H_22 = %s,H_23 = %s,H_24 = %s,H_25 = %s, DataPoints = %s
+                    WHERE Job = %s AND Family = %s AND Years_of_Experience = %s
+                """
+                cursor.execute(update_query, (new_L20, new_L21, new_L22, new_L23, new_L24, new_L25, new_H20, new_H21, new_H22, new_H23, new_H24, new_H25, new_data_points, job, family, years_experience))
+                connection.commit()
+            else:
+                # 4b. Insert new record (create a new entry)
+                insert_query = """
+                    INSERT INTO salarydatabse (Job, Family, Years_of_Experience , L_20, L_21, L_22, L_23, L_24, L_25, H_20, H_21, H_22, H_23, H_24, H_25)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)
+                """
+                cursor.execute(insert_query, (job, family, years_experience, L_20, L_21, L_22, L_23, L_24, L_25,H_20,H_21,H_22,H_23,H_24,H_25))
+                
+                connection.commit()
+
+        print("Data processing and database update complete.")
+        return jsonify({"message": "Data processing and database update complete."}), 200
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        if connection and connection.is_connected():
+            connection.rollback() #rollback any changes.
+
+    finally:
+        if connection and connection.is_connected():
+            cursor.close()
+            connection.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
