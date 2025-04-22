@@ -45,7 +45,7 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'CustomerExperience@opusanalytics.ai'
 
-app.config['MAIL_PASSWORD'] = 'W&980415171710aM'
+app.config['MAIL_PASSWORD'] = 'K.987849690286uM'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
@@ -1993,18 +1993,18 @@ def add_salary_toDB():
                 # 4a. Update existing record (average salary, increase data points)
                 existing_data_points = result[12]
                 
-                existing_L20 = float(result[0]) if result[0] is not None and result[0] != "-" else 0
-                existing_L21 = float(result[1]) if result[1] is not None and result[1] != "-" else 0
-                existing_L22 = float(result[2]) if result[2] is not None and result[2] != "-" else 0
-                existing_L23 = float(result[3]) if result[3] is not None and result[3] != "-" else 0
-                existing_L24 = float(result[4]) if result[4] is not None and result[4] != "-" else 0
-                existing_L25 = float(result[5]) if result[5] is not None and result[5] != "-" else 0
-                existing_H20 = float(result[6]) if result[6] is not None and result[6] != "-" else 0
-                existing_H21 = float(result[7]) if result[7] is not None and result[7] != "-" else 0
-                existing_H22 = float(result[8]) if result[8] is not None and result[8] != "-" else 0
-                existing_H23 = float(result[9]) if result[9] is not None and result[9] != "-" else 0
-                existing_H24 = float(result[10]) if result[10] is not None and result[10] != "-" else 0
-                existing_H25 = float(result[11]) if result[11] is not None and result[11] != "-" else 0
+                existing_L20 = float(result[0]) if result[0] is not None and result[0] != "-" else L_20
+                existing_L21 = float(result[1]) if result[1] is not None and result[1] != "-" else L_21
+                existing_L22 = float(result[2]) if result[2] is not None and result[2] != "-" else L_22
+                existing_L23 = float(result[3]) if result[3] is not None and result[3] != "-" else L_23
+                existing_L24 = float(result[4]) if result[4] is not None and result[4] != "-" else L_24
+                existing_L25 = float(result[5]) if result[5] is not None and result[5] != "-" else L_25
+                existing_H20 = float(result[6]) if result[6] is not None and result[6] != "-" else H_20
+                existing_H21 = float(result[7]) if result[7] is not None and result[7] != "-" else H_21
+                existing_H22 = float(result[8]) if result[8] is not None and result[8] != "-" else H_22
+                existing_H23 = float(result[9]) if result[9] is not None and result[9] != "-" else H_23
+                existing_H24 = float(result[10]) if result[10] is not None and result[10] != "-" else H_24
+                existing_H25 = float(result[11]) if result[11] is not None and result[11] != "-" else H_25
                                    
                 new_L20 = (existing_L20 + L_20) / 2
                 new_L21 = (existing_L21 + L_21) / 2
