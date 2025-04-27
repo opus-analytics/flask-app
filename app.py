@@ -1145,7 +1145,7 @@ def dashboard():
             company_name = result[1]
             session['company_name'] = company_name
             
-            subscriptions_array = f"SELECT subscription FROM subscription WHERE email = '{username}';"
+            subscriptions_array = f"SELECT subscription FROM subscription WHERE email = '{username}' AND  subscription_status='Active';"
             subscriptions = cursor.execute(subscriptions_array)
             subscriptions = cursor.fetchall()
             # I want to concatenate the subscriptions into a single string
