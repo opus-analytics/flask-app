@@ -45,7 +45,7 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'CustomerExperience@opusanalytics.ai'
 
-app.config['MAIL_PASSWORD'] = 'K.987849690286uM'
+app.config['MAIL_PASSWORD'] = 'M$385306638821oY'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
