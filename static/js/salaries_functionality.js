@@ -235,8 +235,14 @@ sendBtn.addEventListener("click", async () => {
 
       if(low != 0 && high != 0){
         labelsArray.push(year);
-        highSalary.push(high/12);
-        lowSalary.push(low/12);
+        if (country == "UAE"){
+          highSalary.push(high);
+          lowSalary.push(low);
+        }
+        else {
+          highSalary.push(high/12);
+          lowSalary.push(low/12);
+        }
       }
       year++;
     }
@@ -274,7 +280,7 @@ sendBtn.addEventListener("click", async () => {
       chartLabel = 'Salary in EGP/month NET' ;
     } 
     else if (country == "UAE"){
-      chartLabel = 'Salary in USD/month NET' ;
+      chartLabel = 'Salary in AED/month NET' ;
     }
     else if (country == "Saudi Arabia"){
       chartLabel = 'Salary in SAR/month Gross' ;
