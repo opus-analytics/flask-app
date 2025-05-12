@@ -1288,13 +1288,16 @@ def payment():
     
     # Using the subscription_ids list to create links to the subscription details page and send an email to the user
     
-    
-    msg = Message('Subscription Confirmation', sender = 'CustomerExperience@opusanalytics.ai', recipients = [email])
-    msg.body = "Your subscription has been successfully created. Please click on the links below to activate your subscription:\n\n"
-    for subscription_id in subscription_ids:
-        msg.body += f"https://opusanalytics.ai/subscription/{subscription_id}\n"
-    msg.body += "\nThank you for choosing our service!"
-    mail.send(msg)
+    try:
+        msg = Message('Subscription Confirmation', sender = 'CustomerExperience@opusanalytics.ai', recipients = [email])
+        msg.body = "Your subscription has been successfully created. Please click on the links below to activate your subscription:\n\n"
+        for subscription_id in subscription_ids:
+            msg.body += f"https://opusanalytics.ai/subscription/{subscription_id}\n"
+        msg.body += "\nThank you for choosing our service!"
+        mail.send(msg)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return jsonify({"error": "Failed to send email"}), 500
         
     connection.close()
     
