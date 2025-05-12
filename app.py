@@ -1279,6 +1279,8 @@ def payment():
             plan = 'Enable'
         elif 'Start' in description:
             plan = 'Start'
+        else:
+            plan = 'Free'
             
         add_subscription = "INSERT INTO subscription( subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id) values (%s, 'Active', %s, %s, %s)"
         cursor.execute(add_subscription, (plan, dt_start, dt_end, subscription_id))
