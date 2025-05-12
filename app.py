@@ -29,6 +29,7 @@ from Resume_analysis import OpusResume, OpusJDAnalyzer
 from opus_conn import create_conn
 from opus_conn import get_competencies_hamza,get_job_info_from_db
 import secrets
+import uuid
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -554,6 +555,7 @@ def get_my_competencies():
             
 
     return json_data
+
 @app.route("/update-manager-competency", methods = ["POST"])
 def update_manager_competency():
     data = request.get_json()
@@ -565,6 +567,39 @@ def update_manager_competency():
     connection.commit()
     connection.close()
     return Response(status=200, response=json.dumps({"message":"Competency added successfully"}), mimetype='application/json')
+
+@app.route("/assign-subscription", methods = ["POST"])
+def assign_subscription():
+    data = request.get_json()
+    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
+    cursor = connection.cursor() 
+    
+    # Check if user email exists in the database
+    query = f"SELECT * FROM users WHERE email='{data['email']}';"
+    cursor.execute(query)
+    results = cursor.fetchall()
+    if not results:
+        return Response(status=500, response=json.dumps({"error": "User email not found."}), mimetype='application/json')
+    
+    # Get the current subscription details
+    query = f"SELECT * FROM subscription WHERE resource_id = '{data['subscription_id']}';"
+    cursor.execute(query)
+    subscription_details = cursor.fetchone()
+    
+    # Check if the email is already assigned to another subscription of the same type
+    query = f"SELECT * FROM subscription WHERE email = '{data['email']}';"
+    cursor.execute(query)
+    subscription_list = cursor.fetchall()
+    
+    for sub in subscription_list:
+      if sub[2] == subscription_details[2]:
+        return Response(status=500, response=json.dumps({"message":"Email already assigned to this subscription"}), mimetype='application/json')
+    
+    create = f"UPDATE subscription SET email = '{data['email']}' where resource_id='{data['subscription_id']}';"
+    cursor.execute(create)
+    connection.commit()
+    connection.close()
+    return Response(status=200, response=json.dumps({"message":"Subscription assigned successfully"}), mimetype='application/json')
     
 @app.route("/get-competency", methods = ["POST"])
 def get_competencies():
@@ -1211,26 +1246,48 @@ def payment():
     connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
     cursor = connection.cursor()
 
-    data = request.get_json().get('data').get('object')
-    #billing_details = data.get('billing_details', {})
+    data = request.get_json()
+    email = data['data']['object']['customer_email']
+    
+    billing_details_array = data['data']['object']['lines']['data']
+    
+    subscription_ids = []
 
-    email = data.get("customer_email")
-    description = data['lines']['data'][0]['description']
-
-    period_start = data['lines']['data'][0]['period']['start']
-    period_end = data['lines']['data'][0]['period']['end']
-    dt_start = datetime.datetime.fromtimestamp(period_start)
-    dt_end = datetime.datetime.fromtimestamp(period_end)
-    if 'Standard' in description:
-        plan = 'SAAS'
-    if 'Advanced' in description:
-        plan = 'Partner'
-    check_mail_query = f"UPDATE users SET user_type = '{plan}', subscription_from_date = '{dt_start}', subscription_expiration_date = '{dt_end}' where email = '{email}' "
-    cursor.execute(check_mail_query)
-    connection.commit()
+    for billing_details in billing_details_array:
+        description = billing_details['description']
+        period_start = billing_details['period']['start']
+        period_end = billing_details['period']['end']
+        dt_start = datetime.datetime.fromtimestamp(period_start)
+        dt_end = datetime.datetime.fromtimestamp(period_end)
+        
+        # Create random short identifier for the subscription
+        subscription_id = str(uuid.uuid4())[:8]
+        subscription_ids.append(subscription_id)
+        
+        if 'Advance' in description:
+            plan = 'Advance'
+        elif 'Enable' in description:
+            plan = 'Enable'
+        elif 'Start' in description:
+            plan = 'Start'
+            
+        add_subscription = "INSERT INTO subscription( subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id) values (%s, 'Active', %s, %s, %s)"
+        cursor.execute(add_subscription, (plan, dt_start, dt_end, subscription_id))
+        connection.commit()
+    
+    # Using the subscription_ids list to create links to the subscription details page and send an email to the user
+    
+    
+    msg = Message('Subscription Confirmation', sender = 'CustomerExperience@opusanalytics.ai', recipients = [email])
+    msg.body = "Your subscription has been successfully created. Please click on the links below to activate your subscription:\n\n"
+    for subscription_id in subscription_ids:
+        msg.body += f"https://opusanalytics.ai/subscription/{subscription_id}\n"
+    msg.body += "\nThank you for choosing our service!"
+    mail.send(msg)
+        
     connection.close()
-    print(dt_end)
-    return (render_template("subscription.html"))
+    
+    return jsonify({"status": "success"}), 200
 
 @app.route("/knowledge-graph")
 def knowledge_graph():
@@ -1242,6 +1299,12 @@ def knowledge_graph_portal():
     username = session.get('username')
 
     return (render_template("knowledge-graph-portal.html", username=username))
+
+@app.route("/subscription/<subscription_id>")
+def subscriptionPortal(subscription_id):
+    username = session.get('username')
+
+    return (render_template("subscriptionPortal.html", username=username, subscription_id=subscription_id))
 
 @app.route("/knowledge-graph-resume")
 def knowledge_graph_resume():
@@ -1921,7 +1984,7 @@ def get_salaries_chart():
 def add_salary_toDB():
     try:
         # 1. Read Excel into a Pandas DataFrame
-        df = pd.read_csv('2025_EgyptSalary_4_6_2025.csv')
+        df = pd.read_csv('2025_UAESalary_Technology.csv')
 
         # 2. Connect to the Database
         connection = mysql.connector.connect(
@@ -1933,6 +1996,9 @@ def add_salary_toDB():
 
         cursor = connection.cursor()
 
+        # Set Country Name
+        country = 'UAE'
+        
         for index, row in df.iterrows():
             job = row['Job']
             family = row['Family']
@@ -1982,10 +2048,11 @@ def add_salary_toDB():
             query = """
                 SELECT  L_20, L_21, L_22, L_23, L_24, L_25, H_20, H_21, H_22, H_23, H_24, H_25, DataPoints
                 FROM salarydatabse
-                WHERE Job = %s AND Family = %s AND Years_of_Experience = %s
+                WHERE Job = %s AND Family = %s AND Years_of_Experience = %s AND Country = %s
             """
-            cursor.execute(query, (job, family, years_experience))
+            cursor.execute(query, (job, family, years_experience, country))
             result = cursor.fetchone()
+            
             
             print(result)
 
@@ -2023,18 +2090,18 @@ def add_salary_toDB():
 
                 update_query = """
                     UPDATE salarydatabse
-                    SET L_20 = %s, L_21 = %s,L_22 = %s,L_23 = %s,L_24 = %s,L_25 = %s, H_20 = %s, H_21 = %s,H_22 = %s,H_23 = %s,H_24 = %s,H_25 = %s, DataPoints = %s
+                    SET L_20 = %s, L_21 = %s,L_22 = %s,L_23 = %s,L_24 = %s,L_25 = %s, H_20 = %s, H_21 = %s,H_22 = %s,H_23 = %s,H_24 = %s,H_25 = %s, DataPoints = %s, Country = %s
                     WHERE Job = %s AND Family = %s AND Years_of_Experience = %s
                 """
-                cursor.execute(update_query, (new_L20, new_L21, new_L22, new_L23, new_L24, new_L25, new_H20, new_H21, new_H22, new_H23, new_H24, new_H25, new_data_points, job, family, years_experience))
+                cursor.execute(update_query, (new_L20, new_L21, new_L22, new_L23, new_L24, new_L25, new_H20, new_H21, new_H22, new_H23, new_H24, new_H25, new_data_points, country, job, family, years_experience))
                 connection.commit()
             else:
                 # 4b. Insert new record (create a new entry)
                 insert_query = """
-                    INSERT INTO salarydatabse (Job, Family, Years_of_Experience , L_20, L_21, L_22, L_23, L_24, L_25, H_20, H_21, H_22, H_23, H_24, H_25)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)
+                    INSERT INTO salarydatabse (Job, Family, Years_of_Experience , Country , L_20, L_21, L_22, L_23, L_24, L_25, H_20, H_21, H_22, H_23, H_24, H_25)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)
                 """
-                cursor.execute(insert_query, (job, family, years_experience, L_20, L_21, L_22, L_23, L_24, L_25,H_20,H_21,H_22,H_23,H_24,H_25))
+                cursor.execute(insert_query, (job, family, years_experience, country , L_20, L_21, L_22, L_23, L_24, L_25,H_20,H_21,H_22,H_23,H_24,H_25))
                 
                 connection.commit()
 

@@ -18,4 +18,5 @@ openai==0.28
 PyPDF2
 docx2txt
 flask_cors
+uuid
 
