@@ -585,6 +585,8 @@ def assign_subscription():
     query = f"SELECT * FROM subscription WHERE resource_id = '{data['subscription_id']}';"
     cursor.execute(query)
     subscription_details = cursor.fetchone()
+    if subscription_details[2]:
+        return Response(status=500, response=json.dumps({"error": "Subscription already assigned."}), mimetype='application/json')
     
     # Check if the email is already assigned to another subscription of the same type
     query = f"SELECT * FROM subscription WHERE email = '{data['email']}';"
@@ -599,6 +601,13 @@ def assign_subscription():
     cursor.execute(create)
     connection.commit()
     connection.close()
+    
+    email = data['email']
+    
+    msg = Message('Account Subscription Activated', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
+    subtitle= f"Your new Opus Subscription is Ready"
+    msg.html = render_template("email_template.html", link = "https://opusanalytics.ai/sign-in", title = "Welcome to Opus!", subTitle=subtitle, message = "\nWe're excited to activate your new subscription! \nYou can access your new subscription with the same Opus account you do have, please click on the button below:", btnText = "Open Your Account")
+    mail.send(msg)
     return Response(status=200, response=json.dumps({"message":"Subscription assigned successfully"}), mimetype='application/json')
     
 @app.route("/get-competency", methods = ["POST"])
