@@ -585,7 +585,7 @@ def assign_subscription():
     query = f"SELECT * FROM subscription WHERE resource_id = '{data['subscription_id']}';"
     cursor.execute(query)
     subscription_details = cursor.fetchone()
-    if subscription_details[2]:
+    if subscription_details[1] != None:
         return Response(status=500, response=json.dumps({"error": "Subscription already assigned."}), mimetype='application/json')
     
     # Check if the email is already assigned to another subscription of the same type
