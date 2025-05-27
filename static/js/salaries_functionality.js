@@ -138,9 +138,11 @@ jobFamily_link.addEventListener("change", async () => {
 
 job_list.addEventListener("change", async () => {
   loader.style.display = "block";
+  const jobFamily = document.getElementById("job-family-list").value;
   const jobTitle = document.getElementById("job-title-list").value;
   const country = document.getElementById("country-list").value;
   const data = {
+    jobFamily: jobFamily,
     jobTitle: jobTitle,
     countryName: country,
   };

@@ -1910,6 +1910,7 @@ def get_salaries_jobs():
 def get_salaries_experience():
     
     data = request.get_json()
+    jobFamily = data['jobFamily']
     jobTitle = data['jobTitle']
     country = data['countryName']
     
@@ -1927,7 +1928,7 @@ def get_salaries_experience():
 
     # Call stored procedure with username as parameter
     # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_yexperience('{ jobTitle }', '{country}');")
+    cursor.execute(f"CALL opus_prod.get_salaries_yexperience('{jobFamily}', '{ jobTitle }', '{country}');")
     
     
     # Fetch results
