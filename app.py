@@ -242,7 +242,7 @@ def confirmed_mail(token):
 
 def create_subscription(connection, email, subscription, resourceId):
     cursor = connection.cursor()
-    create = f"INSERT INTO subscription (email, subscription, subscription_status, resource_id) VALUES ('{email}','{subscription}','Active', '{resourceId}');"
+    create = f"INSERT INTO subscription (email, subscription, subscription_status, resource_id, owner) VALUES ('{email}','{subscription}','Active', '{resourceId}', 'Vodafone');"
     cursor.execute(create)
     
 
@@ -1401,12 +1401,12 @@ def add_user():
         if(manager):
             create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, manager_account ,admin_account) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")
-            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', data['manager'], username))
+            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], 'Enable', 'Verified', data['manager'], username))
 
         else:
             create_user = ("INSERT INTO users (username, password, email, full_name, company_name, user_type, verification_status, admin_account) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
-            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], user_type, 'Verified', username))
+            cursor.execute(create_user, (data['username'], hashed_pwd, data['username'], data['fullname'], data['userAccess'], 'Enable', 'Verified', username))
         # Commit changes and close connection (important!)
         connection.commit()
 
