@@ -30,6 +30,9 @@ from opus_conn import create_conn
 from opus_conn import get_competencies_hamza,get_job_info_from_db
 import secrets
 from flask_cors import CORS
+from config import Config
+import database
+from routes.auth import auth_bp
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173/', "https://opus-backend.azurewebsites.net/"])
@@ -39,17 +42,20 @@ CORS(app, origins=['http://localhost:5173/', "https://opus-backend.azurewebsites
 opus_resume = OpusResume(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
 opus_jd_analyzer = OpusJDAnalyzer(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
 
-app.config['SECRET_KEY'] = 'test123'
-app.config['UPLOAD_FOLDER'] = 'static/files'
-app.config['MAIL_SERVER'] = 'smtp.office365.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'CustomerExperience@opusanalytics.ai'
-
-app.config['MAIL_PASSWORD'] = 'G&829989609587oG'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
 powerbi_blueprint = Blueprint('powerbi', __name__)
 
+app.config.from_object(Config)
+
+# Initialize database connection management
+database.init_app(app)
+
+# Register blueprints
+app.register_blueprint(auth_bp, url_prefix='/api/auth') # Prefix auth routes with /api/auth
+
+# --- API Endpoints (No more template rendering for core app logic) ---
+@app.route("/")
+def index():
+    return jsonify({"message": "Welcome to the Flask API backend!"})
 
 mail = Mail(app)
 
