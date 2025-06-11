@@ -83,8 +83,8 @@ def login():
         payload = {
             'user_id': user.id,
             'user_email': user.email,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=current_app.config['JWT_ACCESS_TOKEN_EXPIRES_MINUTES']),
-            'iat': datetime.datetime.utcnow()
+            'exp': datetime.datetime.now() + datetime.timedelta(minutes=current_app.config['JWT_ACCESS_TOKEN_EXPIRES_MINUTES']),
+            'iat': datetime.datetime.now()
         }
         token = jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm=current_app.config['JWT_ALGORITHM'])
 
