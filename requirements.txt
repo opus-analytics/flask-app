@@ -20,4 +20,4 @@ docx2txt
 flask_cors
 PyJWT
 flask_httpauth
-
+python-dotenv
