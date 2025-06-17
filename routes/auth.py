@@ -94,7 +94,8 @@ def login():
             "user": {
                 "id": user.id,
                 "email": user.email,
-                "full_name": user.full_name
+                "full_name": user.full_name,
+                "user_type": user.user_type,
             }
         }), 200
     except Exception as e:

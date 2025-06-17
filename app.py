@@ -35,7 +35,8 @@ import database
 from routes.auth import auth_bp
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/', "https://opus-backend.azurewebsites.net/"])
+# Allow all origins for CORS
+CORS(app, origins=['*'])
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
