@@ -33,9 +33,10 @@ from flask_cors import CORS
 from config import Config
 import database
 from routes.auth import auth_bp
+from routes.user import user_bp
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/', "https://opus-backend.azurewebsites.net/"])
+CORS(app, origins=['http://localhost:5173/*', "https://opus-backend.azurewebsites.net/"])
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
@@ -51,6 +52,7 @@ database.init_app(app)
 
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth') # Prefix auth routes with /api/auth
+app.register_blueprint(user_bp, url_prefix='/api/user') # Prefix auth routes with /api/auth
 
 # --- API Endpoints (No more template rendering for core app logic) ---
 @app.route("/")

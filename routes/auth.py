@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request, jsonify, current_app
 from models.users import User
+from models.subscriptions import Subscription
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
@@ -88,14 +89,30 @@ def login():
         }
         token = jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm=current_app.config['JWT_ALGORITHM'])
 
+
+        # Get Active Subscription list 
+        user_subscription = Subscription.find_by_email(user.email)
+        if not user_subscription:
+            return jsonify({"message": "No active subscription found for this user"}), 404
+        # Initialize an empty list to hold just the subscription names
+        serializable_subscription_names = []
+
+        # Iterate through the Subscription objects
+        for sub in user_subscription:
+            # Append only the 'subscription' name to the list
+            serializable_subscription_names.append(sub.subscription)
+        
+         
         return jsonify({
             "message": "Login successful",
             "access_token": token,
             "user": {
                 "id": user.id,
                 "email": user.email,
-                "full_name": user.full_name
-            }
+                "full_name": user.full_name,
+                "user_type": user.user_type
+            },
+            "subscriptions": serializable_subscription_names
         }), 200
     except Exception as e:
         current_app.logger.error(f"Error generating JWT for user {email}: {e}")
