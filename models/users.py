@@ -30,6 +30,7 @@ class User:
         query = "SELECT user_id, email, password_hash, full_name, company_name, user_type, verification_status, created_at, login_count, phoneNo, verification_token, token_expiration FROM users WHERE email = %s"
         cursor.execute(query, (email,))
         user_data = cursor.fetchone()
+        print(f"User data fetched: {user_data}")  # Debugging line to check fetched user data
         if user_data:
             return User(
                 user_id=user_data['user_id'],

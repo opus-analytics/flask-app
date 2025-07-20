@@ -149,6 +149,7 @@ def login():
     if not email or not password:
         return jsonify({"message": "Email and password are required"}), 400
 
+    print("Login endpoint hit")  # Debugging line to check if the endpoint is reached
     user = User.find_by_email(email)
 
     if not user:
