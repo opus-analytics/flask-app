@@ -15,7 +15,7 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_USERNAME = 'CustomerExperience@opusanalytics.ai'
+    MAIL_USERNAME = 'customer-service@opusanalytics.ai'
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD') 
     
     # JWT Configuration

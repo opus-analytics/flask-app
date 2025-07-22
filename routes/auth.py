@@ -1,12 +1,15 @@
 # routes/auth.py
 
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, render_template
 from models.users import User
 from models.subscriptions import Subscription
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
 import bcrypt # Ensure bcrypt is imported for password hashing/checking
+from flask_mail import Message, Mail # Import Message and Mail
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature # For secure token generation and exception handling
+import os # For accessing Flask secret key
 
 auth_bp = Blueprint('auth', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -24,9 +27,10 @@ def verify_token(token):
         user_email = payload.get('user_email')
 
         if user_id and user_email:
-            # You might want to fetch the user from the DB here to ensure they still exist and are active
-            # For simplicity, we'll just return the user_email
-            return user_email
+            # Optional: Fetch user from DB to ensure they are still active/exist
+            user = User.find_by_email(user_email)
+            if user and user.verification_status == 'Verified':
+                return user_email # Return user email as current_user
     except jwt.ExpiredSignatureError:
         # Token has expired
         return None
@@ -34,6 +38,31 @@ def verify_token(token):
         # Token is invalid
         return None
     return None
+
+# --- Helper function to send verification email ---
+def send_verification_email(user_email, token):
+    try:
+        mail_instance = current_app.extensions['mail'] # Access the Mail instance
+        msg = Message(
+            "Verify Your Email Address for [Your App Name]",
+            sender=current_app.config['MAIL_DEFAULT_SENDER'],
+            recipients=[user_email]
+        )
+        # Generate the verification URL
+        # Ensure your React frontend has a route like /verify-email?token=<token>
+        # And your REACT_APP_ORIGIN is set correctly in config.py / env vars
+        verification_link = f"{current_app.config['REACT_APP_ORIGIN']}/verify-email?token={token}"
+
+        msg.html = render_template('email/verification_email.html', verification_link=verification_link) # Use a Jinja2 template for email body
+        # Or a simple string:
+        msg.body = f"Please click the following link to verify your email: {verification_link}"
+
+        mail_instance.send(msg)
+        current_app.logger.info(f"Verification email sent to {user_email}")
+        return True
+    except Exception as e:
+        current_app.logger.error(f"Failed to send verification email to {user_email}: {e}")
+        return False
 
 # --- User Registration ---
 @auth_bp.route("/register", methods=["POST"])
@@ -48,12 +77,67 @@ def register():
     if User.find_by_email(email):
         return jsonify({"message": "User with this email already exists"}), 409
 
-    new_user = User.create_user(email, password, verification_status='Verified') # Assuming auto-verified for simplicity, adjust as needed
+    new_user = User.create_user(email, password, verification_status='Pending')
 
     if new_user:
-        return jsonify({"message": "User registered successfully", "user_id": new_user.id, "email": new_user.email}), 201
+        # Generate a secure, time-sensitive token for email verification
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        # The token will contain the user's email
+        verification_token = serializer.dumps(email, salt='email-verification-salt')
+
+        # Save the token and its expiration to the database
+        # Token valid for 24 hours
+        token_expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+        User.save_verification_token(new_user.user_id, verification_token, token_expiration)
+
+        # Send the verification email
+        if send_verification_email(new_user.email, verification_token):
+            return jsonify({"message": "User registered successfully. Please check your email to verify your account."}), 201
+        else:
+            # If email sending fails, you might want to log this and potentially
+            # allow registration but mark it as 'email_send_failed' or similar.
+            return jsonify({"message": "User registered, but failed to send verification email. Please contact support."}), 202
     else:
         return jsonify({"message": "Failed to register user"}), 500
+    
+# --- Email Verification Endpoint ---
+@auth_bp.route("/verify-email", methods=["GET"])
+def verify_email():
+    token = request.args.get('token')
+    if not token:
+        return jsonify({"message": "Verification token is missing"}), 400
+
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    try:
+        # Load the token, max_age checks for expiration
+        email_from_token = serializer.loads(token, salt='email-verification-salt', max_age=3600*24) # Token valid for 24 hours
+
+        user = User.find_by_email(email_from_token)
+
+        if not user:
+            return jsonify({"message": "Invalid or expired verification link"}), 400
+
+        if user.verification_status == 'Verified':
+            return jsonify({"message": "Email already verified"}), 200
+
+        # Check if the token in the database matches the one provided
+        # and if it's still valid (not expired based on DB timestamp)
+        if user.verification_token == token and user.token_expiration > datetime.datetime.utcnow():
+            User.update_verification_status(user.user_id, 'Verified')
+            # Clear the token from DB after successful verification for security
+            User.save_verification_token(user.user_id, None, None)
+            return jsonify({"message": "Email verified successfully! You can now log in."}), 200
+        else:
+            return jsonify({"message": "Invalid or expired verification link"}), 400
+
+    except SignatureExpired:
+        return jsonify({"message": "Verification link has expired"}), 400
+    except BadTimeSignature:
+        return jsonify({"message": "Invalid verification link"}), 400
+    except Exception as e:
+        current_app.logger.error(f"Error during email verification: {e}")
+        return jsonify({"message": "An error occurred during verification"}), 500
+
 
 # --- User Login & Token Generation ---
 @auth_bp.route("/login", methods=["POST"])
