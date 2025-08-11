@@ -1,4 +1,4 @@
-from database import get_cursor
+from database import get_cursor, get_db
 import mysql.connector
 
 class Subscription:
@@ -66,7 +66,7 @@ class Subscription:
             """
             cursor.execute(query, (email, subscription, subscription_status, subscription_from_date,
                                 subscription_expiration_date, resource_id, owner, tag))
-            cursor.connection.commit()
+            get_db().commit()
             return Subscription.find_by_email(email)  # Return the created subscription object
         except mysql.connector.Error as err:
             print(f"Error: {err}")
@@ -76,18 +76,41 @@ class Subscription:
         cursor = get_cursor()
         query = "UPDATE subscription SET subscription_status = %s, subscription_expiration_date = %s WHERE my_row_id = %s"
         cursor.execute(query, (subscription_status, subscription_expiration_date, self.my_row_id))
-        cursor.connection.commit()
+        get_db().commit()
         # Update the current object's attributes
         if subscription_status:
             self.subscription_status = subscription_status
         if subscription_expiration_date:
             self.subscription_expiration_date = subscription_expiration_date
         return self
-       
+    
+    def get_subscription_by_owner( owner):
+        cursor = get_cursor()
+        query = "SELECT * FROM subscription WHERE owner = %s"
+        cursor.execute(query, (owner,))
+        subscription_data = cursor.fetchall()
+        
+        if subscription_data:
+            return [Subscription(*data) for data in subscription_data]
+        return None      
         
     def delete_subscription(self):
         cursor = get_cursor()
         query = "DELETE FROM subscription WHERE my_row_id = %s"
         cursor.execute(query, (self.my_row_id,))
-        cursor.connection.commit()
+        get_db().commit()
         return True
+
+    def to_dict(self):
+        """Convert the Subscription object to a dictionary for JSON serialization."""
+        return {
+            "my_row_id": self.my_row_id,
+            "email": self.email,
+            "subscription": self.subscription,
+            "subscription_status": self.subscription_status,
+            "subscription_from_date": self.subscription_from_date.isoformat() if self.subscription_from_date else None,
+            "subscription_expiration_date": self.subscription_expiration_date.isoformat() if self.subscription_expiration_date else None,
+            "resource_id": self.resource_id,
+            "owner": self.owner,
+            "tag": self.tag
+        }

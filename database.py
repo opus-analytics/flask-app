@@ -13,7 +13,8 @@ def get_db():
             host=current_app.config['MYSQL_HOST'],
             database=current_app.config['MYSQL_DATABASE'],
             user=current_app.config['MYSQL_USER'],
-            password=current_app.config['MYSQL_PASSWORD']
+            password=current_app.config['MYSQL_PASSWORD'],
+            use_pure=True # Add this
         )
     return g.db
 
