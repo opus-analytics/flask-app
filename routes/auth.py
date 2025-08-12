@@ -166,14 +166,18 @@ def login():
     try:
         # Define token payload (what data to store in the token)
         payload = {
-            'user_id': user.id,
+            'user_id': user.user_id,
             'user_email': user.email,
-            'exp': datetime.datetime.now() + datetime.timedelta(minutes=current_app.config['JWT_ACCESS_TOKEN_EXPIRES_MINUTES']),
-            'iat': datetime.datetime.now()
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
+            'iat': datetime.datetime.utcnow()
         }
         token = jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm=current_app.config['JWT_ALGORITHM'])
-
-
+        
+        # Ensure token is a string (PyJWT >= 2.0.0 returns bytes)
+        if isinstance(token, bytes):
+            print(f"Token is bytes, decoding to string for user {email}")
+            token = token.decode('utf-8')
+        
         # Get Active Subscription list 
         user_subscription = Subscription.find_by_email(user.email)
         if not user_subscription:
@@ -186,12 +190,13 @@ def login():
             # Append only the 'subscription' name to the list
             serializable_subscription_names.append(sub.subscription)
         
-         
+        #  Sort the subscription names free, Start, Advanced, Enable
+        serializable_subscription_names.sort(key=lambda x: ['Free', 'Start', 'Advanced', 'Enable'].index(x) if x in ['Free', 'Start', 'Advanced', 'Enable'] else 100)
         return jsonify({
             "message": "Login successful",
             "access_token": token,
             "user": {
-                "id": user.id,
+                "id": user.user_id,
                 "email": user.email,
                 "full_name": user.full_name,
                 "user_type": user.user_type

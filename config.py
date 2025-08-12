@@ -5,10 +5,11 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY')
     # Database Configuration
+    
     MYSQL_HOST = 'opushhdb.mysql.database.azure.com'
     MYSQL_DATABASE = 'opus_prod'
     MYSQL_USER = 'opusadmin'
-    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD') 
+    MYSQL_PASSWORD = '2LFwEprv4AfyXY1'
 
     # Flask-Mail Configuration (if you use it)
     MAIL_SERVER = 'smtp.office365.com'

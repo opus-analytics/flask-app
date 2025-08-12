@@ -1,19 +1,23 @@
 # models/user.py
 
-from database import get_cursor
+from database import get_cursor, get_db
 import bcrypt # For password hashing
 import mysql.connector
-
+import datetime
 class User:
-    def __init__(self, user_id, email, password_hash, full_name, company_name, user_type, verification_status, created_at, login_count, phoneNo, verification_token=None, token_expiration=None):
+    def __init__(self, user_id, email, password_hash,
+                 full_name=None, company_name=None, user_type='Standard', # Default user_type
+                 verification_status='Pending', # Default verification status
+                 created_at=None, login_count=0, phoneNo=None, # Default created_at, login_count
+                 verification_token=None, token_expiration=None):
         self.user_id = user_id
         self.email = email
         self.password_hash = password_hash
-        self.verification_status = verification_status
         self.full_name = full_name
         self.company_name = company_name
         self.user_type = user_type
-        self.created_at = created_at
+        self.verification_status = verification_status
+        self.created_at = created_at if created_at is not None else datetime.datetime.utcnow() # Set default if not provided
         self.login_count = login_count
         self.phoneNo = phoneNo
         self.verification_token = verification_token
@@ -67,11 +71,11 @@ class User:
         try:
             query = "INSERT INTO users (email, password_hash, verification_status) VALUES (%s, %s, %s)"
             cursor.execute(query, (email, hashed_password, verification_status))
-            cursor.connection.commit()
+            get_db().commit()
             return User(cursor.lastrowid, email, hashed_password, verification_status)
         except mysql.connector.Error as err:
             print(f"Error creating user: {err}")
-            cursor.connection.rollback()
+            get_db().rollback()
             return None
         
     @staticmethod
@@ -80,11 +84,11 @@ class User:
         try:
             query = "UPDATE users SET verification_status = %s WHERE user_id = %s"
             cursor.execute(query, (status, user_id))
-            cursor.connection.commit()
+            get_db().commit()
             return True
         except Exception as err:
             print(f"Error updating verification status for user {user_id}: {err}")
-            cursor.connection.rollback()
+            get_db().rollback()
             return False
 
     @staticmethod
@@ -93,9 +97,9 @@ class User:
         try:
             query = "UPDATE users SET verification_token = %s, token_expiration = %s WHERE user_id = %s"
             cursor.execute(query, (token, expires_at, user_id))
-            cursor.connection.commit()
+            get_db().commit()
             return True
         except Exception as err:
             print(f"Error saving verification token for user {user_id}: {err}")
-            cursor.connection.rollback()
+            get_db().rollback()
             return False
