@@ -34,6 +34,11 @@ from config import Config
 import database
 from routes.auth import auth_bp
 from routes.user import user_bp
+from werkzeug.utils import secure_filename
+from docx import Document
+import fitz # PyMuPDF
+from openai import AzureOpenAI
+import re
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173/*', "https://opus-backend.azurewebsites.net/"])
@@ -580,64 +585,64 @@ def compare_resume_job():
     return (render_template("account-not-premium-form.html",result= result,tag=tag, enable_multiple = enable_multiple,username=username,has_job=has_job, type=type))
 
 
-@app.route("/compare_resumes", methods = ["GET","POST"])
+# @app.route("/compare_resumes", methods = ["GET","POST"])
 
-def compare_resumes():
-    type = session.get('type')
-    username = ''
-    enable_multiple = True
-    has_job = True
-    token = session.get('token')
-    if session.get('token') == None:
-        return redirect(url_for('sign_in'))
-    elif session.get('username') == None:
-        return redirect(url_for('sign_in'))
-    else : 
-        username = session.get('username')
-        bearer_token = "Bearer " + token 
-        tag = "Upload two files and submit a job title!"
-        result = ''
-        job_title = request.form.get('field-2')
-        job_description = request.form.get('job_description')
-        files = []
-        language = request.form.get('Language')
-        if request.method == "POST":    
-            files_form = request.files.getlist('file-field') 
+# def compare_resumes():
+#     type = session.get('type')
+#     username = ''
+#     enable_multiple = True
+#     has_job = True
+#     token = session.get('token')
+#     if session.get('token') == None:
+#         return redirect(url_for('sign_in'))
+#     elif session.get('username') == None:
+#         return redirect(url_for('sign_in'))
+#     else : 
+#         username = session.get('username')
+#         bearer_token = "Bearer " + token 
+#         tag = "Upload two files and submit a job title!"
+#         result = ''
+#         job_title = request.form.get('field-2')
+#         job_description = request.form.get('job_description')
+#         files = []
+#         language = request.form.get('Language')
+#         if request.method == "POST":    
+#             files_form = request.files.getlist('file-field') 
             
-            for file in files_form:    
-                file_name = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-                file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-                files.append(("analyze-files",file_saved))
-            r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes/translate", headers= {'Authorization':bearer_token},data={"description" : job_title, "job_description" : job_description},  files=files)
-            if r.status_code == 200:
-                jsonData = json.dumps(r.json()[0])
-                resp = json.loads(jsonData)
-                if language == 'English':
-                    result = resp['message']['content']
-                    result = "</br>".join(result.split("\n"))
-                elif language == 'Arabic':
-                    result = resp['message']['contentAr']
-                    result = "<span dir='rtl'>" + result
-                    result = "</br>".join(result.split("\n"))
-                    result += "</span>"
-                else:
-                    result = resp['message']['contentFr']
-                    result = "</br>".join(result.split("\n"))
-                flash('Files Uploaded Successfully','success')
-            elif r.status_code == 403:
-                flash('You have used the free features five times. Please subscribe!','warning')
-            elif r.status_code == 500:
-                return redirect(url_for("sign_in"))
-            else:
-                flash('Invalid Data','error')
-            @after_this_request
-            def remove_file(response):
-                for file in files_form: 
-                    file_name = secure_filename(file.filename)
-                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-                return response
-    return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
+#             for file in files_form:    
+#                 file_name = secure_filename(file.filename)
+#                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+#                 file_saved = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
+#                 files.append(("analyze-files",file_saved))
+#             r = requests.post(url="https://opus-openai.azurewebsites.net/compare/resumes/translate", headers= {'Authorization':bearer_token},data={"description" : job_title, "job_description" : job_description},  files=files)
+#             if r.status_code == 200:
+#                 jsonData = json.dumps(r.json()[0])
+#                 resp = json.loads(jsonData)
+#                 if language == 'English':
+#                     result = resp['message']['content']
+#                     result = "</br>".join(result.split("\n"))
+#                 elif language == 'Arabic':
+#                     result = resp['message']['contentAr']
+#                     result = "<span dir='rtl'>" + result
+#                     result = "</br>".join(result.split("\n"))
+#                     result += "</span>"
+#                 else:
+#                     result = resp['message']['contentFr']
+#                     result = "</br>".join(result.split("\n"))
+#                 flash('Files Uploaded Successfully','success')
+#             elif r.status_code == 403:
+#                 flash('You have used the free features five times. Please subscribe!','warning')
+#             elif r.status_code == 500:
+#                 return redirect(url_for("sign_in"))
+#             else:
+#                 flash('Invalid Data','error')
+#             @after_this_request
+#             def remove_file(response):
+#                 for file in files_form: 
+#                     file_name = secure_filename(file.filename)
+#                     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+#                 return response
+#     return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
 
 
 
@@ -700,61 +705,6 @@ def compare_resumes_job():
                 for file in files_form: 
                     file_name = secure_filename(file.filename)
                     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-                return response
-    return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
-
-
-@app.route("/analyze-resume", methods = ["GET","POST"])
-
-def analyze_resume():
-    type = session.get('type')
-    username = ''
-    enable_multiple = True
-    has_job = False
-    token = session.get('token')
-    if session.get('token') == None:
-        return (render_template('404.html'))
-    elif session.get('username') == None:
-        return redirect(url_for('sign_in'))
-    else :
-        username = session.get('username')
-        bearer_token = "Bearer " + token 
-        tag = "Upload a resume to get analyzed!"
-        result = ''
-        file = request.form.get('file-field')
-        language = request.form.get('Language')
-        if request.method == "POST":
-            file_ = request.files['file-field']        
-            file_name = secure_filename(file_.filename)
-                    
-            file_.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-            test_file = open(os.path.join(app.config['UPLOAD_FOLDER'], file_name), "rb")
-            r = requests.post(url="https://opus-openai.azurewebsites.net/analyze/resume/translate",headers= {'Authorization':bearer_token},files={"analyze-file" : test_file})
-            if r.status_code == 200:
-                jsonData = json.dumps(r.json()[0])
-                resp = json.loads(jsonData)
-                if language == 'English':
-                    result = resp['message']['content']
-                    result = "</br>".join(result.split("\n"))
-                elif language == 'Arabic':
-                    result = resp['message']['contentAr']
-                    result = "<span dir='rtl'>" + result
-                    result = "</br>".join(result.split("\n"))
-                    result += "</span>"
-                else:
-                    result = resp['message']['contentFr']
-                    result = "</br>".join(result.split("\n"))
-                flash('Files Uploaded Successfully','success')
-            elif r.status_code == 403:
-                flash('You have used the free features five times. Please subscribe!','warning')
-            elif r.status_code == 500:
-                return redirect(url_for("sign_in"))
-            else:
-                flash('Invalid Data','error')
-            @after_this_request
-            def remove_file(response):
-                file_name = secure_filename(file_.filename)
-                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 return response
     return (render_template("account-not-premium-form.html",result= result,tag=tag,username=username,enable_multiple=enable_multiple,has_job=has_job,type=type))
 
@@ -1630,6 +1580,397 @@ def get_salaries_chart():
         connection.close()
     
     return jsonify(results[0])
+
+
+# Open AI revamping
+# --- Configuration (replace with your actual keys and endpoints) ---
+UPLOAD_FOLDER = 'uploads'
+# AZURE_TRANSLATOR_KEY = 'YOUR_AZURE_TRANSLATOR_KEY'
+OPENAI_API_KEY = '888b6eeb7e3e42b7b87b40babd18a3b2'
+OPENAI_ENDPOINT = 'https://opusgptus2.openai.azure.com/'
+AZURE_TRANSLATOR_KEY = '8d5c3b6127144d13b9a67ecbad810ddb'
+AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com/'
+AZURE_TRANSLATOR_REGION = 'eastus2'
+OPENAI_DEPLOYMENT_ID = 'opus-gpt4-32k'
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Ensure the upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Initialize Azure OpenAI client with key-based authentication
+client = AzureOpenAI(
+    azure_endpoint=OPENAI_ENDPOINT,
+    api_key=OPENAI_API_KEY,
+    api_version="2025-01-01-preview",
+)
+
+# --- Helper functions for file processing ---
+def get_docx_text(file_path):
+    """Extracts text from a .docx file."""
+    doc = Document(file_path)
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+    return '\n'.join(full_text)
+
+def get_pdf_text(file_path):
+    """Extracts text from a .pdf file."""
+    text = ""
+    try:
+        with fitz.open(file_path) as doc:
+            for page in doc:
+                text += page.get_text()
+    except Exception as e:
+        print(f"Error reading PDF file: {e}")
+    return text
+
+def clean_text(text):
+    """
+    Cleans text by removing non-alphanumeric characters and normalizing whitespace.
+    """
+    # Remove non-ASCII characters and special symbols
+    cleaned_text = re.sub(r'[^\x00-\x7F]+', ' ', text)
+    # Replace multiple whitespaces (including newlines and tabs) with a single space
+    cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
+    return cleaned_text
+
+# --- API Endpoint ---
+@app.route("/api/compare/resumes/translate", methods=["POST"])
+def compare_resumes():
+    """
+    Analyzes resumes using OpenAI and translates the response.
+    """
+    # Check if files were uploaded
+    if 'analyze-files' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    # Get form data from the request
+    description = request.form.get('description', '')
+    job_description = request.form.get('job_description', '')
+    demo_rules = "and remove their names and add their initials instead"
+    
+    print(f"Description: {description}, Job Description: {job_description}, Demo Rules: {demo_rules}")
+    
+    uploaded_files = request.files.getlist('analyze-files')
+    uploaded_file_texts = []
+
+    # Process each uploaded file
+    for file in uploaded_files:
+        if file and file.filename:
+            # Secure the filename to prevent directory traversal attacks
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Read text based on file extension
+            if filename.endswith('.docx'):
+                text = get_docx_text(file_path)
+            elif filename.endswith('.pdf'):
+                text = get_pdf_text(file_path)
+            else:
+                text = ""
+            
+              # Pre-process the text to remove unwanted characters and normalize whitespace
+            if text:
+                cleaned_text = clean_text(text)
+                uploaded_file_texts.append(cleaned_text)
+            
+            # Clean up the uploaded file after processing
+            os.remove(file_path)
+
+    if not uploaded_file_texts:
+        return jsonify({"error": "No valid resume files found"}), 400
+
+    # Prepare the prompt for OpenAI
+    messages = [
+        { 'role': 'system', 'content': "You are an Human Resources AI, you analyze resumes and do not mention fullnames in your response." },
+        {
+            'role': "user",
+            'content': f"""
+                Analyze the following resumes for the role of {description}, using the job description provided: {job_description}.
+
+                For each resume, provide a summary of the candidate's relevant skills and experience.
+                Finally, give a single, clear recommendation for the most suitable candidate and a brief justification based on the provided job description.
+
+                - Do not mention full names. Use initials only.
+                - Do not add any conversational phrases like 'Based on the resumes...'
+                - Use only the information provided in the resumes.
+
+                Resumes: {json.dumps(uploaded_file_texts)}
+            """,
+        },
+    ]
+    
+    try:
+        # Call the OpenAI API for chat completions
+        completion = client.chat.completions.create(
+            model=OPENAI_DEPLOYMENT_ID,
+            messages=messages,
+        )
+        openai_response_content = completion.choices[0].message.content
+        
+        # --- Handle Translations ---
+        # Note: This is a simplified example. In a real-world app, you might want to 
+        # handle multiple translations concurrently.
+        
+        # Translate to French
+        translated_fr = translate_text(openai_response_content, "fr")
+        
+        # Translate to Arabic
+        translated_ar = translate_text(openai_response_content, "ar")
+
+        # Prepare the final response object
+        final_response = {
+            "choices": [{
+                "message": {
+                    "content": openai_response_content,
+                    "contentFr": translated_fr,
+                    "contentAr": translated_ar
+                }
+            }]
+        }
+
+        return jsonify(final_response)
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    
+@app.route("/api/bulk-compare/resumes/translate", methods=["POST"])
+def bulk_compare_resumes():
+    """
+    Analyzes resumes using OpenAI and translates the response.
+    """
+    # Check if files were uploaded
+    if 'analyze-files' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    # Get form data from the request
+    description = request.form.get('description', '')
+    job_description = request.form.get('job_description', '')
+    demo_rules = "and remove their names and add their initials instead"
+    
+    print(f"Description: {description}, Job Description: {job_description}, Demo Rules: {demo_rules}")
+    
+    uploaded_files = request.files.getlist('analyze-files')
+    uploaded_file_texts = []
+
+    # Process each uploaded file
+    for file in uploaded_files:
+        if file and file.filename:
+            # Secure the filename to prevent directory traversal attacks
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Read text based on file extension
+            if filename.endswith('.docx'):
+                text = get_docx_text(file_path)
+            elif filename.endswith('.pdf'):
+                text = get_pdf_text(file_path)
+            else:
+                text = ""
+            
+              # Pre-process the text to remove unwanted characters and normalize whitespace
+            if text:
+                cleaned_text = clean_text(text)
+                uploaded_file_texts.append(cleaned_text)
+            
+            # Clean up the uploaded file after processing
+            os.remove(file_path)
+
+    if not uploaded_file_texts:
+        return jsonify({"error": "No valid resume files found"}), 400
+
+    # Prepare the prompt for OpenAI
+    messages = [
+        { 'role': 'system', 'content': "You are an Human Resources AI, you analyze resumes and do not mention fullnames in your response." },
+        {
+            'role': "user",
+            'content': f"""
+                Analyze the following resumes and the provided job description for the role of {description}.
+
+                Your task is to identify the top 3-4 candidates that are the most suitable for the position, with this criteria {job_description}.
+                For each of the top candidates, provide a short, one-paragraph summary (3-4 sentences) highlighting their key strengths and how they align with the job description.
+                After the individual summaries, provide a final, very brief recommendation section. This section should give a high-level justification for why these specific candidates were chosen over the others.
+
+                - The output must be in Markdown format.
+                - Do not mention full names. Use initials only.
+                - Do not use conversational phrases.
+                - Base all analysis and recommendations strictly on the provided resumes and job description.
+
+                Resumes: {json.dumps(uploaded_file_texts)}
+            """
+
+        },
+    ]
+    
+    try:
+        # Call the OpenAI API for chat completions
+        completion = client.chat.completions.create(
+            model=OPENAI_DEPLOYMENT_ID,
+            messages=messages,
+        )
+        openai_response_content = completion.choices[0].message.content
+        
+        # --- Handle Translations ---
+        # Note: This is a simplified example. In a real-world app, you might want to 
+        # handle multiple translations concurrently.
+        
+        # Translate to French
+        translated_fr = translate_text(openai_response_content, "fr")
+        
+        # Translate to Arabic
+        translated_ar = translate_text(openai_response_content, "ar")
+
+        # Prepare the final response object
+        final_response = {
+            "choices": [{
+                "message": {
+                    "content": openai_response_content,
+                    "contentFr": translated_fr,
+                    "contentAr": translated_ar
+                }
+            }]
+        }
+
+        return jsonify(final_response)
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+@app.route("/api/analyze/resumes/translate", methods=["POST"])
+def analyze_resume():
+    """
+    Analyzes resumes using OpenAI and translates the response.
+    """
+    # Check if files were uploaded
+    if 'analyze-files' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    # Get form data from the request
+    demo_rules = "and remove their names and add their initials instead"
+    
+    uploaded_files = request.files.getlist('analyze-files')
+    uploaded_file_texts = []
+
+    # Process each uploaded file
+    for file in uploaded_files:
+        if file and file.filename:
+            # Secure the filename to prevent directory traversal attacks
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Read text based on file extension
+            if filename.endswith('.docx'):
+                text = get_docx_text(file_path)
+            elif filename.endswith('.pdf'):
+                text = get_pdf_text(file_path)
+            else:
+                text = ""
+            
+              # Pre-process the text to remove unwanted characters and normalize whitespace
+            if text:
+                cleaned_text = clean_text(text)
+                uploaded_file_texts.append(cleaned_text)
+            
+            # Clean up the uploaded file after processing
+            os.remove(file_path)
+
+    if not uploaded_file_texts:
+        return jsonify({"error": "No valid resume files found"}), 400
+
+    # Prepare the prompt for OpenAI
+    messages = [
+        {
+        'role': 'system',
+        'content': "You are an AI career consultant. Your task is to analyze a single resume and provide a structured analysis. Your response must be in Markdown format, following the specified sections exactly. Do not add any conversational text before or after the analysis."
+      },
+      {
+        'role': "user",
+        'content': f"""
+
+          Analyze the following resume and provide a concise summary.
+
+          - The analysis must follow this exact structure with these Markdown headings:
+          ## Brief Summary
+          ## Key Skills
+          ## Core Advantages
+          ## Suitable Job Fields & Functions
+
+          - For "Brief Summary", write a single paragraph (5-6 lines) that highlights the candidate's main qualifications and professional focus.
+          - For "Key Skills", list the most prominent skills (technical, soft, etc.) as concise bullet points.
+          - For "Core Advantages", list the candidate's key strengths and significant achievements as concise bullet points.
+          - For "Suitable Job Fields & Functions", list specific job titles or industries where the candidate would be a good fit.
+
+          - Do not mention full names. Use initials only.
+          - Use only the information provided in the resume.
+          - The final output must be in Markdown.
+
+          Resume: ${text}
+        """
+        ,
+      },
+    ]
+    
+    try:
+        # Call the OpenAI API for chat completions
+        completion = client.chat.completions.create(
+            model=OPENAI_DEPLOYMENT_ID,
+            messages=messages,
+        )
+        openai_response_content = completion.choices[0].message.content
+        
+        # --- Handle Translations ---
+        # Note: This is a simplified example. In a real-world app, you might want to 
+        # handle multiple translations concurrently.
+        
+        # Translate to French
+        translated_fr = translate_text(openai_response_content, "fr")
+        
+        # Translate to Arabic
+        translated_ar = translate_text(openai_response_content, "ar")
+
+        # Prepare the final response object
+        final_response = {
+            "choices": [{
+                "message": {
+                    "content": openai_response_content,
+                    "contentFr": translated_fr,
+                    "contentAr": translated_ar
+                }
+            }]
+        }
+
+        return jsonify(final_response)
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    
+    
+def translate_text(text, to_lang):
+    """
+    Calls the Azure Translator API.
+    (This is a placeholder function, you would integrate your actual API call here)
+    """
+    # Replace this with your actual Azure Translator API call logic
+    url = f"{AZURE_TRANSLATOR_ENDPOINT}/translate?api-version=3.0&to={to_lang}"
+    headers = {
+        'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY,
+        'Content-type': 'application/json',
+        'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION
+    }
+    body = [{'text': text}]
+
+    try:
+        response = requests.post(url, headers=headers, json=body)
+        response.raise_for_status() # Raise an HTTPError if the response status is 4xx or 5xx
+        translated_text = response.json()[0]['translations'][0]['text']
+        return translated_text
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return "Translation failed."
 
 if __name__ == '__main__':
     app.run(debug=True)

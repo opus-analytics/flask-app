@@ -15,9 +15,11 @@ PrettyTable
 datetime
 xmltodict
 python_random_strings
-openai==0.28
+openai
 PyPDF2
 docx2txt
 flask_cors
 flask_httpauth
 python-dotenv
+python-docx
+PyMuPDF
