@@ -1540,7 +1540,7 @@ def get_salaries_experience():
     return jsonify(experience)
 
 
-@app.route("/get-salaries-chart", methods = ["GET", "POST"]) 
+@app.route("/api/get-salaries-chart", methods = ["GET", "POST"]) 
 def get_salaries_chart():
     
     data = request.get_json()
@@ -1792,6 +1792,7 @@ def bulk_compare_resumes():
 
                 Your task is to identify the top 3-4 candidates that are the most suitable for the position, with this criteria {job_description}.
                 For each of the top candidates, provide a short, one-paragraph summary (3-4 sentences) highlighting their key strengths and how they align with the job description.
+                These candidates should be ranked clearly from most to least suitable, with numbers indicating their rank (1, 2, 3, etc.).
                 After the individual summaries, provide a final, very brief recommendation section. This section should give a high-level justification for why these specific candidates were chosen over the others.
 
                 - The output must be in Markdown format.
