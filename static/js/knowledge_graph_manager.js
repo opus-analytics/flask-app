@@ -740,6 +740,71 @@ const jobFunctionalityList = [
       {title:"Building trust",desc:"Gaining others' confidence by acting with integrity and following through on commitments, while sharing own perspective."},
     ],
   },
+  {
+    value: 17,
+    text: "Administration",
+    desc: [
+      "Designed to provide a clear roadmap for the skills, knowledge, and abilities essential for administrative professionals. This framework ensures that individuals performing administrative roles are well-equipped to meet the demands of today’s dynamic workplace, fostering a culture of excellence and continuous improvement.",
+    ],
+    functionalCompetencies: [
+      {
+        title: "Organizational Communication",
+        desc: "Effective communication of both verbal and written communication to convey clearly and professionally information. Developing listening skills to understand and address the needs of colleagues and stakeholders.",
+      },
+      {
+        title: "Interpersonal skills",
+        desc: "Building and maintaining positive working relationships. Demonstrating empathy and emotional intelligence in interactions with others.",
+      },
+      {
+        title: "Business writing and document production",
+        desc: "Creating clear, concise, and error-free business documents, including emails, reports, and memos. Adapting writing style to suit different audiences and purposes.",
+      },
+      {
+        title: "Document management",
+        desc: "Efficiently producing, formatting, and managing documents using various software applications. Ensuring accuracy and attention to detail in all written communications.",
+      },
+      {
+        title: "Technology and information management",
+        desc: "Utilizing modern office technology and software to enhance productivity and efficiency. Staying current with technological advancements and integrating them into daily work.",
+      },
+      {
+        title: "Information Management",
+        desc: "Managing and organizing digital and physical information effectively. Ensuring the secure distribution and storage of sensitive information.",
+      },
+      {
+        title: "Office records management",
+        desc: "Implementing efficient office systems and procedures to streamline operations. Prioritizing tasks and managing time effectively to meet deadlines.",
+      },
+      {
+        title: "Records Management",
+        desc: "Maintaining accurate and up-to-date records. Understanding and adhering to legal and regulatory requirements for records retention and disposal.",
+      },
+      {
+        title: "Event Planning",
+        desc: "Coordinating and managing events, meetings, and conferences from inception to completion. Handling logistics, budgeting, and vendor relationships to ensure successful events.",
+      },
+      {
+        title: "Project Management",
+        desc: "Applying project management principles to plan, execute, and complete projects on time and within budget. Utilizing tools and techniques to monitor progress and address challenges.",
+      },
+      {
+        title: "HR Fundamentals",
+        desc: "Understanding basic human resources principles, policies, and practices. Assisting with recruitment, onboarding, and employee relations activities.",
+      },
+      {
+        title: "Employee Support",
+        desc: "Providing administrative support for HR functions, including benefits administration and performance management. Promoting a positive work environment and supporting employee engagement initiatives.",
+      },
+      {
+        title: "Basic Financial Management",
+        desc: "Managing financial transactions, including invoicing, budgeting, and expense tracking. Understanding financial statements and reports to support organizational decision-making.",
+      },
+      {
+        title: "Cost Control",
+        desc: "Identifying opportunities for cost savings and efficiency improvements. Assisting with financial planning and analysis to support business objectives.",
+      },
+    ],
+  }
 ];
 
 const coreCompetency = [
@@ -883,7 +948,7 @@ const coreCompetencyTravel = [
   },
   {
     title: "Lifelong Learning",
-    desc: "Seek out opportunities to enhance one\u2019s knowledge and skills. Access and acquire new knowledge and skills actively for continual learning.",
+    desc: "Seek out opportunities to enhance one's knowledge and skills. Access and acquire new knowledge and skills actively for continual learning.",
   },
   {
     title: "Managing Diversity",
@@ -903,7 +968,7 @@ const coreCompetencyTravel = [
   },
   {
     title: "Service Orientation",
-    desc: "Commit to exceeding both internal and external customers\u2019 needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.Commit to exceeding both internal and external customers\u2019 needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.",
+    desc: "Commit to exceeding both internal and external customers' needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.Commit to exceeding both internal and external customers' needs. Proactively identify customer needs and sustain a culture of service excellence within the organisation.",
   },
   {
     title: "Teamwork",
@@ -917,6 +982,25 @@ const coreCompetencyTravel = [
     title: "Virtual Collaboration",
     desc: "Use online collaborative communication tools to work as teams to accomplish tasks or projects.",
   },
+];
+
+const coreCompetencyAdministration = [
+  {
+    title: "Leadership Skills",
+    desc: "Demonstrating leadership qualities, including initiative, accountability, and decision-making. Inspiring and motivating colleagues to achieve common goals.",
+  },
+  {
+    title: "Professional Development",
+    desc: "Committing to continuous learning and development to stay current with industry trends and best practices. Upholding ethical standards and demonstrating integrity in all professional activities.",
+  },
+  {
+    title: "Analytical Skills",
+    desc: "Applying critical thinking to analyze situations, identify problems, and develop effective solutions. Using data and evidence to support decision-making processes.",
+  },
+  {
+    title: "Innovative Thinking",
+    desc: "Encouraging creativity and innovation to improve processes and solve challenges. Adapting to changing circumstances and finding new ways to achieve objectives.",
+  }
 ];
 
 const jobTitleData = [
@@ -6213,6 +6297,1067 @@ const jobTitleData = [
       }
     ],
   },
+  {
+    value: 395,
+    jobFunc: 16,
+    text: "Material Handling Equipment (MHE) Operator/ Forklift Operator/Warehouse Assistant/ Inventory Assistant",
+    functionalAssessment: [
+      {
+        title: "Perform Warehousing Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Activities",
+        desc: "",
+      },
+      { title: "Cargo Issuance and Dispatch", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Cargo Lifting", desc: "" },
+      { title: "Interpersonal Skills", desc: "" },
+      { title: "Container Loading and Unloading Administration", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Cross Docking", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Livestock Cargo Administration", desc: "" },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Warehouse Administration", desc: "" },
+      { title: "Warehouse Inventory Control/Audit", desc: "" },
+      { title: "Warehouse Maintenance and Housekeeping", desc: "" },
+      { title: "Warehouse Management System (WMS) Administration", desc: "" },
+      {
+        title:
+          "Warehouse/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 396,
+    jobFunc: 16,
+    text: "Warehouse Storekeeper/Inventory Coordinator/ Logistics Coordinator",
+    functionalAssessment: [
+      {
+        title: "Perform Warehousing Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Activities",
+        desc: "",
+      },
+      { title: "Cargo Lifting", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Container Loading and Unloading Administration", desc: "" },
+      { title: "Interpersonal Skills", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Developing People", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Order Fulfilment Administration", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Warehouse Administration", desc: "" },
+      { title: "Warehouse Automation Application", desc: "" },
+      { title: "Warehouse Facility Management", desc: "" },
+      { title: "Warehouse Inventory Control/Audit", desc: "" },
+      { title: "Warehouse Maintenance and Housekeeping", desc: "" },
+      { title: "Warehouse Management System (WMS) Administration", desc: "" },
+      {
+        title:
+          "Warehouse/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 397,
+    jobFunc: 16,
+    text: "Warehouse Supervisor/Inventory Control Supervisor/ Quality Control Supervisor",
+    functionalAssessment: [
+      {
+        title: "Perform Warehousing Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Activities",
+        desc: "",
+      },
+      { title: "Change Management", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Developing People", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Resource Management", desc: "" },
+      { title: "Logistics Operations Research and Planning", desc: "" },
+      { title: "Logistics Process Quality Management", desc: "" },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Order Fulfilment Administration", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Warehouse Layout Design", desc: "" },
+      { title: "Warehouse Administration", desc: "" },
+      { title: "Warehouse Facility Management", desc: "" },
+      { title: "Warehouse Inventory Control/Audit", desc: "" },
+      { title: "Warehouse Maintenance and Housekeeping", desc: "" },
+      { title: "Warehouse Management System (WMS) Administration", desc: "" },
+      { title: "Warehouse Performance Measurement", desc: "" },
+      { title: "Warehouse Space Utilisation", desc: "" },
+      {
+        title:
+          "Warehouse/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 398,
+    jobFunc: 16,
+    text: "Warehouse Officer/Inventory Controller/ Quality Control Officer/Warehouse Facilities Management Officer",
+    functionalAssessment: [
+      {
+        title: "Perform Warehousing Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Activities",
+        desc: "",
+      },
+      { title: "Contract/Vendor Management", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Customer Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Developing People", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Problem Solving", desc: "" },
+      { title: "Order Fulfilment Administration", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Warehouse Automation Application", desc: "" },
+      { title: "Warehouse Layout Design", desc: "" },
+      { title: "Warehouse Administration", desc: "" },
+      { title: "Warehouse Facility Management", desc: "" },
+      { title: "Warehouse Facility Security Control", desc: "" },
+      { title: "Warehouse Inventory Control/Audit", desc: "" },
+      { title: "Warehouse Maintenance and Housekeeping", desc: "" },
+      { title: "Warehouse Management System (WMS) Administration", desc: "" },
+      { title: "Warehouse Performance Measurement", desc: "" },
+      { title: "Warehouse Space Utilisation", desc: "" },
+      {
+        title:
+          "Warehouse/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 399,
+    jobFunc: 16,
+    text: "Health, Safety and Environmental Coordinator",
+    functionalAssessment: [
+      {
+        title: "Perform Safety and Health Operations",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Compliance Tasks",
+        desc: "",
+      },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Interpersonal Skills", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Problem Solving", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Warehouse Facility Management", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+      { title: "Warehouse Facility Security Control", desc: "" },
+    ],
+  },
+  {
+    value: 400,
+    jobFunc: 16,
+    text: "Warehouse Operations Executive/ Inventory Management Executive/ Warehouse Assistant Manager",
+    functionalAssessment: [
+      {
+        title: "Perform Warehousing Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      { title: "Automation Design", desc: "" },
+      { title: "Interpersonal Skills", desc: "" },
+      { title: "Change Management", desc: "" },
+      { title: "Developing People", desc: "" },
+      { title: "Customer Management", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Financial Management", desc: "" },
+      { title: "Service Orientation", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Innovation Management", desc: "" },
+      { title: "Logistics Solution Design Thinking", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      {
+        title: "Shipment Load Planning and Palletisation/ Consolidation",
+        desc: "",
+      },
+      { title: "Warehouse Automation Application", desc: "" },
+      { title: "Warehouse Layout Design", desc: "" },
+      { title: "Warehouse Administration", desc: "" },
+      { title: "Warehouse Inventory Control/Audit", desc: "" },
+      { title: "Warehouse Management System (WMS) Administration", desc: "" },
+      { title: "Warehouse Performance Measurement", desc: "" },
+      { title: "Warehouse Space Utilisation", desc: "" },
+    ],
+  },
+  {
+    value: 401,
+    jobFunc: 16,
+    text: "Health, Safety and Environmental Manager",
+    functionalAssessment: [
+      {
+        title: "Perform Safety and Health Operations",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Compliance Tasks",
+        desc: "",
+      },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Interpersonal Skills", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      {
+        title:
+          "Hazardous Materials Identification System (HMIS) Administration",
+        desc: "",
+      },
+      { title: "Problem Solving", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Warehouse Facility Management", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+      { title: "Warehouse Facility Security Control", desc: "" },
+    ],
+  },
+  {
+    value: 402,
+    jobFunc: 16,
+    text: "Rigger/Signalman",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Cross Docking", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Service Orientation", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transportation Equipment Handling", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 403,
+    jobFunc: 16,
+    text: "Dispatch Operator/Transport Operator/ Last Mile Delivery Driver/Container Driver",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      { title: "Cargo Receipt and Inspection", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Service Orientation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      {
+        title: "Shipment Load Planning and Palletisation/ Consolidation",
+        desc: "",
+      },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transportation Equipment Handling", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 404,
+    jobFunc: 16,
+    text: "Lifting Supervisor",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Cross Docking", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Teamwork", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Service Orientation", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transportation Equipment Handling", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 405,
+    jobFunc: 16,
+    text: "Traffic Coordinator/Dispatch Coordinator",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "` Risk Management and Administration", desc: "" },
+      { title: "Service Orientation", desc: "" },
+      { title: "Transport Management System Administration", desc: "" },
+      { title: "Transportation Equipment Handling", desc: "" },
+      { title: "Transportation Hub/Control Centre Administration", desc: "" },
+      { title: "Transportation Route AND Schedule Planning", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 406,
+    jobFunc: 16,
+    text: "Project Engineer",
+    functionalAssessment: [
+      {
+        title: "Perform Programme Management Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      { title: "Automation Design", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Autonomous Logistics Design and Application", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Engineering Installation Design", desc: "" },
+      { title: "Sense Making", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Logistics Solution Design Thinking", desc: "" },
+      { title: "Managing Diversity", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Technology Application", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 407,
+    jobFunc: 16,
+    text: "Project Supervisor",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Programme Management Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      { title: "Cargo Receipt and Inspection", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Cross Docking", desc: "" },
+      { title: "Sense Making", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Import and Export Documentation Administration", desc: "" },
+      { title: "Livestock Cargo Administration", desc: "" },
+      { title: "Material Handling Equipment (MHE) Handling", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Technology Application", desc: "" },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transportation Equipment Handling", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 408,
+    jobFunc: 16,
+    text: "Depot Supervisor/Traffic Supervisor/ Dispatch Supervisor/Hub Operations Supervisor",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Cargo Receipt and Inspection", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Cargo Tracking System Administration", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Equipment Maintenance", desc: "" },
+      { title: "Import and Export Documentation Administration", desc: "" },
+      {
+        title: "Material Management (Planning, Sourcing, Use, Disposal)",
+        desc: "",
+      },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Technology Application", desc: "" },
+      { title: "Transport Management System Administration", desc: "" },
+      { title: "Transportation Hub/Control Centre Administration", desc: "" },
+      { title: "Transportation Route AND Schedule Planning", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 409,
+    jobFunc: 16,
+    text: "Traffic Controller/Transport Officer/ Line Haul Operations Officer",
+    functionalAssessment: [
+      {
+        title: "Perform Project Transportation Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Cargo Tracking System Administration", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Managing Diversity", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Import and Export Documentation Administration", desc: "" },
+      { title: "Logistics Process Quality Management", desc: "" },
+      { title: "Logistics Solution Design Thinking", desc: "" },
+      {
+        title: "Material Management (Planning, Sourcing, Use, Disposal)",
+        desc: "",
+      },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      {
+        title: "Shipment Load Planning and Palletisation/ Consolidation",
+        desc: "",
+      },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Technology Application", desc: "" },
+      { title: "Transport Management System Administration", desc: "" },
+      { title: "Transportation Hub/Control Centre Administration", desc: "" },
+    ],
+  },
+  {
+    value: 410,
+    jobFunc: 16,
+    text: "Senior Project Engineer",
+    functionalAssessment: [
+      {
+        title: "Perform Programme Management Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      { title: "Automation Design", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Autonomous Logistics Design and Application", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Change Management", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Engineering Installation Design", desc: "" },
+      { title: "Sense Making", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Logistics Solution Design Thinking", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Technology Application", desc: "" },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 411,
+    jobFunc: 16,
+    text: "Project Executive",
+    functionalAssessment: [
+      {
+        title: "Perform Programme Management Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Safety and Health Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      { title: "Automation Design", desc: "" },
+      { title: "Digital Literacy", desc: "" },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Change Management", desc: "" },
+      { title: "Leadership", desc: "" },
+      {
+        title: "Contract Preparation, Evaluation, Negotiation and Tendering",
+        desc: "",
+      },
+      { title: "Sense Making", desc: "" },
+      { title: "Contract/Vendor Management", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Data and Statistical Analytics", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Import and Export Documentation Administration", desc: "" },
+      { title: "Market Research", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Stakeholder Management", desc: "" },
+      {
+        title: "Supply Chain Solutioning/Modelling/ Planning/Strategising",
+        desc: "",
+      },
+      { title: "Technology Application", desc: "" },
+      {
+        title: "Technology Infrastructure Management and Integration",
+        desc: "",
+      },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 412,
+    jobFunc: 16,
+    text: "Transport Assistant Manager/Transport Executive/Line Haul Operations Executive",
+    functionalAssessment: [
+      {
+        title: "Perform Programme Management Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Cargo and/or Material Handling and Delivery Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Continuous Improvement Activities",
+        desc: "",
+      },
+      {
+        title: "Perform Technology Application Tasks",
+        desc: "",
+      },
+      {
+        title: "Perform Business Administration Tasks",
+        desc: "",
+      },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Business Negotiation", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Contract/Vendor Management", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Customer Management", desc: "" },
+      { title: "Dangerous Goods (DG) Management", desc: "" },
+      { title: "Livestock Cargo Administration", desc: "" },
+      { title: "Pricing for Transportation Services and Operations", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      { title: "Risk Management and Administration", desc: "" },
+      {
+        title: "Shipment Load Planning and Palletisation/ Consolidation",
+        desc: "",
+      },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Supply Chain Solutioning/Modelling/ Strategising", desc: "" },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transport Management System Administration", desc: "" },
+      { title: "Transportation Hub/Control Centre Administration", desc: "" },
+      { title: "Transportation Route AND Schedule Planning", desc: "" },
+    ],
+  },
+  {
+    value: 413,
+    jobFunc: 16,
+    text: "Project Manager",
+    functionalAssessment: [
+      {
+        title: "Drive Programme Management Activities",
+        desc: "",
+      },
+      {
+        title: "Drive Business Continuous Improvement",
+        desc: "",
+      },
+      {
+        title: "Drive Business Administration Operations",
+        desc: "",
+      },
+      {
+        title: "Drive Safety and Health Operations",
+        desc: "",
+      },
+      {
+        title: "Drive Technology Application Activities",
+        desc: "",
+      },
+      { title: "Automation Design", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Autonomous Logistics Design and Application", desc: "" },
+      { title: "Communication", desc: "" },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Change Management", desc: "" },
+      { title: "Managing Diversity", desc: "" },
+      {
+        title: "Contract Preparation, Evaluation, Negotiation and Tendering",
+        desc: "",
+      },
+      { title: "Problem Solving", desc: "" },
+      { title: "Environmental Protection Management", desc: "" },
+      { title: "Financial Management", desc: "" },
+      { title: "Innovation Mangement", desc: "" },
+      { title: "Logistics Solution Product/Project Management", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      {
+        title: "Public-Private-Individual Partnership Collaboration",
+        desc: "",
+      },
+      { title: "Risk Management and Administration", desc: "" },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Strategy Planning", desc: "" },
+      {
+        title: "Supply Chain Solutioning/Modelling/ Planning/Strategising",
+        desc: "",
+      },
+      { title: "Technology Application", desc: "" },
+      {
+        title: "Technology Infrastructure Management and Integration",
+        desc: "",
+      },
+      {
+        title:
+          "Warehousing/Cargo-related Occupational Health and Safety Management",
+        desc: "",
+      },
+    ],
+  },
+  {
+    value: 414,
+    jobFunc: 16,
+    text: "Transportation Operations Manager",
+    functionalAssessment: [
+      {
+        title: "Drive Transportation Operations",
+        desc: "",
+      },
+      {
+        title: "Drive Cargo/Material Handling AND Delivery Operations",
+        desc: "",
+      },
+      {
+        title: "Drive Business Continuous Improvement",
+        desc: "",
+      },
+      {
+        title: "Drive Technology Application Activities",
+        desc: "",
+      },
+      {
+        title: "Drive Business Administration Operations",
+        desc: "",
+      },
+      { title: "Business Continuity Management", desc: "" },
+      { title: "Resource Management", desc: "" },
+      { title: "Business Negotiation", desc: "" },
+      { title: "Decision Making", desc: "" },
+      { title: "Cargo Security Control", desc: "" },
+      { title: "Leadership", desc: "" },
+      { title: "Change Management", desc: "" },
+      { title: "Communication", desc: "" },
+
+      { title: "Cold Chain Operations Administration", desc: "" },
+      { title: "Problem Solving", desc: "" },
+      { title: "Customer Management", desc: "" },
+      { title: "Financial Management", desc: "" },
+      { title: "Innovation Management", desc: "" },
+      { title: "Logistics Solution Product/Project Management", desc: "" },
+      { title: "Pricing for Transportation Services and Operations", desc: "" },
+      { title: "Process Improvement and Optimisation", desc: "" },
+      {
+        title: "Public-Private-Individual Partnership Collaboration",
+        desc: "",
+      },
+      { title: "Risk Management and Administration", desc: "" },
+      {
+        title: "Shipment Load Planning and Palletisation/ Consolidation",
+        desc: "",
+      },
+      { title: "Stakeholder Management", desc: "" },
+      { title: "Strategy Implementation", desc: "" },
+      { title: "Supply Chain Solutioning/Modelling/ Strategising", desc: "" },
+      { title: "Time Sensitive Cargo Delivery Management", desc: "" },
+      { title: "Transport Management System Administration", desc: "" },
+      { title: "Transportation Hub/Control Centre Administration", desc: "" },
+      { title: "Transportation Route and Schedule Planning", desc: "" },
+    ],
+  },
+  {
+    value: 415,
+    jobFunc: 17,
+    text: "Office Manager",
+    functionalAssessment: "",
+  },
+  {
+    value: 416,
+    jobFunc: 17,
+    text: "Administrative Assistant",
+    functionalAssessment: "",
+  },
+  {
+    value: 417,
+    jobFunc: 17,
+    text: "Executive Assistant",
+    functionalAssessment: "",
+  },
+  {
+    value: 418,
+    jobFunc: 17,
+    text: "Personal Assistant",
+    functionalAssessment: "",
+  },
 ];
 
 // Select the error message element
@@ -6302,16 +7447,20 @@ window.onload = async () => {
 
     const functionalCompetencies = assessmentArray.length;
     if (
-      jobFunctionalityList.find((job) => job.value == jobFunctionality).text ==
+    jobFunctionalityList.find((job) => job.value == jobFunctionality).text ==
       "Pharmaceutical"
-    ) 
-    {
+    ) {
       assessmentArray = assessmentArray.concat(coreCompetencyPharmaceutical);
-    } 
-    else if (jobFunctionalityList.find((job) => job.value == jobFunctionality).text == "Travel Industry"){
-      assessmentArray = assessmentArray.concat(coreCompetencyTravel);
-    }
-    else {
+    } else if (
+      jobFunctionalityList.find((job) => job.value == jobFunctionality).text ==
+      "Travel Industry"
+    ) {
+    } else if (
+      jobFunctionalityList.find((job) => job.value == jobFunctionality).text ==
+      "Administration"
+    ) {
+      assessmentArray = assessmentArray.concat(coreCompetencyAdministration);
+    } else {
       assessmentArray = assessmentArray.concat(coreCompetency);
     }
 

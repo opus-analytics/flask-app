@@ -1560,7 +1560,7 @@ def knowledge_graph_extra_getId():
         name = results[0]['name']
     
         msg = Message('Request for Reassessment', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
-        subtitle= f"{name} has requested a reassessment of his skills."
+        subtitle= f"{name} has requested a reassessment of there skills."
         msg.html = render_template("email_template.html", link = f"https://opusanalytics.ai/knowledge-graph-manager/{token}", title = "Opus Analytics Enable!", subTitle=subtitle, message = "Please click on the button below and you will be redirected:", btnText = "Assessment Link")
         mail.send(msg)
         
