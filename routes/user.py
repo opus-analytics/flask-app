@@ -3,6 +3,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from models.users import User
 from models.subscriptions import Subscription
+from models.assessment import Assessment
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
@@ -156,6 +157,97 @@ def get_user_subscriptions():
         current_app.logger.error(f"Error serializing subscriptions for user {user_email}: {e}")
         return jsonify({"message": "Error retrieving subscriptions"}), 500
     
+
+# --- Create User Assessment ---
+@user_bp.route("/assessment", methods=["POST"])
+@auth.login_required # This decorator protects the route
+def create_user_assessment():
+    user_email = auth.current_user()
+    user = User.find_by_email(user_email)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    data = request.get_json()
+    name = data.get("name")
+    jobFunction = data.get("jobFunction")
+    jobTitle = data.get("jobTitle")
+    monthsInRole = data.get("monthsInRole")
+    jobSkills = data.get("jobSkills")
+    username = data.get("username")
+    score = data.get("score")
+    if not all([name, jobFunction, jobTitle, monthsInRole, jobSkills, username, score]):
+        return jsonify({"message": "All fields are required"}), 400
+    
+    # Check if the assessment is created successfully
+    assessment_id = Assessment.create_assessment(name, jobFunction, jobTitle, monthsInRole, jobSkills, username, score)
+    if not assessment_id:
+        return jsonify({"message": "Error creating assessment"}), 500
+    return jsonify({"message": "Assessment created successfully", "assessment_id": assessment_id}), 201
+
+# --- Get Assessment List ---
+@user_bp.route("/get-assessment", methods=["POST"])
+@auth.login_required # This decorator protects the route
+def get_user_assessments():
+    user_email = auth.current_user()
+    user = User.find_by_email(user_email)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    data = request.get_json()
+    jobFunction = data.get("jobFunction")
+    jobTitle = data.get("jobTitle")
+    
+    assessmentList = Assessment.get_assessment_list(jobFunction, jobTitle)
+    
+    if not assessmentList:
+        return jsonify({"message": "No assessments found"}), 404
+    try:
+        # Assessment list will contain Id, Title, descr, isCore
+        serializable_assessments = []
+        for assess in assessmentList:
+            serializable_assessments.append({
+                "Id": assess["id"],
+                "Title": assess["title"],
+                "descr": assess["description"],
+                "isCore": assess["is_core"]
+            })  
+            
+        return jsonify(serializable_assessments), 200
+    except Exception as e:
+        current_app.logger.error(f"Error serializing assessments for user {user_email}: {e}")
+        return jsonify({"message": "Error retrieving assessments"}), 500    
+    
+# --- Get Job titles List ---
+@user_bp.route("/get-assessment-job-titles", methods=["POST"])
+@auth.login_required # This decorator protects the route
+def get_user_assessments_job_titles():
+    user_email = auth.current_user()
+    user = User.find_by_email(user_email)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    data = request.get_json()
+    jobFunction = data.get("jobFunction")
+    
+    assessmentList = Assessment.get_assessment_job_titles(jobFunction)
+    
+    if not assessmentList:
+        return jsonify({"message": "No assessments found"}), 404
+    try:
+        # Assessment list will contain Id, Title, descr, isCore
+        serializable_assessments = []
+        for assess in assessmentList:
+            serializable_assessments.append({
+                "id": assess["id"],
+                "title": assess["title"],
+                "jobFuncId": assess["job_functionality_id"]
+            })  
+            
+        return jsonify(serializable_assessments), 200
+    except Exception as e:
+        current_app.logger.error(f"Error serializing assessments for user {user_email}: {e}")
+        return jsonify({"message": "Error retrieving assessments"}), 500    
+      
 # # --- Protected Test Endpoint ---
 # @user_bp.route("/protected-data", methods=["GET"])
 # @auth.login_required # This decorator protects the route
