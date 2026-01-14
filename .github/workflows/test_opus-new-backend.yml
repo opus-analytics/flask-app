@@ -2,17 +2,19 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - opus-app
+name: Build and deploy Python app to Azure Web App - opus-new-backend
 
 on:
   push:
     branches:
-      - master
+      - test
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -31,8 +33,6 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -66,6 +66,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'opus-app'
+          app-name: 'opus-new-backend'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2FECFA4A0B644D8B85CCE619178E3AF9 }}
