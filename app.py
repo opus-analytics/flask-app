@@ -1412,176 +1412,6 @@ def add_competency_resume_jd():
     return jsonify({"message": "Data inserted successfully"}), 201
 
 
-@app.route("/get-salaries-family", methods = ["GET", "POST"]) 
-def get_salaries_family():
-
-    # Establish database connection
-    connection = mysql.connector.connect(
-        host='opus-server.mysql.database.azure.com',
-        database='opus_prod',
-        user='opusadmin',
-        password='OAg@1234'
-    )
-
-    # Create cursor object
-    cursor = connection.cursor()
-
-    # Call stored procedure with username as parameter
-    # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_family();")
-    
-    
-    # Fetch results
-    results = cursor.fetchall()
-    
-    # Add all results to a single list
-    familyJobs = []
-    for result in results:
-        familyJobs.append(result[0])
-        
-    # Check if any results were found
-    if not results:
-        return json.dumps({"error": "No data found."})
-    
-
-    # Close cursor and connection
-    if cursor:
-        cursor.close()
-    if connection:
-        connection.close()
-    
-    return jsonify(familyJobs)
-
-@app.route("/get-salaries-jobs", methods = ["GET", "POST"]) 
-def get_salaries_jobs():
-    
-    data = request.get_json()
-    jobFamily = data['jobFamily']
-
-
-    # Establish database connection
-    connection = mysql.connector.connect(
-        host='opus-server.mysql.database.azure.com',
-        database='opus_prod',
-        user='opusadmin',
-        password='OAg@1234'
-    )
-
-    # Create cursor object
-    cursor = connection.cursor()
-
-    # Call stored procedure with username as parameter
-    # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_job('{ jobFamily }');")
-    
-    
-    # Fetch results
-    results = cursor.fetchall()
-    
-    # Add all results to a single list
-    jobs = []
-    for result in results:
-        jobs.append(result[0])
-        
-    # Check if any results were found
-    if not results:
-        return json.dumps({"error": "No data found."})
-    
-
-    # Close cursor and connection
-    if cursor:
-        cursor.close()
-    if connection:
-        connection.close()
-    
-    return jsonify(jobs)
-
-@app.route("/get-salaries-experience", methods = ["GET", "POST"]) 
-def get_salaries_experience():
-    
-    data = request.get_json()
-    jobTitle = data['jobTitle']
-
-    # Establish database connection
-    connection = mysql.connector.connect(
-        host='opus-server.mysql.database.azure.com',
-        database='opus_prod',
-        user='opusadmin',
-        password='OAg@1234'
-    )
-
-    # Create cursor object
-    cursor = connection.cursor()
-
-    # Call stored procedure with username as parameter
-    # This is a simple example, you can pass more parameters as needed
-    cursor.execute(f"CALL opus_prod.get_salaries_experience('{ jobTitle }');")
-    
-    
-    # Fetch results
-    results = cursor.fetchall()
-    
-    # Add all results to a single list
-    experience = []
-    for result in results:
-        experience.append(result[0])
-        
-    # Check if any results were found
-    if not results:
-        return json.dumps({"error": "No data found."})
-    
-
-    # Close cursor and connection
-    if cursor:
-        cursor.close()
-    if connection:
-        connection.close()
-    
-    return jsonify(experience)
-
-
-@app.route("/api/get-salaries-chart", methods = ["GET", "POST"]) 
-def get_salaries_chart():
-    
-    data = request.get_json()
-    familyJob = data['familyJob']
-    jobTitle = data['jobTitle']
-    experience = data['experience']
-
-    # Establish database connection
-    connection = mysql.connector.connect(
-        host='opus-server.mysql.database.azure.com',
-        database='opus_prod',
-        user='opusadmin',
-        password='OAg@1234'
-    )
-
-    # Create cursor object
-    cursor = connection.cursor()
-
-    # Call stored procedure with username as parameter
-    # This is a simple example, you can pass more parameters as needed
-
-    cursor.execute(f"CALL opus_prod.get_salaries_chart('{ familyJob }','{ jobTitle }','{ experience }');")
-    
-    
-    # Fetch results
-    results = cursor.fetchall()
-        
-    # Check if any results were found
-    if not results:
-        return json.dumps({"error": "No data found."})
-    
-
-    # Close cursor and connection
-    if cursor:
-        cursor.close()
-    if connection:
-        connection.close()
-    
-    return jsonify(results[0])
-
-
 # Open AI revamping
 # --- Configuration (replace with your actual keys and endpoints) ---
 UPLOAD_FOLDER = 'uploads'
@@ -1972,6 +1802,225 @@ def translate_text(text, to_lang):
     except Exception as e:
         print(f"Translation error: {e}")
         return "Translation failed."
+    
+    
+@app.route("/get-salaries-country", methods = ["GET", "POST"]) 
+def get_salaries_country():
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    cursor.execute(f"CALL opus_prod.get_salaries_country();")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+    
+    # Add all results to a single list
+    familyJobs = []
+    for result in results:
+        familyJobs.append(result[0])
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(familyJobs)
+
+@app.route("/get-salaries-family", methods = ["GET", "POST"]) 
+def get_salaries_family():
+    
+    data = request.get_json()
+    country = data['countryName']
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    cursor.execute(f"CALL opus_prod.get_salaries_family('{country}');")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+    
+    # Add all results to a single list
+    familyJobs = []
+    for result in results:
+        familyJobs.append(result[0])
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(familyJobs)
+
+@app.route("/get-salaries-jobs", methods = ["GET", "POST"]) 
+def get_salaries_jobs():
+    
+    data = request.get_json()
+    jobFamily = data['jobFamily']
+    country = data['countryName']
+
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    cursor.execute(f"CALL opus_prod.get_salaries_job('{ jobFamily }', '{country}');")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+    
+    # Add all results to a single list
+    jobs = []
+    for result in results:
+        jobs.append(result[0])
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(jobs)
+
+@app.route("/get-salaries-experience", methods = ["GET", "POST"]) 
+def get_salaries_experience():
+    
+    data = request.get_json()
+    jobFamily = data['jobFamily']
+    jobTitle = data['jobTitle']
+    country = data['countryName']
+    
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+    cursor.execute(f"CALL opus_prod.get_salaries_yexperience('{jobFamily}', '{ jobTitle }', '{country}');")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+    
+    # Add all results to a single list
+    experience = []
+    for result in results:
+        experience.append(result[0])
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(experience)
+
+
+@app.route("/get-salaries-chart", methods = ["GET", "POST"]) 
+def get_salaries_chart():
+    
+    data = request.get_json()
+    familyJob = data['familyJob']
+    jobTitle = data['jobTitle']
+    experience = data['experience']
+    country = data['countryName']
+
+    # Establish database connection
+    connection = mysql.connector.connect(
+        host='opus-server.mysql.database.azure.com',
+        database='opus_prod',
+        user='opusadmin',
+        password='OAg@1234'
+    )
+
+    # Create cursor object
+    cursor = connection.cursor()
+
+    # Call stored procedure with username as parameter
+    # This is a simple example, you can pass more parameters as needed
+
+    cursor.execute(f"CALL opus_prod.get_salaries_ychart('{ familyJob }','{ jobTitle }','{ experience }', '{country}');")
+    
+    
+    # Fetch results
+    results = cursor.fetchall()
+        
+    # Check if any results were found
+    if not results:
+        return json.dumps({"error": "No data found."})
+    
+
+    # Close cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+    
+    return jsonify(results[0])
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
