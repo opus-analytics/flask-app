@@ -41,7 +41,7 @@ from openai import AzureOpenAI
 import re
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/*', "https://opus-backend.azurewebsites.net/"])
+CORS(app, origins=['http://localhost:5173/*', "https://opusanalytics.ai/*"])
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
