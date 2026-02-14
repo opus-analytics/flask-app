@@ -4,11 +4,13 @@ from flask import Blueprint, request, jsonify, current_app
 from models.users import User
 from models.subscriptions import Subscription
 from models.assessment import Assessment
+from models.surveys import Survey
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
 
 user_bp = Blueprint('user', __name__)
+survey_bp = Blueprint("survey", __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
 
 # --- Token Validation for Protected Routes ---

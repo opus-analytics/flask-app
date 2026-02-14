@@ -34,6 +34,7 @@ from config import Config
 import database
 from routes.auth import auth_bp
 from routes.user import user_bp
+from models.surveys import survey_bp
 from werkzeug.utils import secure_filename
 from docx import Document
 import fitz # PyMuPDF
@@ -41,7 +42,7 @@ from openai import AzureOpenAI
 import re
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/*', "https://opusanalytics.ai/", "https://opus-analytics.azurewebsites.net/"], supports_credentials=True)
+CORS(app, origins=['http://localhost:5173/*', "thankful-moss-0bffc760f.6.azurestaticapps.net"], supports_credentials=True)
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
@@ -58,6 +59,7 @@ database.init_app(app)
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth') # Prefix auth routes with /api/auth
 app.register_blueprint(user_bp, url_prefix='/api/user') # Prefix auth routes with /api/auth
+app.register_blueprint(survey_bp, url_prefix='/api/survey') # Prefix survey routes with /api/survey
 
 # --- API Endpoints (No more template rendering for core app logic) ---
 @app.route("/")
