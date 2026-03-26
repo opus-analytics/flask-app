@@ -177,25 +177,44 @@ def api_submit_survey():
         return jsonify({"message": "Responses recorded successfully"}), 200
     return jsonify({"message": "Invalid link or survey already completed"}), 400
 
+@survey_bp.route("/<int:survey_id>", methods=["GET"])
+def api_get_survey_details(survey_id):
+    try:
+        cursor = get_cursor()
+        query = "SELECT id, survey_type, total_questions, created_at, (SELECT COUNT(*) FROM survey_participants WHERE survey_id = %s) as participant_count FROM surveys WHERE id = %s"
+        cursor.execute(query, (survey_id,))
+        survey = cursor.fetchone()
+        
+        if not survey:
+            return jsonify({"message": "Survey not found"}), 404
+        
+        return jsonify({
+            "survey_id": survey[0],
+            "type": survey[1],
+            "total_questions": survey[2],
+            "created_at": survey[3]
+        }), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
 @survey_bp.route("/<int:survey_id>/results", methods=["GET"])
 def api_get_survey_results(survey_id):
     try:
         cursor = get_cursor() 
-        query = """
-            SELECT 
-                mq.question_text, 
-                d.dimension_name,
-                AVG(r.score) as average_score,
-                COUNT(r.id) as response_count
-            FROM survey_responses r
-            JOIN master_questions mq ON r.question_id = mq.id
-            JOIN dimensions d ON mq.dimension_id = d.id
-            JOIN survey_participants p ON r.participant_id = p.id
-            WHERE p.survey_id = %s
-            GROUP BY mq.id, d.dimension_name
+        # Get the participants list and their responses for the survey
+        query= """
+        SELECT s.survey_type, s.total_questions, s.status, s.question_ids, s.created_at ,p.email, p.is_completed, p.completed_at, r.response 
+        FROM survey_participants AS p
+        JOIN survey_responses AS r ON p.reference_number = r.reference_id
+        JOIN surveys AS s ON s.id = p.survey_id
+        WHERE s.id = %s;
         """
-        cursor.execute(query, (survey_id,))
-        results = cursor.fetchall()
-        return jsonify({"survey_id": survey_id, "analytics": results}), 200
+        cursor.execute(query, (survey_id,))  # Ensure survey_id is passed correctly
+        participants = cursor.fetchall()
+
+        return jsonify({
+            "survey_id": survey_id, 
+            "participants": participants
+        }), 200
     except Exception as e:
         return jsonify({"message": str(e)}), 500
