@@ -191,7 +191,7 @@ def login():
             serializable_subscription_names.append(sub.subscription)
         
         #  Sort the subscription names free, Start, Advanced, Enable
-        serializable_subscription_names.sort(key=lambda x: ['Free', 'Start', 'Advanced', 'Enable'].index(x) if x in ['Free', 'Start', 'Advanced', 'Enable'] else 100)
+        serializable_subscription_names.sort(key=lambda x: ['Free', 'Start', 'Advance', 'Enable-Contributor', "Motivera"].index(x) if x in ['Free', 'Start', 'Advance', 'Enable-Contributor', "Motivera"] else 100)
         return jsonify({
             "message": "Login successful",
             "access_token": token,

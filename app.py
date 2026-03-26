@@ -40,6 +40,7 @@ from docx import Document
 import fitz # PyMuPDF
 from openai import AzureOpenAI
 import re
+from email_graph import AzureGraphMailer
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173/*', "thankful-moss-0bffc760f.6.azurestaticapps.net"], supports_credentials=True)
@@ -2023,6 +2024,29 @@ def get_salaries_chart():
     
     return jsonify(results[0])
 
+# Test send email with Microsoft Graph API
+@app.route("/test-send-email", methods=["GET"])
+def test_send_email():
+    # Usage in your Flask route:
+    # mailer = AzureGraphMailer()
+    # mailer.send_email("Welcome!", "user@example.com", "<h1>Hello</h1>", is_html=True)
+    
+    mailer = AzureGraphMailer()
+    success = mailer.send_email(
+        subject="Welcome to Opus Analytics!",
+        to_email="omar.alaa@rightfoot.org",
+        body_content="<h1>Hello from Opus Analytics!</h1><p>This is a test email sent via Microsoft Graph API.</p>",
+        is_html=True
+    )
+    if success:
+        return "Email sent successfully!"
+    else:
+        return "Failed to send email.", 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
+    
+
+
+
     
