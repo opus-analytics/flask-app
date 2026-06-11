@@ -43,7 +43,7 @@ import re
 from email_graph import AzureGraphMailer
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173/*', "thankful-moss-0bffc760f.6.azurestaticapps.net"], supports_credentials=True)
+CORS(app, origins=['http://localhost:5173/*', "thankful-moss-0bffc760f.6.azurestaticapps.net", "kind-mushroom-05279770f.2.azurestaticapps.net"], supports_credentials=True)
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
@@ -2045,8 +2045,4 @@ def test_send_email():
     
 if __name__ == '__main__':
     app.run(debug=True)
-    
-
-
-
     
