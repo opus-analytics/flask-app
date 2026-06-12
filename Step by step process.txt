@@ -1,0 +1,769 @@
+Step by step process 
+Data files (in different formates), containing company and employee data are uploaded 
+Opus runs the backend calculations
+A message is generated confirming any additional data that if added would increase/enhance the measurements returned
+User can opt to add an additional source file or accept the results returned as they are
+Opus returns 2 things; summary table (or multiple tables if the data is not correlated).  It also returns charts representing what is represented in the source file.  
+Under the returned charts, there are button options that can instantaneously be represented in the data shown in the charts
+The user has the option to down load the tables and charts in a PDF version or in a picture version.
+The subscription user license price includes up to 5 free downloads, any additional downloads will be allowed for those who have paid for the additional user extension subscription 
+The user should be promtited to add more data sources at this point again, save their source file for later use or come later with new source files, which would trigger a message 'your uploaded files will be deleted'
+Adding multiple files by the user would be allowed
+Opus will correlate from these different source files the data that can be connected and the data that is not.  For the data that cannot be connected to any other data sources, the table of calculations will be returned.  If charts can be generated, then charts will also be shown.  For the data that gets connected (from a single or multiple sources of data that is uploaded), opus should return the collective data sets in a table using the backend calculations.  Before it is generated, a pop up will state, 'if provided with xx, yy,zz… you can generate more insights.'   upload option allowed or continue. 
+Sources of data: LISTED BELOW
+Tables and charts
+The returned data in the form of a table should return SMART tables.  Meaning if the indices are common and can generate multiple calculations, the table  returned is one.  Example: number of employees is common and revenue per employee and leavers can be returned from the source file, then one table with number of employees as the common number used returning 2 columns, one for revenue per employee and one column for leavers.  If the number of employees is changing month over month, we should still return one table with the rows of changes in number of employees and columns with the different matrices (revenue per employee, leavers…etc)
+With the complex calculations, the tables and charts will be very important.  Combining the different data sources that have a relationship to each other should be shown in one table.  That will make the charts more dynamic and the correlative elements that are embedded much more meaningful 
+Complex measurements 
+Use source file: 2022_11_10_HR Measurements _inputs_outputs_opus design.    The tab that should be used is the people scorecard tab
+
+Q1) 
+People data analysis process/ audience specific 				
+What is the average HC growth per department YoY?				
+What is the average HC growth per role YoY?				
+What is the average HC growth of the business YoY?
+
+Q2) 
+What is the average cost of a role?				
+Break down people costs by categories 				
+What is organizations sentiment/engagement 	
+
+Q3) 
+What is organizations sentiment/engagement 				
+
+Q4)
+What is our differentiator 				
+What is our unique value proposition 				
+Is the organization retaining or losing people?				
+Is my team a high performing team				
+Does my team have the skills to achieve the current goals				
+Does my team have the required skills to take us to the next level				
+
+*The website Value Proposition:* Real-time people intelligence that powers business performance.	
+*For a corporate presentation:* Opus Zero2One delivers real-time pay and performance intelligence, enabling leaders to make faster, fairer, and more strategic talent decisions. By connecting workforce insights to organizational performance, it helps businesses strengthen agility, competitiveness, and growth.
+*Website description part:* 
+Because you can’t improve what you can’t see — Zero2One makes workforce performance visible and predictable.
+- Real-time visibility into workforce health
+- Predictive insights that anticipate change
+- Dynamic dashboards that drive decisions
+- Pay and performance benchmarks that matter
+- Smart alerts for timely action			
+
+
+The BUILD Components:
+To build an Opus Zero2One pipeline, while the actual data engineering, feature engineering, large-scale model training and inference should live in services built for scale (Databricks / Synapse / Azure ML / Data Factory / ADLS).
+
+High-level architecture:
+Ingest & landing
+Sources: HR/ERP exports, CSV/Parquet from SFTP, DB replication (SQL), HRIS APIs.
+Store raw files in Azure Data Lake Storage Gen2 or Blob Storage.
+ETL & feature engineering
+Azure Data Factory or Azure Databricks for cleaning, joins across 50+ columns (promotion, retention, performance, skills, etc.), creating features, encoding categorical variables, and saving prepared datasets (Delta/Parquet).
+Maintain a feature layer / feature store (Databricks Delta or Azure ML feature store patterns) for reproducibility.
+Model training & inference
+Azure Machine Learning for model training, tracking (MLflow), and deploying models as online (real-time) or batch endpoints.
+For realtime scoring: Logic Apps calls the Azure ML online endpoint (HTTPS). For batch scoring: Logic Apps triggers an Azure ML/Databricks batch job and polls for completion
+Serving & visualization
+Store predictions and KPIs in a SQL/warehouse (Synapse or Azure SQL).
+Visualize with dashboards
+Monitoring & governance
+Use Azure Monitor + Application Insights + Azure ML model monitoring for drift, and Logic Apps run history for orchestration monitoring.
+
+Azure AI Logic Apps:
+Logic Apps provides visual workflow/orchestration, many connectors (Blob, SQL, HTTP, Azure AI, OpenAI, etc.), and can call REST endpoints (e.g., Azure ML online endpoints) to trigger model inference or pipeline runs. 
+Triggers: file arrival, scheduled cron, or API call.
+Steps: validate file, copy to ADLS, call Data Factory / Databricks to run ETL, call Azure ML endpoint for predictions, notify stakeholders (Teams/Email), refresh dashboards
+Use Logic Apps connectors to call Azure ML REST endpoints or publish pipeline runs.	
+Visual summary: Logic Apps → ADLS / Blob → ADF/Databricks (ETL, feature engineering) → Azure ML (train/deploy) → Store results → Dashboards / Alerts
+
+
+Checklist to get started:
+ Define exact input schema and sample files (50+ columns).
+ Provision ADLS Gen2, Databricks workspace, Azure ML workspace, Logic Apps (Standard), Power BI workspace.
+ Build a small Databricks notebook to ingest sample data, do feature engineering, produce a test label and small model (sklearn/MLflow).
+ Deploy model as an online endpoint (Azure ML) and test via Postman. Microsoft Learn
+ Create Logic App to orchestrate a test run: upload → run ETL → call endpoint → store results → notify.
+ Add monitoring, drift detection, and role-based access.
+
+
+Levels of Data captured in Opus Zero2One
+A. Core- employee profile and Tenure	
+*	Date of hire / tenure (years in role, years in company)
+*	Role history (titles, internal mobility, department changes)
+*	Grade/band progression
+*	Salary history (base, total compensation, % increases)
+*	Employment type (permanent, contract, part-time, etc.)
+*	Manager changes / reporting line stability
+*	Location or business unit
+B. Annual Performance and Growth	
+*	Annual performance ratings (numeric or categorical)
+*	Performance trend (improving, stable, declining)
+*	Goal achievement % per cycle
+*	Learning hours completed
+*	Certifications or courses completed
+*	Skills acquired (by category or skill cluster)
+*	Skill proficiency ratings (from assessments or manager inputs)
+*	Internal promotion frequency / time between promotions
+C. Compensation and Reward	
+*	Annual salary increase (%)
+*	Bonus eligibility and payout ratio
+*	Equity grants / retention bonuses
+*	Pay progression vs. peers / market median
+*	Total reward cost per FTE trend
+D. Career Mobility 	
+*	Number of internal applications / lateral moves
+*	Cross-functional projects or assignments participated in
+*	Mentorship or coaching participation
+*	Career path alignment score (actual vs. desired trajectory)
+E. Engagement and Sentiment	
+*	eNPS / engagement survey score (trend over time)
+*	Participation in engagement or pulse surveys
+*	Absenteeism / attendance consistency
+*	Voluntary turnover risk score (if predictive model available)
+*	Internal social activity (knowledge sharing, recognition given/received)
+F. Managerial and Team	
+*	Team performance average vs. individual
+*	Manager rating (leadership effectiveness, fairness index)
+*	Span of control (number of direct reports)
+*	Peer comparison metrics (promotion velocity, salary gap)
+G. HR System Metadata	
+*	Data completeness score (how much data is available)
+*	Frequency of updates per data type
+*	Historical consistency / anomalies
+
+
+
+Org KPI library
+1.  Headcount (HC)
+Formula: 
+HC = count(employees_active_at_date)
+
+Note: Simple snapshot of active employees on a given date.
+2. Full-Time Equivalent (FTE)
+Formula: 
+FTE = Σ (employee_hours_worked / standard_full_time_hours)
+
+Example: If standard = 40 hrs/wk, part-timer 20 hrs → 0.5 FTE.
+3. New Hires (period)
+Formula: 
+NewHires = count(employees_start_date ∈ period)
+4. Separations (period)
+Formula: 
+Separations = count(employees_end_date ∈ period)
+
+Note: Includes voluntary + involuntary unless separated.
+5. Turnover Rate (period)
+Formula: 
+Turnover % = (Separations / AverageHeadcount) * 100
+
+Where: 
+AverageHeadcount = (HC_start + HC_end) / 2
+6. Voluntary Turnover Rate
+Formula: 
+VoluntaryTurnover % = (VoluntarySeparations / AverageHeadcount) * 100
+7. Involuntary Turnover Rate
+Formula: 
+InvoluntaryTurnover % = (InvoluntarySeparations / AverageHeadcount) * 100
+8. Retention Rate (period)
+Formula: 
+Retention % = (Employees_at_end_of_period_who_were_present_at_start / Employees_at_start) * 100
+9. Average Tenure
+Formula: 
+AvgTenure = mean(current_date - hire_date)
+
+Note: Return in years, months, or days.
+10. Time to Fill (roles)
+Formula: 
+TimeToFill = mean(date_offer_accepted - date_requisition_opened)
+
+Alternative: use 
+date_hire - date_requisition_opened
+ depending on definition.
+11. Time to Hire (candidates)
+Formula: 
+TimeToHire = mean(date_hire - date_application_received)
+12. Offer Acceptance Rate
+Formula: 
+OfferAcceptance % = (OffersAccepted / OffersExtended) * 100
+13. Cost per Hire
+Formula: 
+CostPerHire = (TotalRecruitmentCosts / NumberOfHires)
+
+Where: recruitment costs include advertising, agency fees, recruiter time, travel, sign-on.
+14. Vacancy Rate
+Formula: 
+Vacancy % = (OpenPositions / TotalBudgetedPositions) * 100
+15. Internal Mobility Rate (moves within org)
+Formula: 
+InternalMobility % = (InternalTransfers / AverageHeadcount) * 100
+16. Promotion Rate
+Formula: 
+Promotion % = (Promotions / AverageHeadcount) * 100
+17. Succession Coverage Ratio (per critical role)
+Formula: 
+SuccessionCoverage = (NumberOfReadySuccessors_for_role / Number_of_critical_roles)
+
+Note: Often reported per role category.
+18. Bench Strength Score (team)
+Formula (example): 
+BenchScore = Σ readiness_score(successor_i) / number_of_critical_roles
+
+Where: readiness_score ∈ [0,1] or 0–100.
+19. Training Hours per Employee
+Formula: 
+TrainingHoursPerEmployee = TotalTrainingHours / AverageHeadcount
+20. Learning Utilization Rate
+Formula: 
+LearningUtilization % = (Employees_who_completed_training / Employees_assigned_training) * 100
+21. Performance Distribution (by rating)
+Formula: 
+Pct_rating_X = (Count_employees_with_rating_X / AssessedPopulation) * 100
+
+Note: Useful to monitor rating inflation.
+22. High-Performer Retention Rate
+Formula: 
+HP_Retention % = (HighPerformers_at_end / HighPerformers_at_start) * 100
+23. Engagement Score (org)
+Formula: 
+EngagementIndex = weighted_mean(survey_item_scores)
+
+Note: Use item weights or simple average; convert to 0–100 scale.
+24. Absenteeism Rate
+Formula: 
+Absenteeism % = (TotalUnplannedAbsenceDays / (AverageHeadcount * PeriodWorkDays)) * 100
+25. Sick Leave Rate
+Formula: 
+SickLeave % = (TotalSickDays / (AverageHeadcount * PeriodWorkDays)) * 100
+26. Productivity per FTE (output-based)
+Formula: 
+Productivity = TotalOutputValue / TotalFTEs
+
+Example: revenue per FTE = 
+TotalRevenue / FTEs
+27. Revenue per Employee
+Formula: 
+RevenuePerEmployee = TotalRevenue / HC
+28. Compensation Ratio (midpoint)
+Formula: 
+CompRatio = (EmployeeSalary / MarketMidpointSalary)
+
+Note: Express as decimal or percentage.
+29. Salary Percentile (within market)
+Formula: 
+SalaryPercentile = percentile_rank(market_salary_distribution, EmployeeSalary)
+30. Equity / Diversity Ratios
+Formula: 
+DiversityPct_group = (Count_group / HC) * 100
+
+Note: Calculate by gender, ethnicity, disability, etc., and for leadership separately.
+31. Gender Pay Gap (median)
+Formula: 
+GenderPayGap % = ((MedianSalary_male - MedianSalary_female) / MedianSalary_male) * 100
+32. Time to Productivity / Ramp Time
+Formula: 
+TimeToProductivity = mean(date_reach_productivity_threshold - hire_date)
+
+Note: threshold defined by role (e.g., 80% quota attainment).
+33. Offer-to-Hire Ratio (efficiency)
+Formula: 
+OfferToHireRatio = OffersExtended / Hires
+
+Note: lower ratio can indicate better sourcing quality.
+34. Candidate Conversion Funnel (multiple stages)
+Formula (example):
+ApplyToInterview % = (Interviews / Applications) * 100
+InterviewToOffer % = (Offers / Interviews) * 100
+OfferToHire % = (Hires / Offers) * 100
+35. Predicted Attrition Risk (model output)
+Formula (example score): 
+AttritionRisk = sigmoid(w0 + Σ wi * xi)
+
+Where: 
+xi
+ = features (tenure, engagement score, performance trend, comp_ratio, promotion_gap, etc.) and 
+wi
+ model weights.
+Note: Normalize to probability 0–1 or 0–100%.
+36. Skills Gap Index (role/organization)
+Formula (example): 
+SkillsGapIndex = 1 - (Σ matched_skill_scores / Σ required_skill_scores)
+
+Where: 0 = no gap, 1 = full gap; can be weighted by skill criticality.
+37. Cost of Turnover (per separation)
+Formula: 
+CostOfTurnover = SeparationCost + VacancyCost + RecruitmentCost + OnboardingCost + ProductivityLoss
+
+Note: Estimate components per role for total business impact.
+38. HR-to-Employee Ratio
+Formula: 
+HRtoEmployee = HRHeadcount / HC
+
+Note: Indicates HR capacity; often expressed as 
+1:XXX
+.
+39. Manager Span of Control
+Formula: 
+Span = number_of_direct_reports_per_manager
+ (mean/median)
+40. HR Service SLA Compliance
+Formula: 
+SLACompliance % = (Requests_met_within_SLA / TotalRequests) * 100
+
+
+Quick tips during implementation
+Define period and population clearly for every KPI (e.g., active employees, probationers included/excluded).
+Use references (URIs) rather than raw payloads when integrating into automated pipelines.
+Version your formulas in documentation or a metrics catalogue to ensure consistent definitions.
+Segment KPIs (by function, level, geography) for more actionable insight.
+
+
+Financial Outcomes: zero-to-one KPI calculation and guidance model suitable for describing how OpusAnalytics.ai links organizational performance indicators to financial outcomes at department or line-of-business (LOB) level.
+
+Summary Statement (Product-Ready)
+OpusAnalytics.ai Zero2One delivers the right performance insights, at the right financial altitude, for every decision-maker in the organization.
+
+
+1. Conceptual Overview
+OpusAnalytics.ai zero2one establishes financial performance guidance by quantifying how human and operational performance drivers translate into revenue contribution.
+It integrates people KPIs, attainment metrics, and growth signals into a unified financial impact model that enables predictive and prescriptive decision-making.
+
+
+2. Core KPI Dimensions
+Each department or LOB is evaluated across four weighted performance dimensions:
+Description
+Normalized score of individual and team performance outcomes
+Measures readiness, role elevation, and internal mobility
+Degree to which strategic, operational, or sales targets are achieved
+Dimension
+Performance Rating (PR)
+Promotion & Progression Index (PPI)
+Attainment Target Index (ATI)
+Capacity & Productivity Multiplier (CPM)
+
+
+3. Revenue Contribution Formula
+Step 1: Normalize Performance Indicators
+Each indicator is normalized on a 0–1 scale:
+PRn,  PPIn,  ATIn,  CPMn∈[0,1]PRn​,PPIn​,ATIn​,CPMn​∈[0,1]
+Step 2: Compute the Performance Value Index (PVI)
+PVIdept=w1(PRn)+w2(PPIn)+w3(ATIn)+w4(CPMn)PVIdept​=w1​(PRn​)+w2​(PPIn​)+w3​(ATIn​)+w4​(CPMn​)
+Where:
+w1+w2+w3+w4=1w1​+w2​+w3​+w4​=1
+Weights are dynamically adjusted by OpusAnalytics.ai based on business strategy (e.g., growth vs efficiency)
+Step 3: Correlate to Financial Baseline
+Revenue Contributiondept=Baseline Revenuedept×(1+α×PVIdept)Revenue Contributiondept​=Baseline Revenuedept​×(1+α×PVIdept​)
+Where:
+Baseline Revenue = historical or forecasted revenue without performance uplift
+αα = elasticity coefficient learned from historical correlations between performance shifts and revenue outcomes
+
+4. Example (Illustrative)
+Assume:
+Baseline Department Revenue = $10M
+PVI = 0.72
+α=0.35α=0.35
+RevenueContribution=10M×(1+0.35×0.72)RevenueContribution=10M×(1+0.35×0.72)=10M×1.252=$12.52M=10M×1.252=$12.52M
+Implied Performance-Driven Uplift: $2.52M
+
+5. Guidance & Decision Intelligence
+OpusAnalytics.ai zero2one then provides forward-looking guidance by:
+A. Sensitivity Analysis
+Identifies which KPI (e.g., attainment vs promotion velocity) yields the highest marginal revenue gain
+B. Scenario Modeling
+Simulates outcomes of promotion acceleration, target recalibration, or productivity investment
+C. Prescriptive Actions
+Recommends optimal investment in talent, incentives, or operational capacity to maximize revenue impact
+
+6. Executive-Level Output
+At enterprise scale, the platform rolls this up to:
+LOB-level revenue attribution
+Human capital ROI
+Performance-adjusted financial forecasts
+This enables leadership to treat performance as a measurable financial asset, not a qualitative input
+
+
+Role-Based Performance & Financial Dashboards	
+1. Executive / Enterprise Leader Dashboard
+Audience: CEO, COO, CFO, Board
+Primary Question: How is organizational performance impacting enterprise revenue and risk?
+Dashboard Objective
+Provide a single, financial truth linking performance to enterprise outcomes, with forward-looking guidance.
+Key Visual Sections
+A. Enterprise Performance-to-Revenue Overview
+Enterprise PVI Score (Trend)
+Performance-Driven Revenue Uplift ($ & %)
+Baseline vs Performance-Adjusted Revenue Forecast
+📊 Visuals:
+Waterfall chart: Baseline → Performance Uplift → Total Revenue
+Trend line: PVI vs Revenue over time
+B. Line of Business Financial Attribution
+Revenue contribution by LOB
+Performance elasticity by LOB
+Top & bottom performing LOBs
+📊 Visuals:
+Ranked bar chart (LOB Revenue Contribution)
+Heatmap (LOB × KPI Impact Strength)
+C. Strategic Risk & Opportunity Signals
+Underperforming KPIs with high financial exposure
+Promotion velocity vs growth targets
+Capacity constraints affecting revenue
+📊 Visuals:
+Risk quadrant (Impact vs Likelihood)
+Opportunity sizing tiles
+Executive Actions Enabled - Recommended for the above executive roles …
+Reallocate investment across LOBs
+Adjust enterprise performance priorities
+Validate or challenge growth assumptions
+
+
+2. Department Head / Line of Business Leader Dashboard
+Audience: LOB Heads, Deans, Practice Leaders
+Primary Question: Which performance levers most impact my revenue and outcomes?
+Dashboard Objective
+Enable performance optimization at the business unit level.
+Key Visual Sections
+A. LOB Performance Value Index (PVI)
+Current PVI score
+QoQ and YoY change
+Benchmark vs peer LOBs
+📊 Visuals:
+Gauge or scorecard
+Peer comparison bar chart
+B. KPI-to-Revenue Driver Analysis
+Contribution of each KPI (PR, PPI, ATI, CPM) to revenue
+Marginal revenue gain per KPI improvement
+📊 Visuals:
+Contribution stacked bar
+Sensitivity curve per KPI
+C. Scenario Simulator
+Impact of:
+Promotion acceleration
+Target recalibration
+Productivity improvement
+📊 Visuals:
+Interactive sliders
+Projected revenue outcomes
+LOB Actions Enabled
+Prioritize performance investments
+Justify budget and headcount requests
+Set data-backed performance targets
+
+
+3. Manager Dashboard
+Audience: People Managers, Program Managers
+Primary Question: How is my team’s performance translating into results, and what should I do next?
+Dashboard Objective
+Drive day-to-day performance improvement aligned to financial outcomes.
+
+Key Visual Sections
+A. Team Performance Snapshot
+Team PVI score
+Performance rating distribution
+Attainment vs targets
+📊 Visuals:
+Team scorecards
+Distribution charts
+
+B. Promotion & Readiness Insights
+Promotion readiness index
+High-potential employees
+Performance vs progression gaps
+📊 Visuals:
+Talent grid (Performance × Readiness)
+Alert flags for stagnation risk
+
+B. Promotion & Readiness Insights
+Promotion readiness index
+High-potential employees
+Performance vs progression gaps
+📊 Visuals:
+Talent grid (Performance × Readiness)
+Alert flags for stagnation risk
+
+Manager Actions Enabled
+Improve team outcomes
+Support promotion decisions
+Align execution with LOB goals
+
+
+4. HR Head / People Analytics Dashboard
+Audience: CHRO, HRBP, Talent & Workforce Leaders
+Primary Question: How does talent strategy impact financial performance and organizational health?
+Dashboard Objective
+Translate people decisions into measurable business value.
+Key Visual Sections
+A. Workforce Performance Economics
+Revenue per employee (performance-adjusted)
+Cost vs value of promotions
+Attrition risk vs financial exposure
+📊 Visuals:
+ROI tiles
+Trend lines
+B. Promotion & Progression ROI
+Promotion velocity by department
+Financial uplift post-promotion
+Equity and consistency checks
+📊 Visuals:
+Before/after uplift charts
+Distribution fairness analysis
+C. Capability & Capacity Planning
+Skill gaps affecting revenue
+Productivity multipliers by role
+Hiring vs development trade-offs
+📊 Visuals:
+Skill impact matrix
+Capacity vs demand curves
+HR Actions Enabled
+Optimize promotion and reward systems
+Align workforce planning with revenue goals
+Support executive workforce decisions with data
+
+5. Cross-Dashboard Design Principles
+All dashboards share:
+A single performance-to-financial model
+Role-based filtering and drill-down
+Full explainability and audit traceability
+Configurable KPI weighting by strategy
+
+
+Culture Index 
+Engagement index (survey)
+eNPS (employee Net Promoter Score)
+Trust score (survey)
+Voluntary turnover %
+Internal mobility %
+Promotion rate %
+Absenteeism % (unplanned)
+Manager effectiveness score (survey)
+Training hours per employee
+Diversity % (under-represented groups / inclusive leadership metrics)
+
+
+Employer Branding Index 
+Purpose:  Quantify and track the strength, consistency, and effectiveness of an organization’s employer brand — internally (employee perception) and externally (market perception).
+The index provides a single composite score out of 100, combining 4 core dimensions, each powered by measurable data streams.
+
+
+Layer	Name	Description	Example Data Source
+1	Attractiveness Index	How the organization is perceived by the external talent market	Career site analytics, social metrics, Glassdoor ratings, offer acceptance
+2	Experience Index	How employees perceive the company brand through their lived experience	eNPS, engagement, internal mobility, fairness perceptions
+3	Advocacy Index	How employees actively promote or recommend the organization	Referral rates, social advocacy, review sentiment
+4	Consistency Index	How aligned internal and external perceptions are	Internal vs external sentiment gap
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Indexes
+
+1. Attractiveness Index (External Market Pull)		
+Measure the strength of the employer brand as seen by non-employees — how appealing the company is to external talent.		
+		
+Sub-Metric	Definition	Source
+Talent Market Reach	# of unique visits to career page, job views	ATS / website analytics
+Offer Acceptance Rate	Offers accepted / offers made	ATS
+Application Conversion Rate	Applicants / job post impressions	ATS
+Employer Brand Awareness	Followers, engagement on LinkedIn / social	Social analytics
+External Review Rating	Average Glassdoor / Indeed rating	Public data
+Brand Sentiment Score	Positive vs negative mentions in employer-related content	Text analytics
+		
+Weight (within dimension): Equal or customizable (default equal).		
+Output:		
+Weighted score 0–100 normalized against peer benchmark.		
+
+
+2. Experience Index (Internal Brand Reality)		
+Track how employees actually experience the brand promise internally.		
+		
+Sub-Metric	Definition	Source
+eNPS (Employee Net Promoter Score)	% Promoters − % Detractors	Internal survey
+Engagement Score	Average engagement / pulse rating	HRIS / survey
+Perceived Fairness	% of employees rating promotion/reward processes as fair	Opus Zero2One KPI outputs
+Internal Mobility	% of employees who moved roles internally in last 12 months	HRIS
+Retention of High Performers	% of top performers retained >2 years	HRIS / KPI layer
+Learning & Growth Satisfaction	Satisfaction with development opportunities	L&D platform survey
+
+3. Advocacy Index (Employee Amplification)		
+Measure how actively employees promote the organization.		
+		
+Sub-Metric	Definition	Source
+Referral Rate	% of hires sourced via employee referrals	ATS
+Social Advocacy Rate	% of employees sharing company posts	LinkedIn / advocacy platform
+Internal Recognition Activity	# of recognitions / employee / month	Opus MotivaraX recognition tool
+External Review Activity	# of employee reviews posted externally	Glassdoor / internal logs
+Net Advocacy Intent	% of employees saying “I would recommend my company as an employer”	Pulse survey
+
+
+4. Consistency Index (Alignment)		
+Quantify how aligned internal and external perceptions are — the smaller the gap, the stronger the authentic brand.		
+		
+		
+Sub-Metric	Definition	Source
+Sentiment Gap	Difference between internal (eNPS) and external (Glassdoor) sentiment	Aggregated
+Fairness vs Reputation Gap	Difference between perceived fairness (internal) and fairness mentions (external)	Combined analytics
+Brand Promise Alignment	% of employees who say the company “lives up to its employer brand”	Internal survey
+Employer Narrative Consistency	% overlap between internal messaging & external career site themes (text similarity)	NLP model
+
+
+Productivity Index
+Quantifies how effectively people, processes, and organizational capability translate into output and business results.
+
+A. KPI Components				
+#	KPI	Formula	Weight	Direction
+1	Output per FTE	TotalOutputValue / TotalFTEs	25%	Higher = better
+2	Goal Achievement Rate	(AchievedTargets / TotalTargets) * 100	20%	Higher = better
+3	Project Completion Efficiency	(PlannedDuration / ActualDuration) * 100	10%	Higher = better
+4	Quality Index	(DeliverablesWithoutErrors / TotalDeliverables) * 100	15%	Higher = better
+5	Internal Mobility %	(InternalTransfers / AvgHeadcount) * 100	10%	Higher = better
+6	Absenteeism %	(UnplannedAbsenceDays / (WorkDays * AvgHeadcount)) * 100	10%	Lower = better
+7	Learning Hours per FTE	(TotalLearningHours / AvgHeadcount)	10%	Higher = better
+
+
+B. Normalization & Calculation	
+	Normalize all metrics to a 0–100 scale, then compute:
+	ProductivityIndex=∑(NormalizedKPIi×Weighti)ProductivityIndex=∑(NormalizedKPIi​×Weighti​)
+	Example interpretation:
+	>80 → Highly productive organization
+	65–80 → Stable productivity
+	<65 → Inefficiency or misalignment in workforce deployment
+	
+C. Optional Predictive Inputs	
+	Add for advanced modeling (if data available):
+	Predicted output gap vs. target (from regression on historical output data)
+	Automation ratio (tasks automated vs. total tasks)
+	Collaboration efficiency (based on digital activity metrics)
+
+
+Engagement Index
+Measures emotional commitment, motivation, and willingness to contribute to the organization’s goals.
+
+A. KPI Components				
+#	KPI	Formula	Weight	Direction
+1	Engagement Survey Score	mean(survey_engagement_items)	30%	Higher = better
+2	eNPS (Employee Net Promoter Score)	((Promoters - Detractors) / TotalRespondents) * 100	15%	Higher = better
+3	Trust in Leadership Score	mean(survey_trust_items)	15%	Higher = better
+4	Manager Effectiveness Score	mean(survey_manager_items)	15%	Higher = better
+5	Voluntary Turnover %	(VoluntaryExits / AvgHeadcount) * 100	10%	Lower = better
+6	Absenteeism %	(UnplannedAbsenceDays / (WorkDays * AvgHeadcount)) * 100	5%	Lower = better
+7	Internal Recognition %	(RecognizedEmployees / TotalEmployees) * 100	5%	Higher = better
+8	Learning Participation %	(EmployeesAttendingLearning / TotalEmployees) * 100	5%	Higher = better
+
+B. Normalization & Calculation	
+	Normalize each KPI to 0–100. Then calculate:
+	EngagementIndex=∑(NormalizedKPIi×Weighti)EngagementIndex=∑(NormalizedKPIi​×Weighti​)
+	Example interpretation:
+	>80: Highly engaged and aligned workforce
+	65–80: Moderately engaged — monitor key drivers
+	<65: Risk of disengagement and turnover
+
+
+C. Predictive & Diagnostic Add-ons	
+	Engagement–Performance Correlation: Correlation between engagement score and productivity or performance ratings.
+	Manager Impact Differential: Difference in engagement scores across managers — identifies outliers.
+	Pulse Sentiment Trends: Text sentiment or pulse survey changes (month-on-month delta)
+
+
+
+Potential Index
+Purpose: quantify the organization’s internal bench strength & growth capacity (how much potential exists to fill future roles, accelerate leaders, and scale capability).
+Range: 0–100 (higher = higher internal potential)
+
+A — Components (6) & suggested weights (sum = 100)	
+	Promotion Velocity — 20%
+	Average Performance Rating — 25%
+	Skill Acquisition Rate (new validated skills per employee / period) — 15%
+	Learning Hours per FTE — 10%
+	Internal Mobility Rate — 15%
+	Succession Readiness (ready-now successors for critical roles) — 15%
+
+
+B — Raw formulas for each component	https://chatgpt.com/c/68dfc702-2f40-8327-ac40-c692d7e1769e#:~:text=Promotion%20Velocity%20(%):PromotionVelocity,ReadyNowSuccessors_for_critical_roles%20/%20Number_of_critical_roles)%20*%20100
+	Promotion Velocity (%):
+	PromotionVelocity = (Promotions_in_period / AvgHeadcount) * 100
+	Avg Performance Rating (scale 1–5):
+	PerfRating = AVERAGE(performance_rating)
+	
+	(we treat rating scale 1–5; if different, set bounds accordingly)
+	Skill Acquisition Rate (skills/employee):
+	SkillAcquisition = (TotalNewValidatedSkills / AvgHeadcount)
+	
+	(e.g., new certified skills logged during period)
+	Learning Hours per FTE:
+	LearningHours = (TotalLearningHours / AvgHeadcount)
+	Internal Mobility Rate (%):
+	InternalMobility = (InternalTransfers / AvgHeadcount) * 100
+	Succession Readiness (%):
+	SuccessionReadiness = (ReadyNowSuccessors_for_critical_roles / Number_of_critical_roles) * 100
+
+
+C — Normalization (convert each to 0–100)	To combine components, normalize each to 0–100 using conservative bounds. You can tune bounds by industry or org size.
+	
+Normalization rules (example bounds):	
+1	PromotionVelocity bounds: [0%, 10%]
+	Normalized_Promo = clamp((PromotionVelocity - 0) / (10 - 0) * 100, 0, 100)
+2	PerfRating bounds: [1, 5]
+	Normalized_Perf = (PerfRating - 1) / (5 - 1) * 100
+3	SkillAcquisition bounds: [0, 1.5 skills/employee]
+	Normalized_Skill = clamp((SkillAcquisition - 0) / (1.5 - 0) * 100, 0, 100)
+4	LearningHours bounds: [0, 40 hours/year]
+	Normalized_Learning = clamp((LearningHours - 0) / (40 - 0) * 100, 0, 100)
+5	InternalMobility bounds: [0%, 10%]
+	Normalized_Mobility = clamp((InternalMobility - 0) / (10 - 0) * 100, 0, 100)
+6	SuccessionReadiness bounds: [0%, 100%]
+	Normalized_Succession = SuccessionReadiness
+	 (already 0–100)
+Notes: 	
+clamp(x,0,100)	
+ means limit to 0–100. Adjust upper bounds to match your market / baseline.	
+
+D — Aggregation formula	
+	PotentialIndex=i=1∑6​(Normalizedi​×Weighti​)
+	Where weights are decimals (e.g., PromotionVelocity weight = 0.20).
+	
+	PotentialIndex =
+	0.20*Normalized_Promo +
+	0.25*Normalized_Perf +
+	0.15*Normalized_Skill +
+	0.10*Normalized_Learning +
+	0.15*Normalized_Mobility +
+	0.15*Normalized_Succession
+	Result will be 0–100.
+
+
+E — Worked example (step-by-step numeric)	
+Raw inputs (example for a 12-month period):	AvgHeadcount = 1,000
+	Promotions_in_period = 60
+	Avg Performance Rating = 3.6 (scale 1–5)
+	TotalNewValidatedSkills = 800
+	TotalLearningHours = 18,000
+	InternalTransfers = 70
+	Number_of_critical_roles = 50
+	ReadyNowSuccessors_for_critical_roles = 30
+
+
+Retention Index
+Measure how effectively an organization keeps its employees — and, deeper, who is staying, why, and what patterns signal risk.
+
+Core KPIs				
+KPI Name	Formula	Direction	Typical Period	Insight
+1	Overall Retention Rate (%)	(Employees at End of Period who were Present at Start / Employees at Start of Period) × 100	↑ better	Annual / Quarterly
+2	Voluntary Retention (%)	100 − VoluntaryTurnover%	↑ better	Annual / Quarterly
+3	Involuntary Retention (%)	100 − InvoluntaryTurnover%	↑ better	Annual / Quarterly
+4	High-Performer Retention (%)	(HighPerformers still Active / HighPerformers at Period Start) × 100	↑ better	Annual
+5	Critical Role Retention (%)	(Employees_in_CriticalRoles_Active / Employees_in_CriticalRoles_Start) × 100	↑ better	Annual
+6	New-Hire Retention (12-mo)	(NewHires_remaining_after_12_months / NewHires_in_period) × 100	↑ better	Rolling
+
+
+Supporting / Diagnostic KPIs				
+#	KPI	Formula	Direction	Meaning
+7	Average Tenure (yrs)	mean(current_date − hire_date)	↑ better	Workforce experience depth
+8	Attrition Risk Index (predictive)	sigmoid(w₀ + Σ wᵢxᵢ)	↓ better	Model combining engagement, comp ratio, performance, etc.
+9	Retention Cost Impact (USD)	(AvgCostPerHire × ReplacementsNeeded) + OnboardingCost + LostProductivity	↓ better	Monetary cost of lost employees
+
+Normalized Retention Score (composite)	To express retention as a single index for dashboards:
+	
+	RetentionIndex=(w1​×OverallRetention)+(w2​×HighPerformerRetention)+(w3​×CriticalRoleRetention)+(w4​×NewHireRetention)
+	Suggested weights:
+	w₁ Overall retention → 0.4
+	w₂ High-performer → 0.25
+	w₃ Critical role → 0.20
+	w₄ New-hire → 0.15
+	Each metric normalized to a 0–100 range.
+

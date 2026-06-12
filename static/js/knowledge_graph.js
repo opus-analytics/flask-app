@@ -135,31 +135,29 @@ form.addEventListener("submit", (event) => {
     }
 
     for (let i = 0; i < sliderValues.length; i++) {
-      answerValue = parseInt(sliderValues[i]);
-      if (answerValue == 1) {
-        sliderValues[i] = parseInt(25);
-      } else if (answerValue == 2) {
-        sliderValues[i] = parseInt(50);
-      } else if (answerValue == 3) {
-        sliderValues[i] = parseInt(75);
-      } else if (answerValue == 4) {
-        sliderValues[i] = parseInt(85);
-      } else if (answerValue == 5) {
-        sliderValues[i] = parseInt(100);
-      }
-      else {
-        sliderValues[i] = parseInt(0);
+      let answerValue = Number.parseInt(sliderValues[i], 10);
+      if (answerValue === 1) {
+        sliderValues[i] = 25;
+      } else if (answerValue === 2) {
+        sliderValues[i] = 50;
+      } else if (answerValue === 3) {
+        sliderValues[i] = 75;
+      } else if (answerValue === 4) {
+        sliderValues[i] = 85;
+      } else if (answerValue === 5) {
+        sliderValues[i] = 100;
+      } else {
+        sliderValues[i] = 0;
       }
     }
 
     let userName = document.getElementById("username").value;
-    
-    
-    sliderValuesFiltered = sliderValues.filter((value) => value !== "0");
+
+    const sliderValuesFiltered = sliderValues.filter((value) => value !== 0);
     const sum = sliderValuesFiltered.reduce((a, b) => a + b, 0);
-    const average = sum / sliderValuesFiltered.length;
-    
-    const assessmentScore = average * userExperience;
+    const average = sliderValuesFiltered.length ? sum / sliderValuesFiltered.length : 0;
+
+    const assessmentScore = Number(average) * Number(userExperience);
     let weightedAssessmentScore = 0;
     if (assessmentScore >= 85) {
       weightedAssessmentScore = 0.85;

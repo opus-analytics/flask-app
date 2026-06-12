@@ -6486,8 +6486,14 @@ submitButton.addEventListener("click", async (event) => {
 
   // Display the result
   const resultElement = document.getElementById("result");
-  resultElement.textContent = `Thank you for completing the assessment, the total score is ${weightedAssessmentScore.toFixed(
+  // Guard against NaN values so the UI doesn't break
+  const safeWeightedScore = Number.isFinite(weightedAssessmentScore)
+    ? weightedAssessmentScore
+    : 0;
+
+  resultElement.textContent = `Thank you for completing the assessment, the total score is ${safeWeightedScore.toFixed(
     2
   )}%`;
+
   resultElement.style.display = "block"; // Show the result
 });

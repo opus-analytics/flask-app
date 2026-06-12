@@ -1424,7 +1424,7 @@ OPENAI_ENDPOINT = 'https://opusgptus2.openai.azure.com/'
 AZURE_TRANSLATOR_KEY = '8d5c3b6127144d13b9a67ecbad810ddb'
 AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com/'
 AZURE_TRANSLATOR_REGION = 'eastus2'
-OPENAI_DEPLOYMENT_ID = 'opus-gpt4-32k'
+OPENAI_DEPLOYMENT_ID = 'gpt4-test'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -2042,6 +2042,170 @@ def test_send_email():
         return "Email sent successfully!"
     else:
         return "Failed to send email.", 500
+    
+# Load the file content once at startup to use as system context
+with open('Step by step process.txt', 'r', encoding='utf-8') as f:
+    OPUS_LOGIC_CONTEXT = f.read()
+
+@app.route("/api/analyze/company-data", methods=["POST"])
+def analyze_company_data_new():
+    file = request.files.get('analyze-files')
+    user_input = request.form.get('input', '')
+
+    # 1. READ & SUMMARIZE
+    df = pd.read_csv(file)
+    summary_stats = df.describe().to_json()
+    column_info = list(df.columns)
+
+    # --- KPI-focused visualization policy ---
+    # IMPORTANT: Do not create report "tables" by showing raw CSV subsets or dataframe describe/agg outputs.
+    # This endpoint must return analytics derived from KPI calculations defined in the Opus design document.
+    # We only compute and/or ask the model to compute KPIs; we do not render row extracts as "tables".
+
+    def _numeric_columns(frame: pd.DataFrame):
+        return [c for c in frame.columns if pd.api.types.is_numeric_dtype(frame[c])]
+
+    numeric_cols = _numeric_columns(df)
+
+
+    # 2. ENHANCED SYSTEM PROMPT
+    system_prompt = f"""
+
+    You are the Opus Analytics Data Engine.
+
+    Use the following logic and formula definitions provided in the Opus design document:
+
+    --- START OF DESIGN DOCUMENT ---
+    {OPUS_LOGIC_CONTEXT}
+    --- END OF DESIGN DOCUMENT ---
+
+    CRITICAL RULES (must follow):
+    - Calculate KPIs strictly using formulas defined in the design document.
+    - Hard-code ABSOLUTELY NOTHING. No assumed constants, no invented counts, no placeholder KPI numbers.
+    - Do not use dataframe describe(), raw CSV row samples, or any subset-of-data as a substitute for KPI calculations.
+    - If columns are insufficient for a KPI, explicitly list which required columns are missing (use design-doc required column names).
+    - The user goal/input may appear in the prompt for context ONLY.
+      You MUST NOT repeat, quote, or paraphrase the user's goal text in your output.
+    - Output strictly in JSON (no markdown code fences).
+
+    REQUIRED OUTPUT (Return this as a JSON object with exactly these top-level keys):
+    {{
+      "report_title": "Detailed Organizational KPI Analysis Report",
+      "analysis_narrative": "A full Markdown-formatted report string.",
+      "visuals_and_tables": [
+        {{ "type": "table", "title": "Primary Metric Table", "content": "..." }},
+        {{ "type": "chart", "title": "Trend Visualization", "content": "..." }}
+      ],
+      "next_steps": [
+        "Suggestion 1: ...",
+        "Suggestion 2: ..."
+      ]
+    }}
+
+    MANDATORY NARRATIVE RULES (LONG + CALCULATION-CENTERED):
+    1. analysis_narrative MUST contain at least TWO Markdown titles/sections (e.g., "## Executive Summary" and "## KPI Calculations & Drivers").
+    2. Use long paragraphs: multiple sentences per KPI/issue (avoid short bullet-only explanations).
+    3. For every KPI/major finding included, use these three headers within the narrative:
+       - **Description**
+       - **Key Insight**
+       - **Strategic Value**
+    4. For at least 2 KPIs you include, explicitly document the calculation method in text using the design-doc formula wording (without copying the raw formula block verbatim if it becomes too long).
+    5. If any KPI cannot be calculated, include a final "## Data Quality Note" section at the end that explicitly lists which columns were missing.
+
+    OPTIONAL INDEX EXPANSION (preferred):
+    - If the design document includes composite indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex), then calculate at least one index using the KPI components and clearly explain weighting.
+
+    MANDATORY TABLE NUMERIC RULES:
+    6. visuals_and_tables items with type == "table" MUST include explicit numeric values inside the `content` string that come from KPI computations (not raw row subsets).
+       - Numbers must be visible in the string (percentages, counts, averages, composite index scores).
+       - Do NOT output placeholders like "N/A" without explanation of what is missing.
+
+    REPRESENTATIONS RULES:
+    7. visuals_and_tables MUST always include at least 2 items: one KPI-derived table and one chart description derived from KPI logic.
+    8. next_steps MUST be an array with at least 2 actionable recommendations.
+
+    OUTPUT DISCIPLINE:
+    - analysis_narrative must be rich and long, reflecting multiple KPIs, their computed results, and their business implications.
+    """
+
+
+    messages = [
+        {'role': 'system', 'content': system_prompt},
+        {'role': 'user', 'content': f"""
+            Goal: {user_input}
+            Available Columns: {column_info}
+            Statistical Summary: {summary_stats}
+            Please provide the analysis based on these metrics.
+            """
+        }
+    ]
+
+    
+    # 3. EXECUTE
+    try:
+        completion = client.chat.completions.create(
+            model=OPENAI_DEPLOYMENT_ID,
+            messages=messages,
+            response_format={ "type": "json_object" }
+        )
+
+        raw = completion.choices[0].message.content
+        parsed = json.loads(raw)
+
+        # Minimal schema validation / fallback (keep frontend output shape fixed)
+        required_top_level = {"report_title", "analysis_narrative", "visuals_and_tables", "next_steps"}
+        if not isinstance(parsed, dict) or not required_top_level.issubset(set(parsed.keys())):
+            parsed = {
+                "report_title": "Detailed Organizational KPI Analysis Report",
+                "analysis_narrative": (
+                    "## Executive Summary\n"
+                    "### Description\nModel output was incomplete, so KPI rendering could not be guaranteed.\n\n"
+                    "### Key Insight\nThe response did not match the expected schema.\n\n"
+                    "### Strategic Value\nReturning safe defaults prevents the frontend from presenting incorrect or partial KPI information.\n\n"
+                    "## Data Quality Note\nMissing or invalid fields in the model output."
+                ),
+                "visuals_and_tables": [
+                    {"type": "table", "title": "Primary Metric Table", "content": "No numeric KPI table could be produced from the returned data."},
+                    {"type": "chart", "title": "Trend Visualization", "content": "No chart description could be produced from the returned data."}
+                ],
+                "next_steps": [
+                    "Suggestion 1: Re-run analysis with a CSV that includes the required numeric columns for the target KPIs.",
+                    "Suggestion 2: Verify the CSV headers match the design document column names; then re-submit."
+                ]
+            }
+
+        # Ensure visuals_and_tables contains at least 1 table and 1 chart entry
+        visuals = parsed.get("visuals_and_tables")
+        if not isinstance(visuals, list):
+            visuals = []
+
+        has_table = any(isinstance(v, dict) and v.get("type") == "table" for v in visuals)
+        has_chart = any(isinstance(v, dict) and v.get("type") == "chart" for v in visuals)
+
+        if not has_table:
+            visuals.insert(0, {"type": "table", "title": "Primary Metric Table", "content": "No numeric KPI table could be produced from the returned data."})
+        if not has_chart:
+            visuals.append({"type": "chart", "title": "Trend Visualization", "content": "No chart description could be produced from the returned data."})
+
+        parsed["visuals_and_tables"] = visuals
+
+        # Ensure next_steps has at least 2 actionable items
+        next_steps = parsed.get("next_steps")
+        if not isinstance(next_steps, list) or len(next_steps) < 2:
+            parsed["next_steps"] = [
+                "Suggestion 1: Re-run analysis with complete columns required by the KPI formulas in the design document.",
+                "Suggestion 2: Cross-check column headers and numeric formats; then re-submit the same file."
+            ]
+
+        # Enforce report_title (frontend expects fixed title)
+        parsed["report_title"] = "Detailed Organizational KPI Analysis Report"
+
+        # DO NOT override model visuals with raw-data “tables”.
+        # The model must return KPI-derived visuals_and_tables (table + chart).
+        return jsonify({"analysis": parsed})
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
