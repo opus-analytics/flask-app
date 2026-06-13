@@ -2048,6 +2048,9 @@ def test_send_email():
 # Load the file content once at startup to use as system context
 with open('step_by_step_process.md', 'r', encoding='utf-8') as f:
     OPUS_LOGIC_CONTEXT = f.read()
+    
+with open('index_definitions.md', 'r', encoding='utf-8') as f:
+    PROJECT_INDEX_DEFINITIONS = f.read()
 
 @app.route("/api/analyze/company-data", methods=["POST"])
 def analyze_company_data_new():
@@ -2064,129 +2067,282 @@ def analyze_company_data_new():
         session['company_chat_history'] = []
 
     file = request.files.get('analyze-files')
-    user_input = request.form.get('input', '')
+    user_input = request.form.get('analysis-notes', '')
+    requested_index = request.form.get('requested_index', '')
 
     # Optional: allow phase-based prompt switching later (kept for compatibility / future)
     phase = request.form.get('phase', 'analyze')
 
     # 1. READ & SUMMARIZE (only when a new file is provided)
+    # IMPORTANT: data_preview must always be set (not None) because it is injected into the chat prompt.
     data_preview = None
     column_info = None
 
-    if file:
-        # 1. READ
-        df = pd.read_csv(file)
-        
-        # 2. CLEANUP
-        df = df.dropna(how='all') # Remove empty rows
-        df = df.drop_duplicates() # Remove duplicate rows
-        
-        # 3. PREPARE DATA FOR LLM
-        # Instead of summary stats, convert the cleaned dataframe to a list of dicts
-        # This gives the model the "full picture" of the rows and columns
-        data_preview = df.to_json(orient='records')
-        column_info = list(df.columns)
 
-        # KPI Engine only needs one initialization system message per chat.
-        # Clear existing history to avoid mixing different datasets in the same chat.
-        session['company_chat_history'] = []
+
+   # ---- 2. FILE HANDLING & MEMORY FOOTPRINT EXTRACTION ----
+    if file:
+        # Read raw strings to safely preserve the spatial layout of multiple tables
+        df_raw = pd.read_csv(file, header=None).fillna("")
+
+        
+        # Capture a 35-row structural snippet so the LLM can see where sub-tables begin/end
+        preview_rows = df_raw.head(100).values.tolist()
+        
+        structural_map = []
+        for idx, row in enumerate(preview_rows):
+            # Strip extra spacing and isolate row values to optimize token context size
+            row_str = " | ".join([str(item).strip() for item in row if str(item).strip() != ""])
+            if row_str:
+                structural_map.append(f"Row {idx}: {row_str}")
+        
+        raw_data_footprint = "\n".join(structural_map)
+        
+        # Re-read formatted dataframe to safely glean column lists and types for fallback references
+        try:
+            file.seek(0)
+            df_typed = pd.read_csv(file)
+            column_info = list(df_typed.columns)
+            numeric_cols = [c for c in df_typed.columns if pd.api.types.is_numeric_dtype(df_typed[c])]
+        except Exception:
+            column_info = []
+            numeric_cols = []
+
+        # Fresh upload triggers an initial clear of the current workflow branch history
+        session['company_chat_history'] = [] 
+    else:
+        # Subsequent conversational turns require background session history
+        if not session.get('company_chat_history'):
+            return jsonify({"error": "No active data layout found in memory. Please upload your spreadsheet file first."}), 400
+
+    # ---- 3. TARGETED PHASE PROMPT SYSTEM ----
+    if phase == "Analysis":
+        system_prompt = f"""
+        You are the Opus Structural Data Mapper. 
+        The uploaded sheet does NOT have a standard, flat database structure. It contains multiple independent tables, 
+        scattered data frameworks, and non-standard/unmapped column labels within the same sheet.
+
+        YOUR TASK:
+        1. Analyze the raw layout text snippet provided below. Identify how many distinct tables or logical blocks exist.
+        2. For each detected table, list the column labels and infer their likely meaning based on common HR/employee data conventions.
+        3. Deduce what the unique attributes/columns mean (e.g., mapping custom user header variations to internal system logic).
+        4. Show validations of the column presence and their data types (numeric, string, date, etc.) for each detected table.
+        5. Document your layout assumptions completely. Explain clearly *what* your analysis metrics will be based on.
+        6. Evaluate the data footprint against the 8 core composite indexes defined in the project architecture.
+        7. Show clear analysis of the number of data rows (employees for example) that can be tracked based on the detected layout and column presence.
+        8. Say clearly what are the primary keys for data for example employee id, and why are you using it.
+        9. Next steps should have clear separation between content and actions (which is the list of top three available indexes based on data analysis to further analyze the data)
+
+        MANDATORY INSTRUCTIONS:
+        - Do not make assumptions about missing columns or data. Only analyze what is present in the raw footprint.
+        - Do not mention grid row coordinates or raw indices; keep descriptions entirely business-oriented and structural unless absolutely necessary to isolate a block.
+        
+
+        RAW SHEET SNIPPET FOR AUDIT:
+        \"\"\"
+        {raw_data_footprint}
+        \"\"\"
+        
+        PROJECT INDEX DEFINITIONS (for reference):
+        \"\"\"
+        {PROJECT_INDEX_DEFINITIONS}
+        \"\"\"
+
+        CRITICAL NEXT STEPS GATEWAY (Evaluate data state and select and output EXACTLY ONE matching path inside your Markdown list format):
+        
+        - PATH A (Data Enhancement): If columns are present but rows are misaligned, dates are broken, formats are inconsistent, or data requires structural mapping correction.
+          -> Inform the user of structural mapping adjustments needed.
+          
+        - PATH B (Missing Data): If core foundational elements or keys required to track fundamental records are entirely missing.
+          -> List the exact missing fields required before deep metrics can begin.
+          
+        - PATH C (Analysis Complete & Ready): If the layout structure reading is clear and verified. You MUST cross-reference the available columns with the provided PROJECT INDEX DEFINITIONS and recommend which specific indexes can be successfully executed.
+
+        REQUIRED OUTPUT FORMAT (Return this exact JSON structure, no markdown code block backticks, ensure newlines in string are escaped as \\n):
+        {{
+          "report_title": "Source Sheet Structural Audit & Mapping Preview",
+          "analysis_narrative": "### 1. Detected Sub-Tables & Frameworks\\n[Explain where data blocks start/stop and what they represent]\\n\\n### 2. Column Mapping & Deduction Logic\\n[Explicitly declare what you think the unmapped column names stand for and why]\\n\\n### 3. Data Integrity & Foundations Assessment\\n[State clearly if the data is Ready, needs Enhancement, or has Missing Core Fields]",
+          "visuals_and_tables": [
+            {{
+              "type": "table",
+              "title": "Proposed Structural Framework Map",
+              "content": "| Isolated Segment | Inferred Columns | Target Mapping Status |\\n| --- | --- | --- |\\n| Block A | [detected labels] | [Ready / Needs Enhancement / Missing Fields] |"
+            }}
+          ],
+          "next_steps": [
+                {{
+                    "content": " #### Based on the data supplied and interpretations provided, the following are data insights and actionable next steps for the user to follow:\\n\\n* **Data State Assessment:** [State here if the layout is Complete, needs Enhancement, or has Missing Core Fields]\\n* **Primary Verification:** Verified [Count] distinct tracking profiles tied via [Primary Key ID Variable Name].",
+                    "actions": [
+                        {{
+                            # [Insert dynamically chosen header based on data state: Recommended Execution Suite OR Actionable Resolutions Required]\\n\\n[IF DATA INCOMPLETE/PATH A or B: Provide a clear Markdown bulleted list of fields or re-formatting requirements here]\\n\\n[IF DATA READY/PATH C: Provide a detailed Markdown list explaining exactly which of the 8 core project indexes are fully available in the actions attribute]:
+                            "name": [Index Name],
+                            "status": "Available",
+                            "description: [Why this index is available]"
+                        }}
+                    ],
+                    "comment": "By clicking on any of the next steps, you will trigger the execution of that index and receive a detailed report based on your data."
+                }}
+            ]
+          }}
+        """
+        
+    elif phase == "Index":
+        # 2. ENHANCED SYSTEM PROMPT
+        system_prompt = f"""
+
+        You are the Opus Analytics Data Engine.
+
+        Index-driven analysis: your output scope MUST be determined by the provided index input: {requested_index}.
+        If an index is provided, compute/analyze ONLY that index (and its required component KPIs) using the formulas from the design document.
+        Do NOT use the free-form user text to expand scope beyond the requested index.
+        If the index is missing/empty/invalid, DO NOT CONTINUE—ask for clarification by requesting a valid index name from the 8 supported indexes.
+
+        Use the following logic and formula definitions provided in the Opus design document:
+
+        --- START OF DESIGN DOCUMENT ---
+        {OPUS_LOGIC_CONTEXT}
+        --- END OF DESIGN DOCUMENT ---
+        
+        PROJECT INDEX DEFINITIONS (for reference):
+        --- Start of Index document ---
+        \"\"\"
+        {PROJECT_INDEX_DEFINITIONS}
+        \"\"\"
+        --- End of Index document ---
+        
+
+        CRITICAL RULES (must follow):
+        - Calculate KPIs strictly using formulas defined in the design document.
+        - Hard-code ABSOLUTELY NOTHING. No assumed constants, no invented counts, no placeholder KPI numbers.
+        - Do not use dataframe describe(), raw CSV row samples, or any subset-of-data as a substitute for KPI calculations.
+        - If columns are insufficient for a KPI, explicitly list which required columns are missing (use design-doc required column names).
+        - The user goal/input may appear in the prompt for context ONLY.
+        - You MUST NOT repeat, quote, or paraphrase the user's goal text in your output.
+        - Output strictly in JSON (no markdown code fences).
+        - Next steps if data is available should show at least two indexes not the one analyzed (Use the PROJECT_INDEX_DEFINITIONS)
+        - For charts that do have missing data, state clearly this and show and example with data just for visualization and highlight this to the user
+
+        REQUIRED OUTPUT (Return this as a JSON object with exactly these top-level keys):
+        {{
+        "report_title": "Detailed Organizational KPI Analysis Report",
+        "analysis_narrative": "A full Markdown-formatted report string.",
+        "visuals_and_tables": [
+            {{
+            "type": "table",
+            "title": "KPI Table: [KPI Name]",
+            "content": "A Markdown-formatted table with explicit numeric KPI values (not raw data subsets)."
+            }},
+            {{
+            "type": "chart",
+            "visualization": "bar" | "line" | "pie" | "scatter" | etc. (choose the most appropriate chart type based on the KPI and insights)",
+            "title": "KPI Chart: [KPI Name]",
+            "labels": ["Label1", "Label2", ...],  # e.g., time periods, categories
+            "data": [NumericValue1, NumericValue2, ...],  # Corresponding numeric values for the labels
+            "content": "A clear array of numeric values and labels ready for visualization, along with a descriptive explanation of what the chart would show if rendered."
+            }}
+        ],
+        "next_steps": [
+                {{
+                    "content": " #### Based on the recent analysis and interpretations provided, How to further analyze using this index: provide additional dimensional fields (time granularity, cohort tags, segment labels), more complete event timestamps, and auxiliary identifiers to enable trend analysis, cohort retention, and contribution-to-index breakdowns..",
+                    "actions": [
+                        {{
+                            # [Insert dynamically chosen header based on data state: Recommended Execution Suite OR Actionable Resolutions Required]\\n\\n[IF DATA INCOMPLETE/PATH A or B: Provide a clear Markdown bulleted list of fields or re-formatting requirements here]\\n\\n[IF DATA READY/PATH C: Provide a detailed Markdown list explaining exactly which of the 8 core project indexes are fully available in the actions attribute]:
+                            "name": [Index Name],
+                            "status": "Available",
+                            "description: [Why this index is available]"
+                        }}
+                    ],
+                    "comment": "By clicking on any of the next steps, you will trigger the execution of that index and receive a detailed report based on your data."
+                }}
+            ]
+        }}
+
+        MANDATORY NARRATIVE RULES (LONG + CALCULATION-CENTERED):
+        1. The analysis_narrative must be a rich, detailed report that explains the KPIs, their implications, and strategic insights. It should not be a simple list of bullet points or a brief summary. The narrative should weave together the KPIs into a cohesive story about the organization's performance and areas for improvement.
+        2. Use long paragraphs: multiple sentences per KPI/issue (avoid short bullet-only explanations).
+        3. For every KPI/major finding included, use these three headers within the narrative:
+        - **Description**
+        - **Key Insight**
+        - **Strategic Value**
+        Clearly separate these sections for each KPI/issue discussed to ensure depth of analysis and clarity of implications. add \n\n between each section and KPI for readability.
+        4. For at least 2 KPIs you include, explicitly document the calculation method in text using the design-doc formula wording (without copying the raw formula block verbatim if it becomes too long).
+        5. If any KPI cannot be calculated, include a final "## Data Quality Note" section at the end that explicitly lists which columns were missing.
+
+        OPTIONAL INDEX EXPANSION (preferred):
+        - If the design document includes composite indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex), then calculate at least one index using the KPI components and clearly explain weighting.
+
+        (IF AVAILABLE) MANDATORY TABLE NUMERIC RULES:
+        6. visuals_and_tables items with type == "table" MUST include explicit numeric values inside the `content` string that come from KPI computations (not raw row subsets).
+        - Numbers must be visible in the string (percentages, counts, averages, composite index scores).
+        - Do NOT output placeholders like "N/A" without explanation of what is missing.
+
+        REPRESENTATIONS RULES:
+        7. visuals_and_tables items with type == "chart" should be clear array of numbers, labels and chart type.
+        8. Do NOT create tables by showing raw CSV subsets or dataframe describe/agg outputs. The "table" content must be derived from KPI calculations.
+
+        OUTPUT DISCIPLINE:
+        - analysis_narrative must be rich and long, reflecting multiple KPIs, their computed results, and their business implications.
+
+        """
 
     else:
-        # If no file is uploaded, we rely on existing history.
-        if not session.get('company_chat_history'):
-            return jsonify({"error": "No chat history found. Please upload a CSV file first."}), 400
+        # ---- Chat / Q&A mode prompt (keeps engine logic + enforces output discipline) ----
+        # Uses a *raw* string template (no user_input interpolation) to avoid nested f-string issues.
+        system_prompt = """
+        You are the Opus Analytics Data Engine in CHAT mode.
+        
+        Use the user input to respond on it based on the context: {user_input}
+        Core behavior:
 
-    # ---- KPI-focused visualization policy ----
+        1) You MUST always follow the OPUS_LOGIC_CONTEXT and PROJECT_INDEX_DEFINITIONS provided below.
+        2) You MUST keep a consistent engine output format using EXACTLY this JSON schema.
+        3) The user may ask conversational questions or request specific visualizations/charts.
+        You must translate that request into the engine’s constrained computation scope
+        without breaking index/formula rules.
+        4) If the user requests a chart:
+        - If the chart is derivable from available KPI/index data, produce it in visuals_and_tables.
+        - If required columns/KPIs are missing, clearly state what is missing (use Data Quality Note).
+        - For visualization-only requests with missing data, provide an example array for visualization
+            ONLY when the prompt explicitly allows it; otherwise refuse to fabricate numbers.
+        
+        Strict design-doc rules:
+        - Use formulas strictly as defined in OPUS_LOGIC_CONTEXT.
+        - Hard-code ABSOLUTELY NOTHING. No invented numbers.
+        - Do not use raw CSV subsets or describe/describe-like aggregation as KPI substitutes.
+        - If columns are insufficient, list required missing columns by their design-doc names.
+        - Do NOT mention or repeat the user's goal text.
+        - Do not return visuals if not require keep it simple
 
-    # IMPORTANT: Do not create report "tables" by showing raw CSV subsets or dataframe describe/agg outputs.
-    # This endpoint must return analytics derived from KPI calculations defined in the Opus design document.
-    # We only compute and/or ask the model to compute KPIs; we do not render row extracts as "tables".
+        Conversation rule:
+        - Treat the user's latest message as a question or request.
+        - The chat style is for interaction, but the content must be driven by engine logic and schema.
 
-    def _numeric_columns(frame: pd.DataFrame):
-        return [c for c in frame.columns if pd.api.types.is_numeric_dtype(frame[c])]
+        OPUS_LOGIC_CONTEXT:
+        {OPUS_LOGIC_CONTEXT}
 
-    numeric_cols = _numeric_columns(df)
+        PROJECT_INDEX_DEFINITIONS:
+        {PROJECT_INDEX_DEFINITIONS}
 
+        REQUIRED OUTPUT (JSON only, no markdown code fences):
+        {
+        "analysis_narrative": "A full Markdown-formatted report string.",
+        "visuals_and_tables": [
+            {"type": "table", "title": "KPI Table: [KPI Name]", "content": "A Markdown-formatted table with explicit numeric KPI values"},
+            {"type": "chart", "visualization": "bar" | "line" | "pie" | "scatter" ,
+            "title": "KPI Chart: [KPI Name]",
+            "labels": ["Label1", "Label2"],
+            "data": [NumericValue1, NumericValue2],
+            "content": "Narrative explanation with what the chart would show if rendered."}
+        ],
+        }
 
-    # 2. ENHANCED SYSTEM PROMPT
-    system_prompt = f"""
-
-    You are the Opus Analytics Data Engine.
-
-    Use the following logic and formula definitions provided in the Opus design document:
-    Be flexible with the user input make sure to focus on the direction the user point to do not produce all the analysis or follow the structure if the user ask for specific KPI or specific analysis, in that case focus on the user request and produce the output based on that, but if the user input is general or not specific then follow the structure and produce a full analysis.
-    If the user input is not clear DO NOT CONTINUE and ask for clarification, do not make assumptions about what the user wants, if the user input is not clear or specific ask the user to provide more details or clarify their request before proceeding with the analysis.
-    But if user input is empty or very general then produce a full analysis based on the design document and follow the structure in that case.
-    DO NOT SHOW ALL KPI if user specified and do not do any analysis the user didn't specify without informing
-
-    --- START OF DESIGN DOCUMENT ---
-    {OPUS_LOGIC_CONTEXT}
-    --- END OF DESIGN DOCUMENT ---
-    
-
-    CRITICAL RULES (must follow):
-    - Calculate KPIs strictly using formulas defined in the design document.
-    - Hard-code ABSOLUTELY NOTHING. No assumed constants, no invented counts, no placeholder KPI numbers.
-    - Do not use dataframe describe(), raw CSV row samples, or any subset-of-data as a substitute for KPI calculations.
-    - If columns are insufficient for a KPI, explicitly list which required columns are missing (use design-doc required column names).
-    - The user goal/input may appear in the prompt for context ONLY.
-    - You MUST NOT repeat, quote, or paraphrase the user's goal text in your output.
-    - Output strictly in JSON (no markdown code fences).
-
-    REQUIRED OUTPUT (Return this as a JSON object with exactly these top-level keys):
-    {{
-      "report_title": "Detailed Organizational KPI Analysis Report",
-      "analysis_narrative": "A full Markdown-formatted report string.",
-      "visuals_and_tables": [
-        {{
-          "type": "table",
-          "title": "KPI Table: [KPI Name]",
-          "content": "A Markdown-formatted table with explicit numeric KPI values (not raw data subsets)."
-        }},
-        {{
-          "type": "chart",
-          "visualization": "bar" | "line" | "pie" | "scatter" | etc. (choose the most appropriate chart type based on the KPI and insights)",
-          "title": "KPI Chart: [KPI Name]",
-          "labels": ["Label1", "Label2", ...],  # e.g., time periods, categories
-          "data": [NumericValue1, NumericValue2, ...],  # Corresponding numeric values for the labels
-          "content": "A clear array of numeric values and labels ready for visualization, along with a descriptive explanation of what the chart would show if rendered."
-        }}
-      ],
-      "next_steps": [
-        "Actionable recommendation 1 based on the analysis.",
-      ]
-    }}
-
-    MANDATORY NARRATIVE RULES (LONG + CALCULATION-CENTERED):
-    1. The analysis_narrative must be a rich, detailed report that explains the KPIs, their implications, and strategic insights. It should not be a simple list of bullet points or a brief summary. The narrative should weave together the KPIs into a cohesive story about the organization's performance and areas for improvement.
-    2. Use long paragraphs: multiple sentences per KPI/issue (avoid short bullet-only explanations).
-    3. For every KPI/major finding included, use these three headers within the narrative:
-       - **Description**
-       - **Key Insight**
-       - **Strategic Value**
-       Clearly separate these sections for each KPI/issue discussed to ensure depth of analysis and clarity of implications. add \n\n between each section and KPI for readability.
-    4. For at least 2 KPIs you include, explicitly document the calculation method in text using the design-doc formula wording (without copying the raw formula block verbatim if it becomes too long).
-    5. If any KPI cannot be calculated, include a final "## Data Quality Note" section at the end that explicitly lists which columns were missing.
-
-    OPTIONAL INDEX EXPANSION (preferred):
-    - If the design document includes composite indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex), then calculate at least one index using the KPI components and clearly explain weighting.
-
-    (IF AVAILABLE) MANDATORY TABLE NUMERIC RULES:
-    6. visuals_and_tables items with type == "table" MUST include explicit numeric values inside the `content` string that come from KPI computations (not raw row subsets).
-       - Numbers must be visible in the string (percentages, counts, averages, composite index scores).
-       - Do NOT output placeholders like "N/A" without explanation of what is missing.
-
-    REPRESENTATIONS RULES:
-    7. visuals_and_tables items with type == "chart" should be descriptive text that explains what a chart would show if rendered, based on the KPI logic and values. It should not be a placeholder or generic statement.
-    8. Do NOT create tables by showing raw CSV subsets or dataframe describe/agg outputs. The "table" content must be derived from KPI calculations.
-
-    OUTPUT DISCIPLINE:
-    - analysis_narrative must be rich and long, reflecting multiple KPIs, their computed results, and their business implications.
-
-    """
-
+        MANDATORY NARRATIVE STRUCTURE:
+        - analysis_narrative must be rich and long.
+        - Keep it more explanatory to the user
+        """
 
     # ---- Build chat messages using persisted history ----
+
     # Persisted history is a list of chat messages: [{"role":"system"|"user"|"assistant","content":...}, ...]
     # Keep the system prompt only once at the beginning of the chat.
     history = session.get('company_chat_history', [])
@@ -2200,16 +2356,18 @@ def analyze_company_data_new():
     # return jsonify({"error": "Debug stop - check console for current chat history."})
 
     # Append current user message (always) if user_input is provided.
-    if user_input:
+    if user_input or requested_index:
         history.append({
             'role': 'user',
             'content': f"""
-                Goal: {user_input}
+                Requested index: {requested_index}
+                Additional user context (not for scoping): {user_input}
                 Available Columns: {column_info}
                 Data Preview: {data_preview}
                 Numeric Columns: {numeric_cols}
-                Please provide the analysis based on these metrics.
-                """
+                Produce output for ONLY the requested index and its required component KPIs.
+                Index value must be interpreted strictly from requested_index.
+            """
         })
 
     # Trim history to avoid cookie bloat: keep system + last N turns.
@@ -2246,54 +2404,6 @@ def analyze_company_data_new():
         session['company_chat_history'] = history
         session.modified = True
 
-        # Minimal schema validation / fallback (keep frontend output shape fixed)
-
-        required_top_level = {"report_title", "analysis_narrative", "visuals_and_tables", "next_steps"}
-        if not isinstance(parsed, dict) or not required_top_level.issubset(set(parsed.keys())):
-            parsed = {
-                "report_title": "Detailed Organizational KPI Analysis Report",
-                "analysis_narrative": (
-                    "## Executive Summary\n"
-                    "### Description\nModel output was incomplete, so KPI rendering could not be guaranteed.\n\n"
-                    "### Key Insight\nThe response did not match the expected schema.\n\n"
-                    "### Strategic Value\nReturning safe defaults prevents the frontend from presenting incorrect or partial KPI information.\n\n"
-                    "## Data Quality Note\nMissing or invalid fields in the model output."
-                ),
-                "visuals_and_tables": [
-                    {"type": "table", "title": "Primary Metric Table", "content": "No numeric KPI table could be produced from the returned data."},
-                    {"type": "chart", "title": "Trend Visualization", "content": "No chart description could be produced from the returned data."}
-                ],
-                "next_steps": [
-                    "Suggestion 1: Ask the engine to recommend which KPI indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex) are feasible to compute from your dataset.",
-                    "Suggestion 2: Re-run analysis and request an index-selection plan explaining which indexes you can use (and why) based on the dataset columns it detects as available."
-                ]
-            }
-
-        # Ensure visuals_and_tables contains at least 1 table and 1 chart entry
-        visuals = parsed.get("visuals_and_tables")
-        if not isinstance(visuals, list):
-            visuals = []
-
-        has_table = any(isinstance(v, dict) and v.get("type") == "table" for v in visuals)
-        has_chart = any(isinstance(v, dict) and v.get("type") == "chart" for v in visuals)
-
-        if not has_table:
-            visuals.insert(0, {"type": "table", "title": "Primary Metric Table", "content": "No numeric KPI table could be produced from the returned data."})
-        if not has_chart:
-            visuals.append({"type": "chart", "title": "Trend Visualization", "content": "No chart description could be produced from the returned data."})
-
-        parsed["visuals_and_tables"] = visuals
-
-        # Ensure next_steps has at least 2 actionable items
-        next_steps = parsed.get("next_steps")
-        if not isinstance(next_steps, list) or len(next_steps) < 2:
-            parsed["next_steps"] = [
-                "Suggestion 1: Ask the engine to propose which KPI indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex) you can compute from your dataset.",
-                "Suggestion 2: Re-run the request asking specifically for an index recommendation plan based on the dataset columns detected as available (and explain why each index is feasible)."
-            ]
-
-        # Enforce report_title (frontend expects fixed title)
-        parsed["report_title"] = "Detailed Organizational KPI Analysis Report"
 
         # DO NOT override model visuals with raw-data “tables”.
         # The model must return KPI-derived visuals_and_tables (table + chart).
