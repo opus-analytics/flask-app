@@ -1,4 +1,82 @@
-Step by step process 
+# OPUS ZERO2ONE — SOURCE OF TRUTH: Step-by-Step Process
+
+
+
+The process should Analyze the data mainly on these 3 subcategories
+Sub-category 1:
+Analyze
+Execution Insights: Upload your organizational KPIs to uncover insights, risks, and opportunities.
+Examples of actions:
+
+Analyze reports
+Detect trends
+Identify execution risks
+Benchmark performance
+Generate narratives
+
+Sub-category 2:
+
+Generate Indexes
+Execution Indexes: Instantly generate the Zero2One indexes using pre-configured intelligence.
+
+Examples of actions:
+
+Calculate all 8 indexes
+View index breakdowns
+Compare periods
+Export results
+Track progress over time
+
+2) Then on each page, we will have a place to upload and return the data.
+
+Specifically on the Index page, we will have the back and forth: upload ---> return with logic ---> suggested updates ---> provide more information/reports/data inputs ---> return refined logic/insights 
+
+3) At each stage there is something returned, the icon of download should show.  An additional box should allow the upload and add refining information.... and so on
+
+Btw... the 8 indexes all have the explanation, what is expected as data inputs, the reasoning, the calculation itself of the index.  These all need to be added in the backend because that is how the information will be analyzed and returned.  There should be 1 or 2 sentences explaining the index and providing the guidance and information to help the user better understand the logic and usability. 
+
+ As follows ...
+
+Execution Index
+Execution intelligence tied to business performance
+Zero2One calculates the index using real operational metrics and data points.  The simulated insights are aligned to 5 pillars: Strategy Clarity - Capability Visibility - Talent Precision - Leadership Multipliers - Execution Intelligence 
+
+
+
+Financial Outcome Index
+Zero2One delivers the right performance insights, at the right financial altitude, for every decision-maker in the organization.
+Establishes financial performance guidance by quantifying how human and operational performance drivers translate into revenue contribution.
+It integrates people KPIs, attainment metrics, and growth signals into a unified financial impact model that enables predictive and prescriptive decision-making.
+
+
+Culture Index
+Moving culture from perception to measurable intelligence that drives business outcomes.
+The Culture Index translates culture into measurable outcomes by integrating indicators such as engagement, trust, advocacy, mobility, manager effectiveness, development, and inclusion. It enables organizations to identify cultural strengths and risks early, helping leaders build high-performing environments where people and businesses thrive.
+
+Engagement Index
+The Engagement Index measures employees' emotional commitment to the organization and their willingness to invest discretionary effort toward its objectives. By linking motivation and advocacy to business outcomes, it enables leaders to understand how engagement influences productivity, retention, execution, and overall organizational performance.
+
+Employer Branding Index
+Quantify and track the strength, consistency, and effectiveness of an organization’s employer brand, internally - employee perception - and externally - market perception.
+
+The index provides a single composite score out of 100, combining 4 core dimensions, each powered by measurable data streams.
+Potential Index
+The Index evaluates the organization's ability to convert today's talent into tomorrow's capability by assessing performance, learning agility, career progression, and succession preparedness. It enables leaders to proactively manage talent risks while building the leadership and skills pipeline needed to execute future strategy.
+
+Productivity Index
+The Index measures the effectiveness of execution by assessing how people, processes, and organizational capabilities translate into measurable outcomes. It enables leaders to pinpoint the drivers of productivity and unlock sustainable improvements in business performance.
+
+Retention Index
+
+The Retention Index measures how effectively an organization sustains the talent and capabilities needed to execute its strategy.  By identifying who stays, why they stay, and the patterns that predict attrition risk, it enables leaders to protect institutional knowledge, strengthen workforce continuity, and improve organizational performance.
+
+Sub-category 3:
+
+Organizational Health Dashboard
+
+The Organizational Health Dashboard serves as the organization's execution intelligence center, bringing together the Zero2One indexes into a single view of workforce capability, culture, productivity, and operational effectiveness. It helps leaders identify strengths, anticipate risks, and prioritize the actions that drive sustainable performance and business outcomes.
+
+
 Data files (in different formates), containing company and employee data are uploaded 
 Opus runs the backend calculations
 A message is generated confirming any additional data that if added would increase/enhance the measurements returned

@@ -8,6 +8,8 @@ import os
 import pandas as pd
 import requests, json
 from flask import Flask, request, jsonify
+import uuid
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from mysql.connector import Error
@@ -2044,20 +2046,58 @@ def test_send_email():
         return "Failed to send email.", 500
     
 # Load the file content once at startup to use as system context
-with open('Step by step process.txt', 'r', encoding='utf-8') as f:
+with open('step_by_step_process.md', 'r', encoding='utf-8') as f:
     OPUS_LOGIC_CONTEXT = f.read()
 
 @app.route("/api/analyze/company-data", methods=["POST"])
 def analyze_company_data_new():
+    # ---- Session-based chat memory (per browser session cookie) ----
+    chat_id = session.get('company_chat_id')
+    if not chat_id:
+        chat_id = str(uuid.uuid4())
+        session['company_chat_id'] = chat_id
+
+    reset = request.form.get('reset', None)
+    should_reset = str(reset).lower() in {'1', 'true', 'yes', 'y', 'on'}
+
+    if should_reset or 'company_chat_history' not in session:
+        session['company_chat_history'] = []
+
     file = request.files.get('analyze-files')
     user_input = request.form.get('input', '')
 
-    # 1. READ & SUMMARIZE
-    df = pd.read_csv(file)
-    summary_stats = df.describe().to_json()
-    column_info = list(df.columns)
+    # Optional: allow phase-based prompt switching later (kept for compatibility / future)
+    phase = request.form.get('phase', 'analyze')
 
-    # --- KPI-focused visualization policy ---
+    # 1. READ & SUMMARIZE (only when a new file is provided)
+    data_preview = None
+    column_info = None
+
+    if file:
+        # 1. READ
+        df = pd.read_csv(file)
+        
+        # 2. CLEANUP
+        df = df.dropna(how='all') # Remove empty rows
+        df = df.drop_duplicates() # Remove duplicate rows
+        
+        # 3. PREPARE DATA FOR LLM
+        # Instead of summary stats, convert the cleaned dataframe to a list of dicts
+        # This gives the model the "full picture" of the rows and columns
+        data_preview = df.to_json(orient='records')
+        column_info = list(df.columns)
+
+        # KPI Engine only needs one initialization system message per chat.
+        # Clear existing history to avoid mixing different datasets in the same chat.
+        session['company_chat_history'] = []
+
+    else:
+        # If no file is uploaded, we rely on existing history.
+        if not session.get('company_chat_history'):
+            return jsonify({"error": "No chat history found. Please upload a CSV file first."}), 400
+
+    # ---- KPI-focused visualization policy ----
+
     # IMPORTANT: Do not create report "tables" by showing raw CSV subsets or dataframe describe/agg outputs.
     # This endpoint must return analytics derived from KPI calculations defined in the Opus design document.
     # We only compute and/or ask the model to compute KPIs; we do not render row extracts as "tables".
@@ -2074,10 +2114,15 @@ def analyze_company_data_new():
     You are the Opus Analytics Data Engine.
 
     Use the following logic and formula definitions provided in the Opus design document:
+    Be flexible with the user input make sure to focus on the direction the user point to do not produce all the analysis or follow the structure if the user ask for specific KPI or specific analysis, in that case focus on the user request and produce the output based on that, but if the user input is general or not specific then follow the structure and produce a full analysis.
+    If the user input is not clear DO NOT CONTINUE and ask for clarification, do not make assumptions about what the user wants, if the user input is not clear or specific ask the user to provide more details or clarify their request before proceeding with the analysis.
+    But if user input is empty or very general then produce a full analysis based on the design document and follow the structure in that case.
+    DO NOT SHOW ALL KPI if user specified and do not do any analysis the user didn't specify without informing
 
     --- START OF DESIGN DOCUMENT ---
     {OPUS_LOGIC_CONTEXT}
     --- END OF DESIGN DOCUMENT ---
+    
 
     CRITICAL RULES (must follow):
     - Calculate KPIs strictly using formulas defined in the design document.
@@ -2085,7 +2130,7 @@ def analyze_company_data_new():
     - Do not use dataframe describe(), raw CSV row samples, or any subset-of-data as a substitute for KPI calculations.
     - If columns are insufficient for a KPI, explicitly list which required columns are missing (use design-doc required column names).
     - The user goal/input may appear in the prompt for context ONLY.
-      You MUST NOT repeat, quote, or paraphrase the user's goal text in your output.
+    - You MUST NOT repeat, quote, or paraphrase the user's goal text in your output.
     - Output strictly in JSON (no markdown code fences).
 
     REQUIRED OUTPUT (Return this as a JSON object with exactly these top-level keys):
@@ -2093,66 +2138,116 @@ def analyze_company_data_new():
       "report_title": "Detailed Organizational KPI Analysis Report",
       "analysis_narrative": "A full Markdown-formatted report string.",
       "visuals_and_tables": [
-        {{ "type": "table", "title": "Primary Metric Table", "content": "..." }},
-        {{ "type": "chart", "title": "Trend Visualization", "content": "..." }}
+        {{
+          "type": "table",
+          "title": "KPI Table: [KPI Name]",
+          "content": "A Markdown-formatted table with explicit numeric KPI values (not raw data subsets)."
+        }},
+        {{
+          "type": "chart",
+          "visualization": "bar" | "line" | "pie" | "scatter" | etc. (choose the most appropriate chart type based on the KPI and insights)",
+          "title": "KPI Chart: [KPI Name]",
+          "labels": ["Label1", "Label2", ...],  # e.g., time periods, categories
+          "data": [NumericValue1, NumericValue2, ...],  # Corresponding numeric values for the labels
+          "content": "A clear array of numeric values and labels ready for visualization, along with a descriptive explanation of what the chart would show if rendered."
+        }}
       ],
       "next_steps": [
-        "Suggestion 1: ...",
-        "Suggestion 2: ..."
+        "Actionable recommendation 1 based on the analysis.",
       ]
     }}
 
     MANDATORY NARRATIVE RULES (LONG + CALCULATION-CENTERED):
-    1. analysis_narrative MUST contain at least TWO Markdown titles/sections (e.g., "## Executive Summary" and "## KPI Calculations & Drivers").
+    1. The analysis_narrative must be a rich, detailed report that explains the KPIs, their implications, and strategic insights. It should not be a simple list of bullet points or a brief summary. The narrative should weave together the KPIs into a cohesive story about the organization's performance and areas for improvement.
     2. Use long paragraphs: multiple sentences per KPI/issue (avoid short bullet-only explanations).
     3. For every KPI/major finding included, use these three headers within the narrative:
        - **Description**
        - **Key Insight**
        - **Strategic Value**
+       Clearly separate these sections for each KPI/issue discussed to ensure depth of analysis and clarity of implications. add \n\n between each section and KPI for readability.
     4. For at least 2 KPIs you include, explicitly document the calculation method in text using the design-doc formula wording (without copying the raw formula block verbatim if it becomes too long).
     5. If any KPI cannot be calculated, include a final "## Data Quality Note" section at the end that explicitly lists which columns were missing.
 
     OPTIONAL INDEX EXPANSION (preferred):
     - If the design document includes composite indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex), then calculate at least one index using the KPI components and clearly explain weighting.
 
-    MANDATORY TABLE NUMERIC RULES:
+    (IF AVAILABLE) MANDATORY TABLE NUMERIC RULES:
     6. visuals_and_tables items with type == "table" MUST include explicit numeric values inside the `content` string that come from KPI computations (not raw row subsets).
        - Numbers must be visible in the string (percentages, counts, averages, composite index scores).
        - Do NOT output placeholders like "N/A" without explanation of what is missing.
 
     REPRESENTATIONS RULES:
-    7. visuals_and_tables MUST always include at least 2 items: one KPI-derived table and one chart description derived from KPI logic.
-    8. next_steps MUST be an array with at least 2 actionable recommendations.
+    7. visuals_and_tables items with type == "chart" should be descriptive text that explains what a chart would show if rendered, based on the KPI logic and values. It should not be a placeholder or generic statement.
+    8. Do NOT create tables by showing raw CSV subsets or dataframe describe/agg outputs. The "table" content must be derived from KPI calculations.
 
     OUTPUT DISCIPLINE:
     - analysis_narrative must be rich and long, reflecting multiple KPIs, their computed results, and their business implications.
+
     """
 
 
-    messages = [
-        {'role': 'system', 'content': system_prompt},
-        {'role': 'user', 'content': f"""
-            Goal: {user_input}
-            Available Columns: {column_info}
-            Statistical Summary: {summary_stats}
-            Please provide the analysis based on these metrics.
-            """
-        }
-    ]
+    # ---- Build chat messages using persisted history ----
+    # Persisted history is a list of chat messages: [{"role":"system"|"user"|"assistant","content":...}, ...]
+    # Keep the system prompt only once at the beginning of the chat.
+    history = session.get('company_chat_history', [])
 
+    # On a fresh chat (or after reset/file), history may be empty; initialize with system + current user message.
+    if not history:
+        history = [{'role': 'system', 'content': system_prompt}]
+        
+    print(f"Current chat history (before appending user message): {data_preview}")
     
+    # return jsonify({"error": "Debug stop - check console for current chat history."})
+
+    # Append current user message (always) if user_input is provided.
+    if user_input:
+        history.append({
+            'role': 'user',
+            'content': f"""
+                Goal: {user_input}
+                Available Columns: {column_info}
+                Data Preview: {data_preview}
+                Numeric Columns: {numeric_cols}
+                Please provide the analysis based on these metrics.
+                """
+        })
+
+    # Trim history to avoid cookie bloat: keep system + last N turns.
+    # A "turn" is user+assistant, so keep last 10 user messages and their assistant responses.
+    max_user_messages = 10
+    system_msgs = [m for m in history if m.get('role') == 'system']
+    other_msgs = [m for m in history if m.get('role') != 'system']
+    user_msgs = [m for m in other_msgs if m.get('role') == 'user']
+    if len(user_msgs) > max_user_messages:
+        # Keep only messages after the earliest user message within the window
+        # Find index of the user message we want to start from
+        user_indices = [i for i, m in enumerate(other_msgs) if m.get('role') == 'user']
+        start_user_idx = user_indices[-max_user_messages]
+        other_msgs = other_msgs[start_user_idx:]
+        history = system_msgs[:1] + other_msgs
+
+    messages = history
+
     # 3. EXECUTE
     try:
+
         completion = client.chat.completions.create(
             model=OPENAI_DEPLOYMENT_ID,
             messages=messages,
-            response_format={ "type": "json_object" }
+            response_format={"type": "json_object"}
         )
 
         raw = completion.choices[0].message.content
         parsed = json.loads(raw)
+        
+
+        # Append assistant response to memory and persist
+        history.append({'role': 'assistant', 'content': raw})
+        session['company_chat_history'] = history
+        session.modified = True
 
         # Minimal schema validation / fallback (keep frontend output shape fixed)
+
         required_top_level = {"report_title", "analysis_narrative", "visuals_and_tables", "next_steps"}
         if not isinstance(parsed, dict) or not required_top_level.issubset(set(parsed.keys())):
             parsed = {
@@ -2169,8 +2264,8 @@ def analyze_company_data_new():
                     {"type": "chart", "title": "Trend Visualization", "content": "No chart description could be produced from the returned data."}
                 ],
                 "next_steps": [
-                    "Suggestion 1: Re-run analysis with a CSV that includes the required numeric columns for the target KPIs.",
-                    "Suggestion 2: Verify the CSV headers match the design document column names; then re-submit."
+                    "Suggestion 1: Ask the engine to recommend which KPI indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex) are feasible to compute from your dataset.",
+                    "Suggestion 2: Re-run analysis and request an index-selection plan explaining which indexes you can use (and why) based on the dataset columns it detects as available."
                 ]
             }
 
@@ -2193,8 +2288,8 @@ def analyze_company_data_new():
         next_steps = parsed.get("next_steps")
         if not isinstance(next_steps, list) or len(next_steps) < 2:
             parsed["next_steps"] = [
-                "Suggestion 1: Re-run analysis with complete columns required by the KPI formulas in the design document.",
-                "Suggestion 2: Cross-check column headers and numeric formats; then re-submit the same file."
+                "Suggestion 1: Ask the engine to propose which KPI indexes (e.g., ProductivityIndex, EngagementIndex, PotentialIndex, RetentionIndex) you can compute from your dataset.",
+                "Suggestion 2: Re-run the request asking specifically for an index recommendation plan based on the dataset columns detected as available (and explain why each index is feasible)."
             ]
 
         # Enforce report_title (frontend expects fixed title)
@@ -2202,7 +2297,8 @@ def analyze_company_data_new():
 
         # DO NOT override model visuals with raw-data “tables”.
         # The model must return KPI-derived visuals_and_tables (table + chart).
-        return jsonify({"analysis": parsed})
+        return jsonify({"analysis": parsed, "chat_id": session.get('company_chat_id')})
+
 
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
