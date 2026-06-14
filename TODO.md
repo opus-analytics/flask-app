@@ -1,12 +1,10 @@
 # TODO
 
-- [x] Implement session-based chat memory for `/api/analyze/company-data` in `app.py`:
-
-  - [ ] Add `chat_id` generation and persistence in Flask `session`
-  - [ ] Store `company_chat_history` as message list and keep initial system prompt
-  - [ ] Initialize/append history depending on whether `analyze-files` is present
-  - [ ] Add `reset` support to clear history
-  - [ ] Trim history to a safe max length (cap turns)
-  - [ ] Return `chat_id` in API response
-- [ ] Quick test via local request flow (2 calls) and ensure JSON schema still matches frontend expectations
-
+- [ ] Update `analyze_company_data_new()` prompts in `app.py`:
+  - [ ] Introduce a shared `generic_any_mode_instructions` block used in Analysis/Index/Chat modes
+  - [ ] Add an explicit rule: never return formula text/blocks; only describe results and high-level calculation approach
+  - [ ] Improve user-facing tone in `analysis_narrative` instructions
+  - [ ] Reduce repeated information in chat mode by adding a “no repetition” instruction + tighter response scope
+  - [ ] Add an instruction that the assistant should confirm understanding briefly before presenting the report (without asking the user to verify)
+- [ ] Implement prompt edits
+- [ ] Run quick syntax check (`python -m py_compile app.py`)

@@ -2060,6 +2060,29 @@ def analyze_company_data_new():
         chat_id = str(uuid.uuid4())
         session['company_chat_id'] = chat_id
 
+    # Shared prompt rules that apply across ALL phases/modes.
+    generic_any_mode_instructions = """
+    GENERIC INSTRUCTIONS (Apply in every mode):
+    1) Be user-friendly and action-oriented. Write in a clear, non-technical tone.
+    2) Never copy or return the design document formulas themselves (do NOT output formula blocks, formula text, or equations). If calculation explanation is needed, describe it at a high level (e.g., 'computed using the required fields and the design logic') without showing the formula.
+    3) Reduce repetition: avoid restating the same conclusion multiple times. If you must repeat for clarity, rephrase and keep it brief.
+    4) Be responsive: produce only the information requested by the current mode, plus a short, practical next-step section.
+    5) Confirm understanding briefly, then deliver the output:
+       - Start the narrative with a short sentence that you understood the task and the data context.
+       - Do not ask the user to confirm anything before continuing.
+    6) Keep the JSON schema exactly as required by this endpoint (no extra top-level keys; no missing required keys).
+
+    Anti-repetition / output discipline (hard requirement):
+    - Do NOT restate the user’s goal, constraints, headers, or schema rules.
+    - Do NOT re-quote any prompt text, instructions, or the design document.
+    - Produce each major conclusion once and do not repeat it under multiple headings.
+
+    Repetition control (important):
+    - Do NOT re-quote instructions, headers, or the provided prompts in your response.
+    - Do NOT duplicate the same paragraph under multiple headings.
+    """
+
+
     reset = request.form.get('reset', None)
     should_reset = str(reset).lower() in {'1', 'true', 'yes', 'y', 'on'}
 
@@ -2147,6 +2170,8 @@ def analyze_company_data_new():
         \"\"\"
         {PROJECT_INDEX_DEFINITIONS}
         \"\"\"
+        
+  
 
         CRITICAL NEXT STEPS GATEWAY (Evaluate data state and select and output EXACTLY ONE matching path inside your Markdown list format):
         
@@ -2294,8 +2319,8 @@ def analyze_company_data_new():
         Use the user input to respond on it based on the context: {user_input}
         Core behavior:
 
-        1) You MUST always follow the OPUS_LOGIC_CONTEXT and PROJECT_INDEX_DEFINITIONS provided below.
-        2) You MUST keep a consistent engine output format using EXACTLY this JSON schema.
+        1) Discuss only what the user is asking, no need for repetition
+        2) Use the engine itself to answer teh user questions
         3) The user may ask conversational questions or request specific visualizations/charts.
         You must translate that request into the engine’s constrained computation scope
         without breaking index/formula rules.
@@ -2365,8 +2390,7 @@ def analyze_company_data_new():
                 Available Columns: {column_info}
                 Data Preview: {data_preview}
                 Numeric Columns: {numeric_cols}
-                Produce output for ONLY the requested index and its required component KPIs.
-                Index value must be interpreted strictly from requested_index.
+                Generic Instructions: {generic_any_mode_instructions}
             """
         })
 
