@@ -43,6 +43,7 @@ import fitz # PyMuPDF
 from openai import AzureOpenAI
 import re
 from email_graph import AzureGraphMailer
+import ast
 
 from database import get_cursor, get_db
 
@@ -1100,31 +1101,49 @@ def dashboard():
 
 
 @app.route("/payment", methods = ["GET","POST"])
+# Parse incoming request body as JSON and get Python dict
 def payment():
-        
-    connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-    cursor = connection.cursor()
+    raw_data = request.get_data()
+    
+    # Decode bytes to string
+    try:
+        data_str = raw_data.decode('utf-8')
+    except UnicodeDecodeError:
+        data_str = raw_data.decode('latin-1', errors='ignore')
 
-    data = request.get_json().get('data').get('object')
-    #billing_details = data.get('billing_details', {})
+    payload = None
+    
+    # 1. Try standard JSON loading first
+    try:
+        payload = json.loads(data_str)
+    except json.JSONDecodeError:
+        # 2. Fallback: If it's formatted like a Python dictionary string or malformed JSON
+        try:
+            # Replace JavaScript/JSON constants with Python equivalents if needed
+            py_friendly = data_str.replace('true', 'True').replace('false', 'False').replace('null', 'None')
+            payload = ast.literal_eval(py_friendly)
+        except Exception as e:
+            print(f"Parsing failed completely: {e}")
+            return "Invalid JSON / Payload Format", 400
 
-    email = data.get("customer_email")
-    description = data['lines']['data'][0]['description']
+    # Extract object / customer details safely regardless of how it was parsed
+    obj = payload.get("object", payload) if isinstance(payload, dict) else {}
+    
+    # Extract email
+    email = obj.get("receipt_email") or obj.get("billing_details", {}).get("email")
+    if not email and "customer_details" in obj and obj["customer_details"]:
+        email = obj["customer_details"].get("email")
 
-    period_start = data['lines']['data'][0]['period']['start']
-    period_end = data['lines']['data'][0]['period']['end']
-    dt_start = datetime.datetime.fromtimestamp(period_start)
-    dt_end = datetime.datetime.fromtimestamp(period_end)
-    if 'Standard' in description:
-        plan = 'SAAS'
-    if 'Advanced' in description:
-        plan = 'Partner'
-    check_mail_query = f"UPDATE users SET user_type = '{plan}', subscription_from_date = '{dt_start}', subscription_expiration_date = '{dt_end}' where email = '{email}' "
-    cursor.execute(check_mail_query)
-    connection.commit()
-    connection.close()
-    print(dt_end)
-    return (render_template("subscription.html"))
+    print(f"Extracted Customer Email: {email}")
+    
+    # Send confirmation email
+    if email:
+        send_email("Payment Confirmation",email, "Your payment was successful. Thank you for your purchase!")
+    else:
+        print("No email found in the payload.")
+
+    return {"status": "success"}, 200
+
 
 @app.route("/knowledge-graph")
 def knowledge_graph():
@@ -2208,21 +2227,48 @@ def get_salaries_chart():
 # Test send email with Microsoft Graph API
 @app.route("/test-send-email", methods=["GET"])
 def test_send_email():
-    # Usage in your Flask route:
-    # mailer = AzureGraphMailer()
-    # mailer.send_email("Welcome!", "user@example.com", "<h1>Hello</h1>", is_html=True)
-    
-    mailer = AzureGraphMailer()
-    success = mailer.send_email(
+    # Example usage of the generic sender below
+    email_template = render_template("email_template.html", 
+        link="https://opusanalytics.ai/subscription", 
+        title="Welcome to Opus Analytics!", 
+        subTitle="Your Opus Account is Ready",
+        message="We're excited to welcome you to the Opus community! Your account has been created successfully. Click the button below to get started:",
+        btnText="Get Started"
+    )
+
+    # Use the generic helper to prepare and send the email
+    success = send_email(
         subject="Welcome to Opus Analytics!",
         to_email="omar.alaa@rightfoot.org",
-        body_content="<h1>Hello from Opus Analytics!</h1><p>This is a test email sent via Microsoft Graph API.</p>",
+        template_str=email_template,
         is_html=True
     )
+
     if success:
-        return "Email sent successfully!"
+        return redirect(url_for('subscription'))
     else:
         return "Failed to send email.", 500
+
+
+def send_email(subject: str, to_email: str, template_str: str, is_html: bool = True) -> bool:
+    """Generic helper: given a rendered template string, prepare and send email via AzureGraphMailer.
+
+    Returns True on success, False otherwise.
+    """
+    try:
+        mailer = AzureGraphMailer()
+        return mailer.send_email(
+            subject=subject,
+            to_email=to_email,
+            body_content=template_str,
+            is_html=is_html
+        )
+    except Exception:
+        return False
+
+
+def send_email_from_template(subject: str, to_email: str, template_str: str, is_html: bool = True) -> bool:
+    return send_email(subject, to_email, template_str, is_html)
     
 # Load the file content once at startup to use as system context
 with open('step_by_step_process.md', 'r', encoding='utf-8') as f:
