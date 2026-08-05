@@ -670,7 +670,7 @@ def reset_password():
         return jsonify({"error": "User not found"}), 404
 
     token = s.dumps(email, salt='email-confirm')
-    link = f"http://localhost:5173/auth/reset-password/{token}"
+    link = f"https://opusanalytics.ai/auth/reset-password/{token}"
     #msg.body = 'Your Confirmation link is {}'.format(link)
     
     # Example usage of the generic sender below
