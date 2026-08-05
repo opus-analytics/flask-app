@@ -242,9 +242,6 @@ def confirmation_mail():
     
     return (render_template('confirmation-mail.html'))
 
-
-
-
 @app.route("/confirmed-mail/<token>", methods = ["GET","POST"])
 def confirmed_mail(token):
     try:
@@ -648,47 +645,95 @@ def calculate_competency_list():
     
     return Response(status=200, response=json.dumps({"message":"Competency calculated successfully", "score": weightedAssessmentScore*100}), mimetype='application/json')
     
-@app.route("/reset-password", methods = ["GET","POST"])
+@app.route("/api/reset-password", methods = ["POST"])
 def reset_password():
-    email = request.form.get("Email")
-    token = s.dumps(email, salt= 'email-confirm')
-    msg = Message('Confirm Email', sender='CustomerExperience@opusanalytics.ai', recipients=[email])
-    link = url_for('new_password',token=token, _external=True)
+    payload = request.get_json(silent=True) or {}
+    email = payload.get("email")
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    try:
+        cursor = get_cursor()
+        cursor.execute("SELECT 1 FROM users WHERE email = %s LIMIT 1", (email,))
+        user_exists = cursor.fetchone() is not None
+    except Exception:
+        return jsonify({"error": "Failed to verify user"}), 500
+    finally:
+        try:
+            if 'cursor' in locals() and cursor is not None:
+                cursor.close()
+        except Exception:
+            pass
+
+    if not user_exists:
+        return jsonify({"error": "User not found"}), 404
+
+    token = s.dumps(email, salt='email-confirm')
+    link = f"http://localhost:5173/auth/reset-password/{token}"
     #msg.body = 'Your Confirmation link is {}'.format(link)
-    msg.html = render_template('reset_password_mail.html',link = link)
-    if request.method == "POST":
-        mail.send(msg)
-        flash('Reset mail has been sent!','success')
-        
-    return (render_template('reset-password.html',token=token))
+    
+    # Example usage of the generic sender below
+    email_template = render_template("reset_password_mail.html", 
+        link = link, 
+        title="Confirm Email",
+    )
+    
+    # Use the generic helper to prepare and send the email
+    success = send_email(
+        subject="Opus Analytics - Reset Password",
+        to_email=email,
+        template_str=email_template,
+        is_html=True
+    )
+    if success:
+        return jsonify({"message": "Reset password email sent successfully."}), 200
+    else:
+        return jsonify({"error": "Failed to send reset password email."}), 500
             
 
-@app.route("/new-password/<token>", methods = ["GET","POST"])
+@app.route("/api/new-password/<token>", methods=["POST"])
 def new_password(token):
+    used_tokens = app.config.setdefault("used_reset_tokens", set())
+
+    if token in used_tokens:
+        return jsonify({"error": "Token expired or invalid"}), 400
+
     try:
         email = s.loads(token, salt='email-confirm', max_age=3600)
-        password = request.form.get("Password")
-        confirm_password = request.form.get("Confirm-Password")
-        if request.method == "POST":
-            if password != confirm_password:
-                flash('Passwords do not match!','error')
-            else:
-                password = bytes(password, encoding = 'utf-8')
-                salt = bcrypt.gensalt()
-                hashed_pwd = bcrypt.hashpw(password, salt)
-                hashed_pwd = hashed_pwd.decode()
-                connection = mysql.connector.connect(host='opus-server.mysql.database.azure.com',database='opus_prod',user='opusadmin',password='OAg@1234')
-                cursor = connection.cursor()   
-                check_mail_query = f"UPDATE USERS SET password = '{hashed_pwd}' WHERE email = '{email}'"
-                cursor.execute(check_mail_query)
-                connection.commit()
-                connection.close()
-                return redirect(url_for("sign_in"))
-
-
     except SignatureExpired:
-        return (render_template('404.html'))
-    return (render_template('new-password.html'))
+        return jsonify({"error": "Token expired or invalid"}), 400
+
+    payload = request.get_json(silent=True) or request.form or {}
+    password = payload.get("password")
+    confirm_password = payload.get("confirm_password")
+
+    if not password or not confirm_password:
+        return jsonify({"error": "Password and confirmation are required"}), 400
+
+    if password != confirm_password:
+        return jsonify({"error": "Passwords do not match"}), 400
+
+    cursor = None
+    try:
+        hashed_pwd = generate_password_hash(password)
+
+        cursor = get_cursor()
+        cursor.execute("UPDATE USERS SET password_hash = %s WHERE email = %s", (hashed_pwd, email))
+        get_db().commit()
+
+        used_tokens.add(token)
+        app.config["used_reset_tokens"] = used_tokens
+    except Exception:
+        return jsonify({"error": "Failed to update password"}), 500
+    finally:
+        try:
+            if cursor is not None:
+                cursor.close()
+        except Exception:
+            pass
+
+    return jsonify({"message": "Password updated successfully"}), 200
 
 
 @app.route("/log-out", methods = ["GET","POST"])
@@ -1100,7 +1145,7 @@ def dashboard():
 # """
 
 
-@app.route("/payment", methods = ["GET","POST"])
+@app.route("/api/payment", methods = ["GET","POST"])
 # Parse incoming request body as JSON and get Python dict
 def payment():
     raw_data = request.get_data()
@@ -2247,7 +2292,7 @@ def test_send_email():
     if success:
         return redirect(url_for('subscription'))
     else:
-        return "Failed to send email.", 500
+        return jsonify({"error": "Failed to send email."}), 500
 
 
 def send_email(subject: str, to_email: str, template_str: str, is_html: bool = True) -> bool:
