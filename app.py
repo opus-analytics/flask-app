@@ -716,7 +716,10 @@ def new_password(token):
 
     cursor = None
     try:
-        hashed_pwd = generate_password_hash(password)
+        password = bytes(password, encoding = 'utf-8')
+        salt = bcrypt.gensalt()
+        hashed_pwd = bcrypt.hashpw(password, salt)
+        hashed_pwd = hashed_pwd.decode()
 
         cursor = get_cursor()
         cursor.execute("UPDATE USERS SET password_hash = %s WHERE email = %s", (hashed_pwd, email))
