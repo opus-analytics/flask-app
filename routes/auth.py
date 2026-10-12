@@ -1,8 +1,8 @@
 # routes/auth.py
 
 from flask import Blueprint, request, jsonify, current_app, render_template
-from models.users import User
-from models.subscriptions import Subscription
+from opus_api.models.users import User
+from opus_api.models.subscriptions import Subscription
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth

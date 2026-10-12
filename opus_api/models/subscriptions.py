@@ -1,4 +1,4 @@
-from database import get_cursor, get_db
+from opus_api.db import get_cursor, get_db
 import mysql.connector
 
 class Subscription:

@@ -1,6 +1,6 @@
 # models/user.py
 
-from database import get_cursor, get_db
+from opus_api.db import get_cursor, get_db
 import bcrypt # For password hashing
 import mysql.connector
 import datetime

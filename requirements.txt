@@ -24,3 +24,7 @@ python-dotenv
 python-docx
 PyMuPDF
 msal
+
+pytest
+flask-limiter
+azure-storage-blob

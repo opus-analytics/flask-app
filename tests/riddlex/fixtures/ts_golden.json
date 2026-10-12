@@ -1,0 +1,1488 @@
+{
+  "cases": [
+    {
+      "name": "job_data_analyst",
+      "job": {
+        "title": "People Data Analyst",
+        "description": "Turn workforce data into insights for HR leaders across the region. Partner with People teams on dashboards and KPIs.",
+        "requirements": "SQL, Python, Power BI or similar, statistics fundamentals, and clear written communication with non-technical stakeholders.",
+        "location": "Riyadh, KSA",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_python",
+          "skill": "Python",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_statistics",
+          "skill": "Statistics",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_power_bi",
+          "skill": "Power BI",
+          "category": "Tools",
+          "required": true
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true
+        },
+        {
+          "id": "skill_stakeholder_management",
+          "skill": "Stakeholder management",
+          "category": "Professional",
+          "required": true
+        },
+        {
+          "id": "skill_data_visualisation_dashboards",
+          "skill": "Data visualisation & dashboards",
+          "category": "Technical",
+          "required": false
+        },
+        {
+          "id": "skill_kpi_design",
+          "skill": "KPI design",
+          "category": "Technical",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used Python together with SQL and Statistics. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The People Data Analyst role asks for: \"SQL, Python, Power BI or similar, statistics fundamentals, and clear written communication with non-technical stakeholde…\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (Riyadh, KSA). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه Python مع SQL وStatistics. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور People Data Analyst: \"SQL, Python, Power BI or similar, statistics fundamentals, and clear written communication with non-technical stakeholde…\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في Riyadh, KSA. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé Python avec SQL et Statistics. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de People Data Analyst demande : « SQL, Python, Power BI or similar, statistics fundamentals, and clear written communication with non-technical stakeholde… ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à Riyadh, KSA. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "job_frontend_engineer",
+      "job": {
+        "title": "Front-End Engineer (React)",
+        "description": "Build fast, accessible interfaces for our HR analytics platform. You will own features end to end, from design handoff to production.",
+        "requirements": "3+ years with React and TypeScript, Tailwind CSS, REST API integration, accessibility (WCAG) and performance profiling.",
+        "location": "Hybrid — Cairo, Egypt",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used React together with TypeScript and Tailwind CSS. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Front-End Engineer (React) role asks for: \"3+ years with React and TypeScript, Tailwind CSS, REST API integration, accessibility (WCAG) and performance profiling.\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (Hybrid — Cairo, Egypt). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه React مع TypeScript وTailwind CSS. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Front-End Engineer (React): \"3+ years with React and TypeScript, Tailwind CSS, REST API integration, accessibility (WCAG) and performance profiling.\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في Hybrid — Cairo, Egypt. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé React avec TypeScript et Tailwind CSS. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Front-End Engineer (React) demande : « 3+ years with React and TypeScript, Tailwind CSS, REST API integration, accessibility (WCAG) and performance profiling. ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à Hybrid — Cairo, Egypt. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "job_hr_intern",
+      "job": {
+        "title": "Talent Acquisition Intern",
+        "description": "Support the recruiting team with sourcing, screening and candidate communication.",
+        "requirements": "Strong communication, organisation, LinkedIn sourcing and interest in HR technology.",
+        "location": "Remote",
+        "jobType": "Internship",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_candidate_sourcing",
+          "skill": "Candidate sourcing",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_linkedin_recruiter",
+          "skill": "LinkedIn Recruiter",
+          "category": "Tools",
+          "required": true
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true
+        },
+        {
+          "id": "skill_organisation_prioritisation",
+          "skill": "Organisation & prioritisation",
+          "category": "Professional",
+          "required": true
+        },
+        {
+          "id": "skill_candidate_screening",
+          "skill": "Candidate screening",
+          "category": "Technical",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used Candidate sourcing together with LinkedIn Recruiter. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Talent Acquisition Intern role asks for: \"Strong communication, organisation, LinkedIn sourcing and interest in HR technology.\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a internship position (Remote). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه Candidate sourcing مع LinkedIn Recruiter. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Talent Acquisition Intern: \"Strong communication, organisation, LinkedIn sourcing and interest in HR technology.\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Internship) في Remote. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé Candidate sourcing avec LinkedIn Recruiter. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Talent Acquisition Intern demande : « Strong communication, organisation, LinkedIn sourcing and interest in HR technology. ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Internship) basé à Remote. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "many_skills",
+      "job": {
+        "title": "Full Stack Lead",
+        "description": "Digital git github dashboard",
+        "requirements": "React, TypeScript, JavaScript, Next.js, NodeJS, GraphQL, Redux, Tailwind, Python, SQL, Flask, Azure, Excel, Figma, stakeholder, communication",
+        "location": "Remote",
+        "jobType": "Contract",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_javascript",
+          "skill": "JavaScript",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_next_js",
+          "skill": "Next.js",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_node_js",
+          "skill": "Node.js",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_graphql",
+          "skill": "GraphQL",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_redux",
+          "skill": "Redux",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used React together with TypeScript and JavaScript. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Full Stack Lead role asks for: \"React, TypeScript, JavaScript, Next.js, NodeJS, GraphQL, Redux, Tailwind, Python, SQL, Flask, Azure, Excel, Figma, stake…\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a contract position (Remote). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه React مع TypeScript وJavaScript. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Full Stack Lead: \"React, TypeScript, JavaScript, Next.js, NodeJS, GraphQL, Redux, Tailwind, Python, SQL, Flask, Azure, Excel, Figma, stake…\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Contract) في Remote. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé React avec TypeScript et JavaScript. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Full Stack Lead demande : « React, TypeScript, JavaScript, Next.js, NodeJS, GraphQL, Redux, Tailwind, Python, SQL, Flask, Azure, Excel, Figma, stake… ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Contract) basé à Remote. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "sparse",
+      "job": {
+        "title": "Office Manager",
+        "description": "Run the office.",
+        "requirements": "Friendly attitude.",
+        "location": "Remote",
+        "jobType": "Part-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_problem_solving",
+          "skill": "Problem solving",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_cross_team_collaboration",
+          "skill": "Cross-team collaboration",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_learning_new_tools_quickly",
+          "skill": "Learning new tools quickly",
+          "category": "Professional",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used the core skills listed for this role. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Office Manager role asks for: \"Friendly attitude.\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a part-time position (Remote). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه المهارات الأساسية المطلوبة لهذا الدور. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Office Manager: \"Friendly attitude.\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Part-time) في Remote. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé les compétences clés de ce poste. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Office Manager demande : « Friendly attitude. ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Part-time) basé à Remote. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "sparse_comm",
+      "job": {
+        "title": "Receptionist",
+        "description": "Front desk",
+        "requirements": "Good communication",
+        "location": "Alexandria",
+        "jobType": "Internship",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true
+        },
+        {
+          "id": "skill_problem_solving",
+          "skill": "Problem solving",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_cross_team_collaboration",
+          "skill": "Cross-team collaboration",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_learning_new_tools_quickly",
+          "skill": "Learning new tools quickly",
+          "category": "Professional",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used the core skills listed for this role. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Receptionist role asks for: \"Good communication\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a internship position (Alexandria). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه المهارات الأساسية المطلوبة لهذا الدور. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Receptionist: \"Good communication\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Internship) في Alexandria. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé les compétences clés de ce poste. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Receptionist demande : « Good communication ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Internship) basé à Alexandria. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "digital_git",
+      "job": {
+        "title": "Digital Marketer",
+        "description": "digital campaigns, widgets, Preact, reactive",
+        "requirements": "gitless digital; sqlite; nodes",
+        "location": "Dubai",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_node_js",
+          "skill": "Node.js",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_git",
+          "skill": "Git",
+          "category": "Tools",
+          "required": true
+        },
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used Node.js together with SQL and Git. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Digital Marketer role asks for: \"gitless digital; sqlite; nodes\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (Dubai). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه Node.js مع SQL وGit. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Digital Marketer: \"gitless digital; sqlite; nodes\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في Dubai. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé Node.js avec SQL et Git. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Digital Marketer demande : « gitless digital; sqlite; nodes ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à Dubai. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "long_emoji",
+      "job": {
+        "title": "QA Engineer",
+        "description": "Testing role",
+        "requirements": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA😀Cypress and python and Jest xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "location": "Cairo",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_automated_testing",
+          "skill": "Automated testing",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_python",
+          "skill": "Python",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_problem_solving",
+          "skill": "Problem solving",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used Automated testing together with Python. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The QA Engineer role asks for: \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA😀…\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (Cairo). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه Automated testing مع Python. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور QA Engineer: \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA😀…\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في Cairo. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé Automated testing avec Python. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de QA Engineer demande : « AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA😀… ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à Cairo. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "arabic_title",
+      "job": {
+        "title": "مهندس React",
+        "description": "وصف",
+        "requirements": "ReAcT, ÉXCEL, Next.JS, node.js and REST API; End-to-End ownership",
+        "location": "الرياض",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_next_js",
+          "skill": "Next.js",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_node_js",
+          "skill": "Node.js",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": true
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used React together with Next.js and Node.js. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The مهندس React role asks for: \"ReAcT, ÉXCEL, Next.JS, node.js and REST API; End-to-End ownership\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (الرياض). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه React مع Next.js وNode.js. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور مهندس React: \"ReAcT, ÉXCEL, Next.JS, node.js and REST API; End-to-End ownership\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في الرياض. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé React avec Next.js et Node.js. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de مهندس React demande : « ReAcT, ÉXCEL, Next.JS, node.js and REST API; End-to-End ownership ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à الرياض. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "exactly_120",
+      "job": {
+        "title": "Analyst",
+        "description": "d",
+        "requirements": "SQL yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+        "location": "Cairo",
+        "jobType": "Full-time",
+        "language": "en"
+      },
+      "skills": [
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true
+        },
+        {
+          "id": "skill_problem_solving",
+          "skill": "Problem solving",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": false
+        },
+        {
+          "id": "skill_cross_team_collaboration",
+          "skill": "Cross-team collaboration",
+          "category": "Professional",
+          "required": false
+        }
+      ],
+      "screening": {
+        "en": [
+          {
+            "question": "Describe a recent project where you used SQL. What was your role and what was the outcome?",
+            "minChars": 20
+          },
+          {
+            "question": "The Analyst role asks for: \"SQL yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\". Which of these is your strongest area, and where would you need support?",
+            "minChars": 20
+          },
+          {
+            "question": "This is a full-time position (Cairo). What is your availability to start, and does this work setup suit you?",
+            "minChars": 2
+          }
+        ],
+        "ar": [
+          {
+            "question": "صف مشروعاً حديثاً استخدمت فيه SQL. ما كان دورك وما النتيجة؟",
+            "minChars": 20
+          },
+          {
+            "question": "يتطلب دور Analyst: \"SQL yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\". ما أقوى مجالاتك من بينها، وأين ستحتاج إلى دعم؟",
+            "minChars": 20
+          },
+          {
+            "question": "هذه وظيفة (Full-time) في Cairo. متى يمكنك البدء، وهل يناسبك نظام العمل هذا؟",
+            "minChars": 2
+          }
+        ],
+        "fr": [
+          {
+            "question": "Décrivez un projet récent où vous avez utilisé SQL. Quel était votre rôle et quel a été le résultat ?",
+            "minChars": 20
+          },
+          {
+            "question": "Le poste de Analyst demande : « SQL yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy ». Quel est votre point fort parmi ces éléments, et où auriez-vous besoin de soutien ?",
+            "minChars": 20
+          },
+          {
+            "question": "Il s'agit d'un poste (Full-time) basé à Cairo. Quand pouvez-vous commencer, et ce mode de travail vous convient-il ?",
+            "minChars": 2
+          }
+        ]
+      }
+    }
+  ],
+  "applications": [
+    {
+      "id": "app_6",
+      "jobId": "job_data_analyst",
+      "skills": [
+        {
+          "id": "skill_python",
+          "skill": "Python",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_statistics",
+          "skill": "Statistics",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_power_bi",
+          "skill": "Power BI",
+          "category": "Tools",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_stakeholder_management",
+          "skill": "Stakeholder management",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_data_visualisation_dashboards",
+          "skill": "Data visualisation & dashboards",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_kpi_design",
+          "skill": "KPI design",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 3
+        }
+      ],
+      "skillsMatch": 80
+    },
+    {
+      "id": "app_1",
+      "jobId": "job_frontend_engineer",
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false,
+          "proficiency": 4
+        }
+      ],
+      "skillsMatch": 60
+    },
+    {
+      "id": "app_8",
+      "jobId": "job_data_analyst",
+      "skills": [
+        {
+          "id": "skill_python",
+          "skill": "Python",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_statistics",
+          "skill": "Statistics",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_power_bi",
+          "skill": "Power BI",
+          "category": "Tools",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_stakeholder_management",
+          "skill": "Stakeholder management",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_data_visualisation_dashboards",
+          "skill": "Data visualisation & dashboards",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_kpi_design",
+          "skill": "KPI design",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 5
+        }
+      ],
+      "skillsMatch": 80
+    },
+    {
+      "id": "app_2",
+      "jobId": "job_frontend_engineer",
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false,
+          "proficiency": 3
+        }
+      ],
+      "skillsMatch": 80
+    },
+    {
+      "id": "app_7",
+      "jobId": "job_data_analyst",
+      "skills": [
+        {
+          "id": "skill_python",
+          "skill": "Python",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_sql",
+          "skill": "SQL",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_statistics",
+          "skill": "Statistics",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_power_bi",
+          "skill": "Power BI",
+          "category": "Tools",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_stakeholder_management",
+          "skill": "Stakeholder management",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_data_visualisation_dashboards",
+          "skill": "Data visualisation & dashboards",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_kpi_design",
+          "skill": "KPI design",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 2
+        }
+      ],
+      "skillsMatch": 60
+    },
+    {
+      "id": "app_3",
+      "jobId": "job_frontend_engineer",
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false,
+          "proficiency": 2
+        }
+      ],
+      "skillsMatch": 60
+    },
+    {
+      "id": "app_5",
+      "jobId": "job_frontend_engineer",
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 1
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 1
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false,
+          "proficiency": 3
+        }
+      ],
+      "skillsMatch": 41
+    },
+    {
+      "id": "app_4",
+      "jobId": "job_frontend_engineer",
+      "skills": [
+        {
+          "id": "skill_react",
+          "skill": "React",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_typescript",
+          "skill": "TypeScript",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_tailwind_css",
+          "skill": "Tailwind CSS",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_rest_api_integration",
+          "skill": "REST API integration",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_accessibility_wcag",
+          "skill": "Accessibility (WCAG)",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_performance_optimisation",
+          "skill": "Performance optimisation",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 5
+        },
+        {
+          "id": "skill_figma",
+          "skill": "Figma",
+          "category": "Tools",
+          "required": false,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_end_to_end_ownership",
+          "skill": "End-to-end ownership",
+          "category": "Professional",
+          "required": false,
+          "proficiency": 5
+        }
+      ],
+      "skillsMatch": 80
+    },
+    {
+      "id": "app_9",
+      "jobId": "job_hr_intern",
+      "skills": [
+        {
+          "id": "skill_candidate_sourcing",
+          "skill": "Candidate sourcing",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_linkedin_recruiter",
+          "skill": "LinkedIn Recruiter",
+          "category": "Tools",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_organisation_prioritisation",
+          "skill": "Organisation & prioritisation",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 4
+        },
+        {
+          "id": "skill_candidate_screening",
+          "skill": "Candidate screening",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 2
+        }
+      ],
+      "skillsMatch": 58
+    },
+    {
+      "id": "app_10",
+      "jobId": "job_hr_intern",
+      "skills": [
+        {
+          "id": "skill_candidate_sourcing",
+          "skill": "Candidate sourcing",
+          "category": "Technical",
+          "required": true,
+          "proficiency": 1
+        },
+        {
+          "id": "skill_linkedin_recruiter",
+          "skill": "LinkedIn Recruiter",
+          "category": "Tools",
+          "required": true,
+          "proficiency": 2
+        },
+        {
+          "id": "skill_written_verbal_communication",
+          "skill": "Written & verbal communication",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 3
+        },
+        {
+          "id": "skill_organisation_prioritisation",
+          "skill": "Organisation & prioritisation",
+          "category": "Professional",
+          "required": true,
+          "proficiency": 1
+        },
+        {
+          "id": "skill_candidate_screening",
+          "skill": "Candidate screening",
+          "category": "Technical",
+          "required": false,
+          "proficiency": 2
+        }
+      ],
+      "skillsMatch": 36
+    }
+  ]
+}

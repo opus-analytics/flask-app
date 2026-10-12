@@ -1,8 +1,8 @@
 import openai
 import PyPDF2
 import docx2txt
-from opus_conn import get_competencies_hamza,get_job_info_from_db
-from opus_conn import create_conn
+from opus_api.repositories.legacy_competency import get_competencies_hamza, get_job_info_from_db
+from opus_api.repositories.legacy_competency import create_conn
 from datetime import datetime
 import json
 import ast
