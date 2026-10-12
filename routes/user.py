@@ -1,9 +1,9 @@
 # routes/auth.py
 
 from flask import Blueprint, request, jsonify, current_app
-from models.users import User
-from models.subscriptions import Subscription
-from models.assessment import Assessment
+from opus_api.models.users import User
+from opus_api.models.subscriptions import Subscription
+from opus_api.models.assessment import Assessment
 from models.surveys import Survey
 import jwt
 import datetime

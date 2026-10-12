@@ -1,4 +1,7 @@
-from flask import * 
+from dotenv import load_dotenv
+load_dotenv()
+
+from flask import *
 from flask import flash
 import json, time
 from flask_wtf import FlaskForm
@@ -27,33 +30,41 @@ from prettytable.colortable import ColorTable, Themes
 import datetime
 import xmltodict
 from python_random_strings import random_strings
-from Resume_analysis import OpusResume, OpusJDAnalyzer
-from opus_conn import create_conn
-from opus_conn import get_competencies_hamza,get_job_info_from_db
+from opus_api.services.resume_analysis import OpusResume, OpusJDAnalyzer
+from opus_api.repositories.legacy_competency import create_conn
+from opus_api.repositories.legacy_competency import get_competencies_hamza, get_job_info_from_db
 import secrets
 from flask_cors import CORS
-from config import Config
-import database
+from opus_api.config import Config
+from opus_api import db as database
 from routes.auth import auth_bp
 from routes.user import user_bp
 from models.surveys import survey_bp
+from riddlex import riddlex_bp
+from salaries import salaries_bp
 from werkzeug.utils import secure_filename
 from docx import Document
 import fitz # PyMuPDF
 from openai import AzureOpenAI
 import re
-from email_graph import AzureGraphMailer
+from opus_api.services.graph_mailer import AzureGraphMailer
 import ast
 
-from database import get_cursor, get_db
+from opus_api.db import get_cursor, get_db
 
 app = Flask(__name__)
+# Pages live in templates/; moved email templates live in opus_api/templates/. Search both.
+import jinja2
+app.jinja_loader = jinja2.ChoiceLoader([
+    jinja2.FileSystemLoader(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')),
+    jinja2.FileSystemLoader(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'opus_api', 'templates')),
+])
 CORS(app, origins=['http://localhost:5173/*', "thankful-moss-0bffc760f.6.azurestaticapps.net", "kind-mushroom-05279770f.2.azurestaticapps.net"], supports_credentials=True)
 
 # Hamza's code
 # Assuming you have imported the `OpusResume` class and helper functions
-opus_resume = OpusResume(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
-opus_jd_analyzer = OpusJDAnalyzer(api_base='https://opusgptus2.openai.azure.com/', api_key='c23514f5b6f64bfd84046ab0fad95da0')
+opus_resume = OpusResume(api_base='https://opusgptus2.openai.azure.com/', api_key=os.environ.get('AZURE_OPENAI_KEY', ''))
+opus_jd_analyzer = OpusJDAnalyzer(api_base='https://opusgptus2.openai.azure.com/', api_key=os.environ.get('AZURE_OPENAI_KEY', ''))
 
 powerbi_blueprint = Blueprint('powerbi', __name__)
 
@@ -62,10 +73,23 @@ app.config.from_object(Config)
 # Initialize database connection management
 database.init_app(app)
 
+# Real client IP for per-IP rate limiting (RiddleX /public/*). DEPLOYMENT ASSUMPTION: exactly
+# RIDDLEX_TRUSTED_PROXIES reverse proxies (default 1 = Azure App Service front end) append to
+# X-Forwarded-For. Too high -> clients can spoof their IP via X-Forwarded-For and dodge limits;
+# too low -> every client shares the proxy's IP. Set 0 when the app is exposed directly.
+from werkzeug.middleware.proxy_fix import ProxyFix
+from riddlex.limits import limiter as riddlex_limiter
+_trusted_proxies = int(os.environ.get("RIDDLEX_TRUSTED_PROXIES") or 1)
+if _trusted_proxies > 0:
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=_trusted_proxies)
+riddlex_limiter.init_app(app)  # no default limits: only decorated /public/* routes are limited
+
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth') # Prefix auth routes with /api/auth
 app.register_blueprint(user_bp, url_prefix='/api/user') # Prefix auth routes with /api/auth
 app.register_blueprint(survey_bp, url_prefix='/api/survey') # Prefix survey routes with /api/survey
+app.register_blueprint(riddlex_bp, url_prefix='/api/riddlex')
+app.register_blueprint(salaries_bp, url_prefix='/api/salaries')
 
 # --- API Endpoints (No more template rendering for core app logic) ---
 @app.route("/")

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 import uuid
-from database import get_cursor, get_db
+from opus_api.db import get_cursor, get_db
 
 survey_bp = Blueprint("survey", __name__)
 

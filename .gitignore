@@ -1,2 +1,9 @@
-/myenv
+__pycache__/
+*.pyc
 .env
+uploads/*
+!uploads/.gitkeep
+graphify-out/
+myenv/
+antenv/
+.pytest_cache/

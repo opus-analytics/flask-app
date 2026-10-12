@@ -1,0 +1,551 @@
+[
+ {
+  "rule": "/",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "index"
+ },
+ {
+  "rule": "/",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "home"
+ },
+ {
+  "rule": "/.well-known/pki-validation/godaddy.html",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "goddadyVerification"
+ },
+ {
+  "rule": "/add-competency",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "add_competency"
+ },
+ {
+  "rule": "/add-competency-resume-jd",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "add_competency_resume_jd"
+ },
+ {
+  "rule": "/add-user",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "add_user"
+ },
+ {
+  "rule": "/analyze-company-data",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "analyze_company_data"
+ },
+ {
+  "rule": "/analyze-resume-hamza",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "analyze_resume_hamza"
+ },
+ {
+  "rule": "/analyze_jd_hamza",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "analyze_jd_hamza"
+ },
+ {
+  "rule": "/api/analyze/company-data",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "analyze_company_data_new"
+ },
+ {
+  "rule": "/api/analyze/resumes/translate",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "analyze_resume"
+ },
+ {
+  "rule": "/api/auth/login",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "auth.login"
+ },
+ {
+  "rule": "/api/auth/protected-data",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "auth.protected_data"
+ },
+ {
+  "rule": "/api/auth/register",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "auth.register"
+ },
+ {
+  "rule": "/api/auth/verify-email",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "auth.verify_email"
+ },
+ {
+  "rule": "/api/bulk-compare/resumes/translate",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "bulk_compare_resumes"
+ },
+ {
+  "rule": "/api/compare/resumes/translate",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "compare_resumes"
+ },
+ {
+  "rule": "/api/new-password/<token>",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "new_password"
+ },
+ {
+  "rule": "/api/payment",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "payment"
+ },
+ {
+  "rule": "/api/reset-password",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "reset_password"
+ },
+ {
+  "rule": "/api/survey/<int:survey_id>",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "survey.api_get_survey_details"
+ },
+ {
+  "rule": "/api/survey/<int:survey_id>/results",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "survey.api_get_survey_results"
+ },
+ {
+  "rule": "/api/survey/create-surveys",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "survey.api_create_survey"
+ },
+ {
+  "rule": "/api/survey/submit",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "survey.api_submit_survey"
+ },
+ {
+  "rule": "/api/survey/take-survey/<string:ref>",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "survey.api_take_survey"
+ },
+ {
+  "rule": "/api/survey/user/<string:email>/surveys",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "survey.api_get_surveys_per_user"
+ },
+ {
+  "rule": "/api/user/assessment",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "user.create_user_assessment"
+ },
+ {
+  "rule": "/api/user/get-assessment",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "user.get_user_assessments"
+ },
+ {
+  "rule": "/api/user/get-assessment-job-titles",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "user.get_user_assessments_job_titles"
+ },
+ {
+  "rule": "/api/user/profile",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "user.get_user_profile"
+ },
+ {
+  "rule": "/api/user/subscriptions",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "user.get_user_subscriptions"
+ },
+ {
+  "rule": "/api/user/subscriptions-all",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "user.get_user_subscriptions_all"
+ },
+ {
+  "rule": "/calculate-competency",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "calculate_competency_list"
+ },
+ {
+  "rule": "/compare-resumes-job",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "compare_resumes_job"
+ },
+ {
+  "rule": "/compare_resume_job",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "compare_resume_job"
+ },
+ {
+  "rule": "/competency-results",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "competency_results"
+ },
+ {
+  "rule": "/competency-results-manager",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "competency_results_manager"
+ },
+ {
+  "rule": "/confirmation-mail",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "confirmation_mail"
+ },
+ {
+  "rule": "/confirmed-mail/<token>",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "confirmed_mail"
+ },
+ {
+  "rule": "/contact",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "contact"
+ },
+ {
+  "rule": "/cookie-policy",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "cookie_policy"
+ },
+ {
+  "rule": "/create",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "create_user"
+ },
+ {
+  "rule": "/dashboard",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "dashboard"
+ },
+ {
+  "rule": "/get-competency",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "get_competencies"
+ },
+ {
+  "rule": "/get-competency-results",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_competency_results"
+ },
+ {
+  "rule": "/get-my-competencies",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "get_my_competencies"
+ },
+ {
+  "rule": "/get-my-competency",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "get_my_competency"
+ },
+ {
+  "rule": "/get-salaries-chart",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_salaries_chart"
+ },
+ {
+  "rule": "/get-salaries-country",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_salaries_country"
+ },
+ {
+  "rule": "/get-salaries-experience",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_salaries_experience"
+ },
+ {
+  "rule": "/get-salaries-family",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_salaries_family"
+ },
+ {
+  "rule": "/get-salaries-jobs",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "get_salaries_jobs"
+ },
+ {
+  "rule": "/getState",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "getUserState"
+ },
+ {
+  "rule": "/knowledge-graph",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "knowledge_graph"
+ },
+ {
+  "rule": "/knowledge-graph-extra",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "knowledge_graph_extra"
+ },
+ {
+  "rule": "/knowledge-graph-extra-getId",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "knowledge_graph_extra_getId"
+ },
+ {
+  "rule": "/knowledge-graph-jd",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "knowledge_graph_jd"
+ },
+ {
+  "rule": "/knowledge-graph-manager/<id>",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "knowledge_graph_manager"
+ },
+ {
+  "rule": "/knowledge-graph-portal",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "knowledge_graph_portal"
+ },
+ {
+  "rule": "/knowledge-graph-resume",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "knowledge_graph_resume"
+ },
+ {
+  "rule": "/log-out",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "log_out"
+ },
+ {
+  "rule": "/manage-users",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "manage_users"
+ },
+ {
+  "rule": "/our-offerings",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "our_offerings"
+ },
+ {
+  "rule": "/partners",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "partners"
+ },
+ {
+  "rule": "/privacy-policy",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "privacy_policy"
+ },
+ {
+  "rule": "/reactivate",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "reactivate_user"
+ },
+ {
+  "rule": "/salaries_functionality",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "salaries_functionality"
+ },
+ {
+  "rule": "/sign-in",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "sign_in"
+ },
+ {
+  "rule": "/sign-up",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "sign_up"
+ },
+ {
+  "rule": "/subscription",
+  "methods": [
+   "GET",
+   "POST"
+  ],
+  "endpoint": "subscription"
+ },
+ {
+  "rule": "/suspend",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "suspend_user"
+ },
+ {
+  "rule": "/template",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "template"
+ },
+ {
+  "rule": "/terminate",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "terminate_user"
+ },
+ {
+  "rule": "/terms-of-use",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "terms_of_use"
+ },
+ {
+  "rule": "/test-send-email",
+  "methods": [
+   "GET"
+  ],
+  "endpoint": "test_send_email"
+ },
+ {
+  "rule": "/update-manager-competency",
+  "methods": [
+   "POST"
+  ],
+  "endpoint": "update_manager_competency"
+ }
+]
