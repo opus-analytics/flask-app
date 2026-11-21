@@ -12,7 +12,8 @@ import jwt
 import mysql.connector
 import pytest
 
-SCHEMA = Path(__file__).resolve().parents[2] / "riddlex" / "migrations" / "001_schema.sql"
+_MIGRATIONS = Path(__file__).resolve().parents[2] / "riddlex" / "migrations"
+SCHEMAS = [_MIGRATIONS / "001_schema.sql", _MIGRATIONS / "002_custom_questions.sql"]
 _REQUIRED = ("HOST", "USER", "PASSWORD", "NAME")
 
 # Minimal stand-ins for the pre-existing tables, created in the *test* DB only (IF NOT EXISTS).
@@ -80,8 +81,9 @@ def _db_schema(db_settings):
     cur = conn.cursor()
     cur.execute(_USERS_DDL)
     cur.execute(_SUBSCRIPTION_DDL)
-    for stmt in _split_sql(SCHEMA.read_text(encoding="utf-8")):
-        cur.execute(stmt)
+    for schema in SCHEMAS:  # 002 needs the stand-in subscription table and 001 first; it is re-runnable
+        for stmt in _split_sql(schema.read_text(encoding="utf-8")):
+            cur.execute(stmt)
     conn.commit()
     conn.close()
 

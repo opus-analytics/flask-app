@@ -33,6 +33,7 @@ def fake(monkeypatch):
     state = {"job": _job(), "site": None, "calls": []}
     monkeypatch.setattr(repo_public, "get_job", lambda jid: state["job"] if state["job"] and jid == state["job"]["id"] else None)
     monkeypatch.setattr(repo_public, "get_site_for_org", lambda org: state["site"])
+    monkeypatch.setattr(repo_public, "custom_questions_enabled", lambda org: False)
 
     def goq(job, kind, lang):
         state["calls"].append((kind, lang))

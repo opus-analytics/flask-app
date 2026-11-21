@@ -2,7 +2,7 @@ from opus_api.db import get_cursor, get_db
 import mysql.connector
 
 class Subscription:
-    def __init__(self, my_row_id, email, subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id, owner, tag='user'):
+    def __init__(self, my_row_id, email, subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id, owner, tag='user', custom_questions_enabled=0):
         self.my_row_id = my_row_id
         self.email = email
         self.subscription = subscription
@@ -12,6 +12,7 @@ class Subscription:
         self.resource_id = resource_id
         self.owner = owner
         self.tag = tag
+        self.custom_questions_enabled = bool(custom_questions_enabled)  # SELECT * appends this column last
 
     @staticmethod
     def find_by_email(email, include_inactive=False):

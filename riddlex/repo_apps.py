@@ -30,7 +30,7 @@ _ORDER = {
     "match": "a.skills_match DESC, a.created_at DESC, a.id DESC",
 }
 _APP_COLS = ("a.id, a.job_id, a.applicant_name, a.applicant_email, a.mobile_number, "
-             "a.resume_file_name, a.answers, a.skills, a.skills_match, a.stage, a.notes, "
+             "a.resume_file_name, a.answers, a.custom_answers, a.skills, a.skills_match, a.stage, a.notes, "
              "a.created_at, a.updated_at, j.title AS job_title")
 _FROM = "FROM riddlex_applications a JOIN riddlex_jobs j ON j.id = a.job_id"
 
@@ -103,6 +103,14 @@ def _json_col(value):
     return value
 
 
+def _safe_json_list(value):
+    try:
+        parsed = _json_col(value)
+    except (ValueError, TypeError):
+        return []
+    return parsed if isinstance(parsed, list) else []
+
+
 def _ts(value):
     return iso(value) if isinstance(value, datetime.datetime) else value
 
@@ -120,6 +128,7 @@ def application_row_to_json(row: dict, history: list, with_job: bool = True) -> 
         "mobileNumber": row["mobile_number"],
         "resumeFileName": row["resume_file_name"],
         "answers": _json_col(row["answers"]),
+        "customAnswers": _safe_json_list(row.get("custom_answers")),
         "skills": _json_col(row["skills"]),
         "skillsMatch": int(row["skills_match"]),
         "stage": row["stage"],

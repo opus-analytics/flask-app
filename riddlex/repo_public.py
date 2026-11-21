@@ -10,7 +10,7 @@ from datetime import datetime
 
 from opus_api.db import get_db
 
-from . import questionnaire
+from . import questionnaire, repo_jobs
 from .schemas import LANGUAGES
 
 KINDS = ("screening", "skills")
@@ -30,7 +30,7 @@ DEFAULT_SITE = {
 }
 
 _JOB_COLS = ("id, org_email, title, description, requirements, location, job_type, language, "
-             "status, public_token, created_at")
+             "status, public_token, created_at, custom_questions")
 _SITE_COLS = ("org_email, company_name, slug, tagline, logo_url, colors, font, hiring_locations, "
               "languages, default_language, published")
 
@@ -66,12 +66,31 @@ def _row_to_job(row: dict) -> dict:
         "status": row["status"],
         "publicToken": row["public_token"],
         "createdAt": _iso(row["created_at"]),
+        "customQuestions": repo_jobs.parse_questions(row.get("custom_questions")),
     }
 
 
-def to_public_job(job: dict) -> dict:
-    """Strip every server-only field (publicToken, orgEmail)."""
-    return {k: v for k, v in job.items() if k not in ("publicToken", "orgEmail")}
+def to_public_job(job: dict, questions_enabled: bool = False) -> dict:
+    """Strip every server-only field (publicToken, orgEmail); customQuestions only when the owner's flag is on."""
+    out = {k: v for k, v in job.items() if k not in ("publicToken", "orgEmail")}
+    if not questions_enabled:
+        out["customQuestions"] = []
+    return out
+
+
+def custom_questions_enabled(org_email) -> bool:
+    """Flag from the owner's active, unexpired RiddleX subscription row(s); missing row => False."""
+    cur = _cursor()
+    try:
+        cur.execute(
+            "SELECT custom_questions_enabled FROM subscription WHERE subscription = 'RiddleX' "
+            "AND owner = %s AND subscription_status = 'active' "
+            "AND (subscription_expiration_date IS NULL OR subscription_expiration_date > UTC_TIMESTAMP()) "
+            "ORDER BY custom_questions_enabled DESC LIMIT 1", (org_email,))
+        row = cur.fetchone()
+    finally:
+        cur.close()
+    return bool(row and row["custom_questions_enabled"])
 
 
 def site_row_to_public(row: dict) -> dict:
@@ -211,11 +230,13 @@ def insert_application(app_id: str, job_id: str, a: dict) -> None:
     try:
         cur.execute(
             "INSERT INTO riddlex_applications (id, job_id, applicant_name, applicant_email, mobile_number, "
-            "resume_file_name, resume_blob_path, answers, skills, skills_match, stage, notes, created_at, "
-            "updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'New', '', %s, %s)",
+            "resume_file_name, resume_blob_path, answers, skills, skills_match, custom_answers, stage, notes, "
+            "created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'New', '', %s, %s)",
             (app_id, job_id, a["name"], a["email"], a["mobile"], a["resume_file_name"],
              a["resume_blob_path"], json.dumps(a["answers"], ensure_ascii=False),
-             json.dumps(a["skills"], ensure_ascii=False), a["skills_match"], now, now),
+             json.dumps(a["skills"], ensure_ascii=False), a["skills_match"],
+             json.dumps(a["custom_answers"], ensure_ascii=False) if a.get("custom_answers") is not None else None,
+             now, now),
         )
         cur.execute(
             "INSERT INTO riddlex_application_history (application_id, stage, at) VALUES (%s, 'New', %s)",

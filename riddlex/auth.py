@@ -27,7 +27,7 @@ def _is_current(sub, now):
     return exp is None or exp > now
 
 
-def _resolve_org(user_email: str) -> str:
+def _resolve_sub(user_email: str):
     """Tenant = owner of the user's active, unexpired RiddleX subscription (newest first)."""
     now = datetime.datetime.utcnow()
     subs = [
@@ -36,7 +36,7 @@ def _resolve_org(user_email: str) -> str:
     ]
     subs.sort(key=lambda s: (s.subscription_from_date or datetime.datetime.min, s.my_row_id), reverse=True)
     if subs:
-        return subs[0].owner
+        return subs[0]
     raise ApiError(403, "An active RiddleX subscription is required.")
 
 
@@ -45,7 +45,10 @@ def org_required(fn):
     @auth.login_required
     def wrapper(*args, **kwargs):
         g.user_email = auth.current_user()
-        g.org_email = _resolve_org(g.user_email)
+        sub = _resolve_sub(g.user_email)
+        g.org_email = sub.owner
+        from . import repo_public  # lazy: avoids a circular import with the public routes
+        g.custom_questions_enabled = repo_public.custom_questions_enabled(sub.owner)
         return fn(*args, **kwargs)
 
     return wrapper

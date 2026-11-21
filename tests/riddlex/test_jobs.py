@@ -52,8 +52,9 @@ def test_row_mapper_camel_case_and_timestamp():
            "created_at": datetime.datetime(2026, 1, 2, 3, 4, 5, 6000)}
     out = job_row_to_json(row)
     assert set(out) == {"id", "title", "description", "requirements", "location", "jobType",
-                        "language", "status", "publicToken", "createdAt"}
+                        "language", "status", "publicToken", "createdAt", "customQuestions"}
     assert out["createdAt"] == "2026-01-02T03:04:05.006Z" and out["jobType"] == "Contract"
+    assert out["customQuestions"] == []  # NULL column maps to an empty list
 
 
 def test_jobs_require_auth(anon_client):

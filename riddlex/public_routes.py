@@ -57,7 +57,7 @@ def _site_for(job):
 @limit_get
 def public_job(job_id):
     job = require_public_job(job_id, request.args.get("token"))
-    return jsonify({"job": repo_public.to_public_job(job), "site": _site_for(job)})
+    return jsonify({"job": repo_public.to_public_job(job, repo_public.custom_questions_enabled(job["orgEmail"])), "site": _site_for(job)})
 
 
 @riddlex_bp.route("/public/questions", methods=["POST"])
@@ -186,6 +186,38 @@ def build_skill_ratings(payload: dict, skills_q: list) -> list:
     return out
 
 
+_ANSWER_MAX = {"text": 500, "textarea": 5000}
+MSG_CUSTOM = "The additional questions have changed. Please reload the page and try again."
+
+
+def build_custom_answers(payload: dict, questions: list) -> list:
+    """Snapshot [{id, question, type, answer}] built from the STORED questions; client labels are ignored."""
+    given = payload.get("customAnswers")
+    given = given if given is not None else []
+    if not isinstance(given, list):
+        raise ApiError(400, MSG_CUSTOM)
+    by_id = {}
+    for a in given:
+        if not isinstance(a, dict) or not isinstance(a.get("id"), str) or a["id"] in by_id:
+            raise ApiError(400, MSG_CUSTOM)
+        by_id[a["id"]] = a.get("answer")
+    if not set(by_id) <= {q["id"] for q in questions}:
+        raise ApiError(400, MSG_CUSTOM)
+    out = []
+    for q in questions:
+        raw = by_id.get(q["id"], "")
+        text = raw.strip() if isinstance(raw, str) else None
+        if text is None or (q["required"] and not text):
+            raise ApiError(400, MSG_CUSTOM)
+        if q["type"] == "select":
+            if text and text not in q["options"]:
+                raise ApiError(400, MSG_CUSTOM)
+        elif len(text) > _ANSWER_MAX[q["type"]]:
+            raise ApiError(400, MSG_CUSTOM)
+        out.append({"id": q["id"], "question": q["label"], "type": q["type"], "answer": text})
+    return out
+
+
 def _delete_blob(container: str, path: str) -> None:
     try:
         blob_storage.delete(container, path)
@@ -213,6 +245,9 @@ def public_apply():
         raise ApiError(400, MSG_RESUME_TYPE)
     answers = validate_answers(payload)
     skills = build_skill_ratings(payload, repo_public.get_or_create_questionnaire(job, "skills", "en"))
+    custom_answers = None  # flag off or no questions: customAnswers ignored, NULL stored
+    if job.get("customQuestions") and repo_public.custom_questions_enabled(job["orgEmail"]):
+        custom_answers = build_custom_answers(payload, job["customQuestions"])
 
     ext, mime = kind
     app_id = str(uuid.uuid4())
@@ -225,6 +260,7 @@ def public_apply():
             "resume_blob_path": path,
             "answers": answers,
             "skills": skills,
+            "custom_answers": custom_answers,
             "skills_match": questionnaire.score_skills(skills),
         })
     except mysql.connector.IntegrityError as e:

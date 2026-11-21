@@ -73,9 +73,10 @@ def test_row_mapper_camel_case_no_blob_path():
     hist = [{"stage": "Interview", "at": "2026-10-08T10:00:00.000Z"}]
     out = application_row_to_json(_app_row(), hist)
     assert set(out) == {"id", "jobId", "applicantName", "applicantEmail", "mobileNumber",
-                        "resumeFileName", "answers", "skills", "skillsMatch", "stage", "notes",
-                        "createdAt", "updatedAt", "history", "jobTitle"}
+                        "resumeFileName", "answers", "customAnswers", "skills", "skillsMatch", "stage",
+                        "notes", "createdAt", "updatedAt", "history", "jobTitle"}
     assert out["answers"] == [{"question": "Q", "answer": "A"}]
+    assert out["customAnswers"] == []  # NULL column maps to an empty list
     assert out["skills"] == [{"name": "Python"}]
     assert out["createdAt"] == "2026-10-09T12:00:00.000Z" and out["history"] == hist
     assert "secret-path" not in json.dumps(out)
