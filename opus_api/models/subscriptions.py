@@ -2,7 +2,7 @@ from opus_api.db import get_cursor, get_db
 import mysql.connector
 
 class Subscription:
-    def __init__(self, my_row_id, email, subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id, owner, tag='user', custom_questions_enabled=0):
+    def __init__(self, my_row_id, email, subscription, subscription_status, subscription_from_date, subscription_expiration_date, resource_id, owner, tag='user', connectors_enabled=1, *_extra, custom_questions_enabled=0):
         self.my_row_id = my_row_id
         self.email = email
         self.subscription = subscription
@@ -12,6 +12,12 @@ class Subscription:
         self.resource_id = resource_id
         self.owner = owner
         self.tag = tag
+        # shortcut: informational only; gating uses repo.connectors_enabled() by column name, because trailing
+        # positional columns from SELECT * are not guaranteed to be ours. Falls back to 1 on non-int values.
+        try:
+            self.connectors_enabled = int(connectors_enabled) if connectors_enabled is not None else 1
+        except (TypeError, ValueError):
+            self.connectors_enabled = 1
         self.custom_questions_enabled = bool(custom_questions_enabled)  # SELECT * appends this column last
 
     @staticmethod
@@ -113,5 +119,6 @@ class Subscription:
             "subscription_expiration_date": self.subscription_expiration_date.isoformat() if self.subscription_expiration_date else None,
             "resource_id": self.resource_id,
             "owner": self.owner,
-            "tag": self.tag
+            "tag": self.tag,
+            "connectors_enabled": self.connectors_enabled
         }
