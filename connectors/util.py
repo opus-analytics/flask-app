@@ -4,7 +4,7 @@ import unicodedata
 from urllib.parse import quote
 
 MAX_NAME = 150
-_ID_RE = re.compile(r"[A-Za-z0-9!_\-\.]{1,200}")
+_ID_RE = re.compile(r"(?!\.+\Z)[A-Za-z0-9!_\-\.]{1,200}")  # dot-only ids ('.', '..') would resolve as paths
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 _RESERVED = re.compile(r'[<>:"/\\|?*]')
 _SPACES = re.compile(r"\s+")

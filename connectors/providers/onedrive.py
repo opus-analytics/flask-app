@@ -16,7 +16,7 @@ from .base import MAX_BYTES, AccessResult, FileEntry, FilePage, Provider, Provid
 AUTH_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
 TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 GRAPH = "https://graph.microsoft.com/v1.0"
-GRAPH_PREFIX = "https://graph.microsoft.com/"  # SSRF guard for @odata.nextLink
+GRAPH_PREFIX = GRAPH + "/me/drive"  # SSRF guard for @odata.nextLink
 TIMEOUT = (5, 30)
 CHUNK = 64 * 1024
 RECONNECT_ERRORS = {"invalid_grant", "interaction_required"}

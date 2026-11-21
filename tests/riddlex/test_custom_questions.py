@@ -176,9 +176,9 @@ def test_build_malformed_input_rejected(given):
 def test_subscription_accepts_nine_and_ten_positional_args():
     base = (1, "e@x.com", "RiddleX", "active", None, None, "res", "o@x.com")
     nine = Subscription(*base, "user")
-    assert nine.custom_questions_enabled is False
+    assert nine.owner == "o@x.com"
     ten = Subscription(*base, "user", 1)
-    assert ten.custom_questions_enabled is True and ten.owner == "o@x.com"
+    assert ten.owner == "o@x.com" and not hasattr(ten, "custom_questions_enabled")
 
 
 # ---------------- route fixtures (DB-free) ----------------

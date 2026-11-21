@@ -20,10 +20,7 @@ def _provider_error(e):
 
 
 from . import routes_core  # noqa: E402,F401  (registers routes on connectors_bp)
-try:
-    from . import routes_google  # noqa: E402,F401
-    from . import routes_files  # noqa: E402,F401
-except ImportError:  # shortcut: tolerates missing T2 route modules; remove this try once they are merged
-    pass
+from . import routes_google  # noqa: E402,F401
+from . import routes_files  # noqa: E402,F401
 
 __all__ = ["connectors_bp", "ConnectorError"]

@@ -39,6 +39,12 @@ def test_valid_id():
     assert not valid_id(None)
 
 
+def test_dot_only_ids_are_invalid():
+    assert not valid_id(".")
+    assert not valid_id("..")
+    assert not valid_id("...")
+
+
 def test_content_disposition_has_ascii_fallback_and_utf8_name():
     header = content_disposition("سيرة.pdf")
     assert header.startswith('attachment; filename="file.pdf";')

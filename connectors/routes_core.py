@@ -60,6 +60,7 @@ def _is_no_refresh(message):
 
 
 @connectors_bp.route("", methods=["GET"], strict_slashes=False)
+@limiter.limit("60/minute")
 @auth.login_required
 def list_connectors():
     email = auth.current_user()
@@ -125,6 +126,8 @@ def callback(provider):
         return _popup(pid, origin, False, "bad_request")
     if not config.provider_ready(pid):
         return _popup(pid, origin, False, "not_configured")
+    if not repo.connectors_enabled(data["e"]):
+        return _popup(pid, origin, False, "disabled")
     prov = PROVIDERS[pid]
     verifier = pkce_verifier(data["n"]) if prov.uses_pkce else None
     try:
@@ -153,6 +156,7 @@ def _revoke_quietly(provider_id, acct):
 
 
 @connectors_bp.route("/<provider>", methods=["DELETE"])
+@limiter.limit("60/minute")
 @auth.login_required
 def disconnect(provider):
     pid = _provider_id(provider)

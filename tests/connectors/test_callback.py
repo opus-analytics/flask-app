@@ -108,3 +108,11 @@ def test_script_breakout_is_escaped(app, env, fake_providers, store, client, mon
 def test_no_origin_configured_is_plain_400(app, no_env, fake_providers, client):
     resp = client.get("/api/connectors/google/callback?state=x&code=y")
     assert resp.status_code == 400 and resp.mimetype == "text/plain"
+
+
+def test_disabled_user_gets_disabled_and_nothing_stored(app, env, fake_providers, store, client):
+    store.flags["a@x.com"] = False
+    token, _ = _state(app, "a@x.com", "google")
+    body = _msg(_cb(client, "google", token, code="CODE-ABC"))
+    assert '"error": "disabled"' in body and '"ok": false' in body
+    assert store.accounts == {}

@@ -222,6 +222,7 @@ def test_list_passes_next_link_through(provider, http):
 @pytest.mark.parametrize("token", [
     "https://evil.test/x",
     "https://graph.microsoft.com.evil.test/v1.0/me",
+    "https://graph.microsoft.com/v1.0/users/x",
     "http://graph.microsoft.com/v1.0/me",
     "javascript:alert(1)",
 ])
