@@ -3,6 +3,7 @@ from flask import jsonify, request
 
 from . import presentation, repo, salaries_bp, search
 from .auth import auth
+from user_stats.tracker import track
 
 
 def _params(*names):
@@ -58,6 +59,7 @@ def experience():
 
 
 @salaries_bp.route("/chart", methods=["GET"])
+@track("salary_chart", "Advance")
 @auth.login_required
 def chart():
     p, err = _params("country", "family", "job", "experience")

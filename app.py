@@ -42,6 +42,8 @@ from routes.user import user_bp
 from models.surveys import survey_bp
 from riddlex import riddlex_bp
 from salaries import salaries_bp
+from user_stats import user_stats_bp
+from user_stats.tracker import track
 from werkzeug.utils import secure_filename
 from docx import Document
 import fitz # PyMuPDF
@@ -90,6 +92,7 @@ app.register_blueprint(user_bp, url_prefix='/api/user') # Prefix auth routes wit
 app.register_blueprint(survey_bp, url_prefix='/api/survey') # Prefix survey routes with /api/survey
 app.register_blueprint(riddlex_bp, url_prefix='/api/riddlex')
 app.register_blueprint(salaries_bp, url_prefix='/api/salaries')
+app.register_blueprint(user_stats_bp, url_prefix='/api/user')  # GET /api/user/stats
 
 # --- API Endpoints (No more template rendering for core app logic) ---
 @app.route("/")
@@ -1742,6 +1745,7 @@ def clean_text(text):
 
 # --- API Endpoint ---
 @app.route("/api/compare/resumes/translate", methods=["POST"])
+@track("resume_compare", "Start")
 def compare_resumes():
     """
     Analyzes resumes using OpenAI and translates the response.
@@ -1842,6 +1846,7 @@ def compare_resumes():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     
 @app.route("/api/bulk-compare/resumes/translate", methods=["POST"])
+@track("resume_bulk_compare", "Start")
 def bulk_compare_resumes():
     """
     Analyzes resumes using OpenAI and translates the response.
@@ -1946,6 +1951,7 @@ def bulk_compare_resumes():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @app.route("/api/analyze/resumes/translate", methods=["POST"])
+@track("resume_analyze", "Start")
 def analyze_resume():
     """
     Analyzes resumes using OpenAI and translates the response.
@@ -2350,6 +2356,7 @@ with open('index_definitions.md', 'r', encoding='utf-8') as f:
     PROJECT_INDEX_DEFINITIONS = f.read()
 
 @app.route("/api/analyze/company-data", methods=["POST"])
+@track("company_data_analyze", "Advance")
 def analyze_company_data_new():
     # ---- Session-based chat memory (per browser session cookie) ----
     chat_id = session.get('company_chat_id')

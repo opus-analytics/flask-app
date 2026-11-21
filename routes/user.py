@@ -5,6 +5,7 @@ from opus_api.models.users import User
 from opus_api.models.subscriptions import Subscription
 from opus_api.models.assessment import Assessment
 from models.surveys import Survey
+from user_stats.tracker import track
 import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
@@ -162,6 +163,7 @@ def get_user_subscriptions():
 
 # --- Create User Assessment ---
 @user_bp.route("/assessment", methods=["POST"])
+@track("assessment_create", "Enable")
 @auth.login_required # This decorator protects the route
 def create_user_assessment():
     user_email = auth.current_user()
@@ -188,6 +190,7 @@ def create_user_assessment():
 
 # --- Get Assessment List ---
 @user_bp.route("/get-assessment", methods=["POST"])
+@track("assessment_get", "Enable")
 @auth.login_required # This decorator protects the route
 def get_user_assessments():
     user_email = auth.current_user()
