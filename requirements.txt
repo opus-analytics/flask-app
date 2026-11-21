@@ -28,3 +28,4 @@ msal
 pytest
 flask-limiter
 azure-storage-blob
+cryptography

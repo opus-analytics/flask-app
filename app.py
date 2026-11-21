@@ -41,6 +41,7 @@ from routes.auth import auth_bp
 from routes.user import user_bp
 from models.surveys import survey_bp
 from riddlex import riddlex_bp
+from connectors import connectors_bp
 from salaries import salaries_bp
 from werkzeug.utils import secure_filename
 from docx import Document
@@ -89,6 +90,7 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth') # Prefix auth routes wit
 app.register_blueprint(user_bp, url_prefix='/api/user') # Prefix auth routes with /api/auth
 app.register_blueprint(survey_bp, url_prefix='/api/survey') # Prefix survey routes with /api/survey
 app.register_blueprint(riddlex_bp, url_prefix='/api/riddlex')
+app.register_blueprint(connectors_bp, url_prefix='/api/connectors')
 app.register_blueprint(salaries_bp, url_prefix='/api/salaries')
 
 # --- API Endpoints (No more template rendering for core app logic) ---
