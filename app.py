@@ -1697,9 +1697,9 @@ def add_competency_resume_jd():
 # Open AI revamping
 # --- Configuration (replace with your actual keys and endpoints) ---
 UPLOAD_FOLDER = 'uploads'
-OPENAI_API_KEY = '888b6eeb7e3e42b7b87b40babd18a3b2'
-OPENAI_ENDPOINT = 'https://opusgptus2.openai.azure.com/'
-OPENAI_DEPLOYMENT_ID = 'gpt4-test'
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']  # from .env; fail fast if missing
+OPENAI_ENDPOINT = os.environ['OPENAI_ENDPOINT']
+OPENAI_DEPLOYMENT_ID = os.environ.get('OPENAI_DEPLOYMENT_ID', 'gpt-4.1')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -1710,7 +1710,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 client = AzureOpenAI(
     azure_endpoint=OPENAI_ENDPOINT,
     api_key=OPENAI_API_KEY,
-    api_version="2025-01-01-preview",
+    api_version="2024-12-01-preview",
 )
 
 # --- Versa endpoints: English answer only, translation is a separate step (versa/translator.py) ---
