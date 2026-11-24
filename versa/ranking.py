@@ -68,12 +68,17 @@ Job description: {job_description}
 Return JSON with this shape:
 {{"candidates": [{{"token": "C1", "fullName": "<name as written in the CV, or empty>", "score": <0-100 integer>,
 "summary": "<2-3 sentences>", "strengths": ["..."], "gaps": ["..."]}}],
-"narrative": "<English Markdown ranking all candidates strongest to weakest, with a short final recommendation>"}}
+"narrative": "<full English Markdown report, see the Narrative rules>"}}
 
 Rules:
 - One entry per candidate, all {len(cvs)} of them.
 - In "summary", "strengths", "gaps" and "narrative" refer to people only as [C1], [C2]... never by name or initials.
-- No conversational phrases.
+- Narrative rules: write a full report, never a one-line answer. Use these Markdown sections in this order:
+  ### Ranking Overview (all candidates strongest to weakest, one line each with the score)
+  Then, for EACH candidate in rank order, a "### [Cn]" section with "#### Key Skills" (bullets), "#### Relevant Experience" (bullets) and
+  "#### Relevance to the Role" (a 4-6 line summary of how well the skills and experience match the job description),
+  and finally "### Final Recommendation" (the best candidate and a justification based on the job description).
+- No conversational phrases. Use only the information in the resumes.
 
 Resumes:
 {blocks}"""

@@ -1446,9 +1446,9 @@
     "semantic_hash": ""
   },
   "versa/ranking.py": {
-    "mtime": 1795545250.8595076,
-    "seen": 1795545271.587059,
-    "ast_hash": "1af92c2914bd1bf00f3c8da1824d679a",
+    "mtime": 1795545908.8584971,
+    "seen": 1795545942.3807595,
+    "ast_hash": "09347e7c7e3162a7ce5224326e68e8da",
     "semantic_hash": ""
   },
   "versa/translator.py": {

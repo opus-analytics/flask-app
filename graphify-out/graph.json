@@ -23766,7 +23766,7 @@
       "file_type": "code",
       "norm_label": "rank_candidates()",
       "source_file": "versa/ranking.py",
-      "source_location": "L93"
+      "source_location": "L98"
     },
     {
       "id": "versa_ranking_strs",
@@ -23778,7 +23778,7 @@
       "file_type": "code",
       "norm_label": "_strs()",
       "source_file": "versa/ranking.py",
-      "source_location": "L89"
+      "source_location": "L94"
     },
     {
       "id": "versa_ranking_valid_score",
@@ -23790,7 +23790,7 @@
       "file_type": "code",
       "norm_label": "_valid_score()",
       "source_file": "versa/ranking.py",
-      "source_location": "L82"
+      "source_location": "L87"
     },
     {
       "id": "salaries_presentation_build_meta",
@@ -38269,7 +38269,7 @@
       "source_location": "L30"
     },
     {
-      "id": "versa_ranking_rationale_94",
+      "id": "versa_ranking_rationale_99",
       "label": "Returns (markdown, candidates). candidates is [] when the model reply is not\u2026",
       "_origin": "ast",
       "community": 50,
@@ -38277,7 +38277,7 @@
       "file_type": "rationale",
       "norm_label": "returns (markdown, candidates). candidates is [] when the model reply is not...",
       "source_file": "versa/ranking.py",
-      "source_location": "L94"
+      "source_location": "L99"
     },
     {
       "id": "salaries_presentation",
@@ -84637,7 +84637,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "versa/ranking.py",
-      "source_location": "L101",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -84649,7 +84649,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "versa/ranking.py",
-      "source_location": "L122",
+      "source_location": "L127",
       "weight": 1.0
     },
     {
@@ -84661,7 +84661,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "versa/ranking.py",
-      "source_location": "L123",
+      "source_location": "L128",
       "weight": 1.0
     },
     {
@@ -84673,7 +84673,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "versa/ranking.py",
-      "source_location": "L124",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -125976,7 +125976,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "versa/ranking.py",
-      "source_location": "L82",
+      "source_location": "L87",
       "weight": 1.0
     },
     {
@@ -125987,7 +125987,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "versa/ranking.py",
-      "source_location": "L89",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -125998,7 +125998,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "versa/ranking.py",
-      "source_location": "L93",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -129225,14 +129225,14 @@
       "weight": 1.0
     },
     {
-      "source": "versa_ranking_rationale_94",
+      "source": "versa_ranking_rationale_99",
       "target": "versa_ranking_rank_candidates",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "versa/ranking.py",
-      "source_location": "L94",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -136752,5 +136752,5 @@
       "source_file": "templates/account-not-premium.html"
     }
   ],
-  "built_at_commit": "ed36332288d1ad7fd7b74e80559fdf8672a77ccb"
+  "built_at_commit": "eb355628214f709dba9b65ca2b64d466382ab142"
 }

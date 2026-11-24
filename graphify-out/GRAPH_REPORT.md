@@ -1,7 +1,7 @@
 # Graph Report - flask-app  (2026-11-24)
 
 ## Corpus Check
-- 110 files · ~492,081 words
+- 110 files · ~492,172 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: .css 3, (none) 1, .ico 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ed363322`
+- Built from commit: `eb355628`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
