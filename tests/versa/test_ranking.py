@@ -133,5 +133,6 @@ def test_token_is_upload_order_not_rank_even_with_unreadable_gap():
     client = fake_client(reply)
     _, cands = ranking.rank_candidates(client, "m", cvs)
     prompt = client.chat.completions.create.call_args.kwargs["messages"][1]["content"]
+    assert "Why this candidate was ranked here" in prompt and "#### Weaknesses" in prompt
     assert "[C1]\ncv a" in prompt and "[C3]\ncv c" in prompt and "[C2]" not in prompt.split("Resumes:")[1]
     assert [(c["fileIndex"], c["rank"]) for c in cands] == [(2, 1), (0, 2)]
