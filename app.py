@@ -45,6 +45,8 @@ from models.surveys import survey_bp
 from riddlex import riddlex_bp
 from connectors import connectors_bp
 from salaries import salaries_bp
+from user_stats import user_stats_bp
+from user_stats.tracker import track
 from werkzeug.utils import secure_filename
 from docx import Document
 import fitz # PyMuPDF
@@ -94,6 +96,7 @@ app.register_blueprint(survey_bp, url_prefix='/api/survey') # Prefix survey rout
 app.register_blueprint(riddlex_bp, url_prefix='/api/riddlex')
 app.register_blueprint(connectors_bp, url_prefix='/api/connectors')
 app.register_blueprint(salaries_bp, url_prefix='/api/salaries')
+app.register_blueprint(user_stats_bp, url_prefix='/api/user')  # GET /api/user/stats
 
 # --- API Endpoints (No more template rendering for core app logic) ---
 @app.route("/")
@@ -1754,18 +1757,21 @@ def _versa_ranked():
 
 @app.route("/api/compare/resumes/translate", methods=["POST"])
 @auth.login_required
+@track("resume_compare", "Start")
 def compare_resumes():
     return _versa_ranked()
 
 
 @app.route("/api/bulk-compare/resumes/translate", methods=["POST"])
 @auth.login_required
+@track("resume_bulk_compare", "Start")
 def bulk_compare_resumes():
     return _versa_ranked()
 
 
 @app.route("/api/analyze/resumes/translate", methods=["POST"])
 @auth.login_required
+@track("resume_analyze", "Start")
 def analyze_resume():
     cvs, err = _versa_cvs()
     if err:
@@ -2080,6 +2086,7 @@ with open('index_definitions.md', 'r', encoding='utf-8') as f:
     PROJECT_INDEX_DEFINITIONS = f.read()
 
 @app.route("/api/analyze/company-data", methods=["POST"])
+@track("company_data_analyze", "Advance")
 def analyze_company_data_new():
     # ---- Session-based chat memory (per browser session cookie) ----
     chat_id = session.get('company_chat_id')

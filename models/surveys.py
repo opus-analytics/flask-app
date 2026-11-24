@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 import uuid
 from opus_api.db import get_cursor, get_db
+from user_stats.tracker import track
 
 survey_bp = Blueprint("survey", __name__)
 
@@ -98,6 +99,7 @@ class Survey:
 # --- API ROUTES ---
 
 @survey_bp.route("/create-surveys", methods=["POST"])
+@track("survey_create", "Motivera")
 def api_create_survey():
     data = request.get_json()
     # Validation updated to ensure creator_email is present

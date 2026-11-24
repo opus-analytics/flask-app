@@ -192,6 +192,11 @@ def login():
         
         #  Sort the subscription names free, Start, Advanced, Enable
         serializable_subscription_names.sort(key=lambda x: ['Free', 'Start', 'Advance', 'Enable-Contributor', "Motivera"].index(x) if x in ['Free', 'Start', 'Advance', 'Enable-Contributor', "Motivera"] else 100)
+        try:
+            from user_stats.tracker import record_login
+            record_login(user.email, user.user_id)
+        except Exception:
+            current_app.logger.warning("login usage tracking failed")
         return jsonify({
             "message": "Login successful",
             "access_token": token,

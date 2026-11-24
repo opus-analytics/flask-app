@@ -3,6 +3,7 @@ from flask import g, jsonify, request
 from . import riddlex_bp, repo_jobs
 from .auth import org_required
 from .errors import ApiError
+from user_stats.tracker import track
 
 
 FLAG_OFF = "Custom questions are not enabled for your subscription."
@@ -26,6 +27,7 @@ def list_jobs():
 
 
 @riddlex_bp.route("/jobs", methods=["POST"])
+@track("riddlex_job_create", "RiddleX")
 @org_required
 def create_job():
     body = request.get_json(silent=True)
