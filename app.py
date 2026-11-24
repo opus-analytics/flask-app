@@ -37,7 +37,9 @@ import secrets
 from flask_cors import CORS
 from opus_api.config import Config
 from opus_api import db as database
-from routes.auth import auth_bp
+from routes.auth import auth_bp, auth
+from versa.ranking import read_files, rank_candidates
+from versa.translator import translate_many, supported_languages
 from routes.user import user_bp
 from models.surveys import survey_bp
 from riddlex import riddlex_bp
@@ -1692,12 +1694,8 @@ def add_competency_resume_jd():
 # Open AI revamping
 # --- Configuration (replace with your actual keys and endpoints) ---
 UPLOAD_FOLDER = 'uploads'
-# AZURE_TRANSLATOR_KEY = 'YOUR_AZURE_TRANSLATOR_KEY'
 OPENAI_API_KEY = '888b6eeb7e3e42b7b87b40babd18a3b2'
 OPENAI_ENDPOINT = 'https://opusgptus2.openai.azure.com/'
-AZURE_TRANSLATOR_KEY = '8d5c3b6127144d13b9a67ecbad810ddb'
-AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com/'
-AZURE_TRANSLATOR_REGION = 'eastus2'
 OPENAI_DEPLOYMENT_ID = 'gpt4-test'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -1712,293 +1710,69 @@ client = AzureOpenAI(
     api_version="2025-01-01-preview",
 )
 
-# --- Helper functions for file processing ---
-def get_docx_text(file_path):
-    """Extracts text from a .docx file."""
-    doc = Document(file_path)
-    full_text = []
-    for para in doc.paragraphs:
-        full_text.append(para.text)
-    return '\n'.join(full_text)
-
-def get_pdf_text(file_path):
-    """Extracts text from a .pdf file."""
-    text = ""
+# --- Versa endpoints: English answer only, translation is a separate step (versa/translator.py) ---
+def _versa_respond(content, candidates=None):
+    """Translate the English answer into the requested languages and build the response."""
+    raw = request.form.get('languages', '')
+    langs = [c.strip() for c in raw.split(',') if c.strip()] or ['fr', 'ar']
     try:
-        with fitz.open(file_path) as doc:
-            for page in doc:
-                text += page.get_text()
+        translations = translate_many(content, langs)
+    except Exception:
+        translations = [{"lang": c, "text": None, "error": "failed"} for c in langs]
+    message = {"content": content}
+    for t in translations:
+        if t.get("text") and t.get("lang") in ("fr", "ar"):
+            message["content" + t["lang"].capitalize()] = t["text"]
+    body = {"choices": [{"message": message}], "translations": translations}
+    if candidates:
+        body["candidates"] = candidates
+    return jsonify(body)
+
+
+def _versa_cvs():
+    """Parse uploaded CVs in memory. Returns (cvs, error_response)."""
+    if 'analyze-files' not in request.files:
+        return None, (jsonify({"error": "No files uploaded"}), 400)
+    cvs = read_files(request.files.getlist('analyze-files'))
+    if not cvs:
+        return None, (jsonify({"error": "No valid resume files found"}), 400)
+    return cvs, None
+
+
+def _versa_ranked():
+    cvs, err = _versa_cvs()
+    if err:
+        return err
+    try:
+        content, candidates = rank_candidates(
+            client, OPENAI_DEPLOYMENT_ID, cvs,
+            request.form.get('description', ''), request.form.get('job_description', ''))
+        return _versa_respond(content, candidates)
     except Exception as e:
-        print(f"Error reading PDF file: {e}")
-    return text
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-def clean_text(text):
-    """
-    Cleans text by removing non-alphanumeric characters and normalizing whitespace.
-    """
-    # Remove non-ASCII characters and special symbols
-    cleaned_text = re.sub(r'[^\x00-\x7F]+', ' ', text)
-    # Replace multiple whitespaces (including newlines and tabs) with a single space
-    cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
-    return cleaned_text
 
-# --- API Endpoint ---
 @app.route("/api/compare/resumes/translate", methods=["POST"])
+@auth.login_required
 def compare_resumes():
-    """
-    Analyzes resumes using OpenAI and translates the response.
-    """
-    # Check if files were uploaded
-    if 'analyze-files' not in request.files:
-        return jsonify({"error": "No files uploaded"}), 400
+    return _versa_ranked()
 
-    # Get form data from the request
-    description = request.form.get('description', '')
-    job_description = request.form.get('job_description', '')
-    demo_rules = "and remove their names and add their initials instead"
-    
-    print(f"Description: {description}, Job Description: {job_description}, Demo Rules: {demo_rules}")
-    
-    uploaded_files = request.files.getlist('analyze-files')
-    uploaded_file_texts = []
 
-    # Process each uploaded file
-    for file in uploaded_files:
-        if file and file.filename:
-            # Secure the filename to prevent directory traversal attacks
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-
-            # Read text based on file extension
-            if filename.endswith('.docx'):
-                text = get_docx_text(file_path)
-            elif filename.endswith('.pdf'):
-                text = get_pdf_text(file_path)
-            else:
-                text = ""
-            
-              # Pre-process the text to remove unwanted characters and normalize whitespace
-            if text:
-                cleaned_text = clean_text(text)
-                uploaded_file_texts.append(cleaned_text)
-            
-            # Clean up the uploaded file after processing
-            os.remove(file_path)
-
-    if not uploaded_file_texts:
-        return jsonify({"error": "No valid resume files found"}), 400
-
-    # Prepare the prompt for OpenAI
-    messages = [
-        { 'role': 'system', 'content': "You are an Human Resources AI, you analyze resumes and do not mention fullnames in your response." },
-        {
-            'role': "user",
-            'content': f"""
-                Analyze the following resumes for the role of {description}, using the job description provided: {job_description}.
-
-                For each resume, provide a summary of the candidate's relevant skills and experience.
-                Finally, give a single, clear recommendation for the most suitable candidate and a brief justification based on the provided job description.
-
-                - Do not mention full names. Use initials only.
-                - Do not add any conversational phrases like 'Based on the resumes...'
-                - Use only the information provided in the resumes.
-
-                Resumes: {json.dumps(uploaded_file_texts)}
-            """,
-        },
-    ]
-    
-    try:
-        # Call the OpenAI API for chat completions
-        completion = client.chat.completions.create(
-            model=OPENAI_DEPLOYMENT_ID,
-            messages=messages,
-        )
-        openai_response_content = completion.choices[0].message.content
-        
-        # --- Handle Translations ---
-        # Note: This is a simplified example. In a real-world app, you might want to 
-        # handle multiple translations concurrently.
-        
-        # Translate to French
-        translated_fr = translate_text(openai_response_content, "fr")
-        
-        # Translate to Arabic
-        translated_ar = translate_text(openai_response_content, "ar")
-
-        # Prepare the final response object
-        final_response = {
-            "choices": [{
-                "message": {
-                    "content": openai_response_content,
-                    "contentFr": translated_fr,
-                    "contentAr": translated_ar
-                }
-            }]
-        }
-
-        return jsonify(final_response)
-
-    except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    
 @app.route("/api/bulk-compare/resumes/translate", methods=["POST"])
+@auth.login_required
 def bulk_compare_resumes():
-    """
-    Analyzes resumes using OpenAI and translates the response.
-    """
-    # Check if files were uploaded
-    if 'analyze-files' not in request.files:
-        return jsonify({"error": "No files uploaded"}), 400
+    return _versa_ranked()
 
-    # Get form data from the request
-    description = request.form.get('description', '')
-    job_description = request.form.get('job_description', '')
-    demo_rules = "and remove their names and add their initials instead"
-    
-    print(f"Description: {description}, Job Description: {job_description}, Demo Rules: {demo_rules}")
-    
-    uploaded_files = request.files.getlist('analyze-files')
-    uploaded_file_texts = []
-
-    # Process each uploaded file
-    for file in uploaded_files:
-        if file and file.filename:
-            # Secure the filename to prevent directory traversal attacks
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-
-            # Read text based on file extension
-            if filename.endswith('.docx'):
-                text = get_docx_text(file_path)
-            elif filename.endswith('.pdf'):
-                text = get_pdf_text(file_path)
-            else:
-                text = ""
-            
-              # Pre-process the text to remove unwanted characters and normalize whitespace
-            if text:
-                cleaned_text = clean_text(text)
-                uploaded_file_texts.append(cleaned_text)
-            
-            # Clean up the uploaded file after processing
-            os.remove(file_path)
-
-    if not uploaded_file_texts:
-        return jsonify({"error": "No valid resume files found"}), 400
-
-    # Prepare the prompt for OpenAI
-    messages = [
-        { 'role': 'system', 'content': "You are an Human Resources AI, you analyze resumes and do not mention fullnames in your response." },
-        {
-            'role': "user",
-            'content': f"""
-                Analyze the following resumes and the provided job description for the role of {description}.
-
-                Your task is to identify the top 3-4 candidates that are the most suitable for the position, with this criteria {job_description}.
-                For each of the top candidates, provide a short, one-paragraph summary (3-4 sentences) highlighting their key strengths and how they align with the job description.
-                These candidates should be ranked clearly from most to least suitable, with numbers indicating their rank (1, 2, 3, etc.).
-                After the individual summaries, provide a final, very brief recommendation section. This section should give a high-level justification for why these specific candidates were chosen over the others.
-
-                - The output must be in Markdown format.
-                - Do not mention full names. Use initials only.
-                - Do not use conversational phrases.
-                - Base all analysis and recommendations strictly on the provided resumes and job description.
-
-                Resumes: {json.dumps(uploaded_file_texts)}
-            """
-
-        },
-    ]
-    
-    try:
-        # Call the OpenAI API for chat completions
-        completion = client.chat.completions.create(
-            model=OPENAI_DEPLOYMENT_ID,
-            messages=messages,
-        )
-        openai_response_content = completion.choices[0].message.content
-        
-        # --- Handle Translations ---
-        # Note: This is a simplified example. In a real-world app, you might want to 
-        # handle multiple translations concurrently.
-        
-        # Translate to French
-        translated_fr = translate_text(openai_response_content, "fr")
-        
-        # Translate to Arabic
-        translated_ar = translate_text(openai_response_content, "ar")
-
-        # Prepare the final response object
-        final_response = {
-            "choices": [{
-                "message": {
-                    "content": openai_response_content,
-                    "contentFr": translated_fr,
-                    "contentAr": translated_ar
-                }
-            }]
-        }
-
-        return jsonify(final_response)
-
-    except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @app.route("/api/analyze/resumes/translate", methods=["POST"])
+@auth.login_required
 def analyze_resume():
-    """
-    Analyzes resumes using OpenAI and translates the response.
-    """
-    # Check if files were uploaded
-    if 'analyze-files' not in request.files:
-        return jsonify({"error": "No files uploaded"}), 400
-
-    # Get form data from the request
-    demo_rules = "and remove their names and add their initials instead"
-    
-    uploaded_files = request.files.getlist('analyze-files')
-    uploaded_file_texts = []
-
-    # Process each uploaded file
-    for file in uploaded_files:
-        if file and file.filename:
-            # Secure the filename to prevent directory traversal attacks
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-
-            # Read text based on file extension
-            if filename.endswith('.docx'):
-                text = get_docx_text(file_path)
-            elif filename.endswith('.pdf'):
-                text = get_pdf_text(file_path)
-            else:
-                text = ""
-            
-              # Pre-process the text to remove unwanted characters and normalize whitespace
-            if text:
-                cleaned_text = clean_text(text)
-                uploaded_file_texts.append(cleaned_text)
-            
-            # Clean up the uploaded file after processing
-            os.remove(file_path)
-
-    if not uploaded_file_texts:
-        return jsonify({"error": "No valid resume files found"}), 400
-
-    # Prepare the prompt for OpenAI
+    cvs, err = _versa_cvs()
+    if err:
+        return err
     messages = [
-        {
-        'role': 'system',
-        'content': "You are an AI career consultant. Your task is to analyze a single resume and provide a structured analysis. Your response must be in Markdown format, following the specified sections exactly. Do not add any conversational text before or after the analysis."
-      },
-      {
-        'role': "user",
-        'content': f"""
-
+        {'role': 'system', 'content': "You are an AI career consultant. Your task is to analyze a single resume and provide a structured analysis. Your response must be in Markdown format, following the specified sections exactly. Do not add any conversational text before or after the analysis."},
+        {'role': "user", 'content': f"""
           Analyze the following resume and provide a concise summary.
 
           - The analysis must follow this exact structure with these Markdown headings:
@@ -2012,75 +1786,29 @@ def analyze_resume():
           - For "Core Advantages", list the candidate's key strengths and significant achievements as concise bullet points.
           - For "Suitable Job Fields & Functions", list specific job titles or industries where the candidate would be a good fit.
 
-          - Do not mention full names. Use initials only.
+          - Do not mention the candidate's name; say "the candidate".
           - Use only the information provided in the resume.
           - The final output must be in Markdown.
 
-          Resume: ${text}
-        """
-        ,
-      },
+          Resume: {cvs[0][2]}
+        """},
     ]
-    
     try:
-        # Call the OpenAI API for chat completions
-        completion = client.chat.completions.create(
-            model=OPENAI_DEPLOYMENT_ID,
-            messages=messages,
-        )
-        openai_response_content = completion.choices[0].message.content
-        
-        # --- Handle Translations ---
-        # Note: This is a simplified example. In a real-world app, you might want to 
-        # handle multiple translations concurrently.
-        
-        # Translate to French
-        translated_fr = translate_text(openai_response_content, "fr")
-        
-        # Translate to Arabic
-        translated_ar = translate_text(openai_response_content, "ar")
-
-        # Prepare the final response object
-        final_response = {
-            "choices": [{
-                "message": {
-                    "content": openai_response_content,
-                    "contentFr": translated_fr,
-                    "contentAr": translated_ar
-                }
-            }]
-        }
-
-        return jsonify(final_response)
-
+        completion = client.chat.completions.create(model=OPENAI_DEPLOYMENT_ID, messages=messages)
+        return _versa_respond(completion.choices[0].message.content)
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    
-    
-def translate_text(text, to_lang):
-    """
-    Calls the Azure Translator API.
-    (This is a placeholder function, you would integrate your actual API call here)
-    """
-    # Replace this with your actual Azure Translator API call logic
-    url = f"{AZURE_TRANSLATOR_ENDPOINT}/translate?api-version=3.0&to={to_lang}"
-    headers = {
-        'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY,
-        'Content-type': 'application/json',
-        'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION
-    }
-    body = [{'text': text}]
 
-    try:
-        response = requests.post(url, headers=headers, json=body)
-        response.raise_for_status() # Raise an HTTPError if the response status is 4xx or 5xx
-        translated_text = response.json()[0]['translations'][0]['text']
-        return translated_text
-    except Exception as e:
-        print(f"Translation error: {e}")
-        return "Translation failed."
-    
-    
+
+@app.route("/api/versa/languages", methods=["GET"])
+@auth.login_required
+def versa_languages():
+    langs = supported_languages() or {}
+    items = [{"code": c, "name": v.get("name", c), "nativeName": v.get("nativeName", v.get("name", c))}
+             for c, v in langs.items()]
+    return jsonify({"languages": sorted(items, key=lambda i: i["name"])})
+
+
 @app.route("/get-salaries-country", methods = ["GET", "POST"]) 
 def get_salaries_country():
 
