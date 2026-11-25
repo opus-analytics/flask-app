@@ -7,7 +7,7 @@ import jwt
 import datetime
 from flask_httpauth import HTTPTokenAuth
 import bcrypt # Ensure bcrypt is imported for password hashing/checking
-from flask_mail import Message, Mail # Import Message and Mail
+from opus_api.services.graph_mailer import AzureGraphMailer
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature # For secure token generation and exception handling
 import os # For accessing Flask secret key
 
@@ -42,64 +42,97 @@ def verify_token(token):
 # --- Helper function to send verification email ---
 def send_verification_email(user_email, token):
     try:
-        mail_instance = current_app.extensions['mail'] # Access the Mail instance
-        msg = Message(
-            "Verify Your Email Address for [Your App Name]",
-            sender=current_app.config['MAIL_DEFAULT_SENDER'],
-            recipients=[user_email]
+        origin = (
+            current_app.config.get("FRONTEND_ORIGIN")
+            or os.getenv("FRONTEND_ORIGIN")
+            or "https://opusanalytics.ai"
+        ).rstrip("/")
+        verification_link = f"{origin}/auth/verify-email?token={token}"
+
+        html = render_template(
+            "email_template.html",
+            link=verification_link,
+            title="Welcome to Opus!",
+            subTitle="Please verify your email address",
+            message="\nThanks for signing up. To activate your account, please click the button below:",
+            btnText="Verify Your Email",
         )
-        # Generate the verification URL
-        # Ensure your React frontend has a route like /verify-email?token=<token>
-        # And your REACT_APP_ORIGIN is set correctly in config.py / env vars
-        verification_link = f"{current_app.config['REACT_APP_ORIGIN']}/verify-email?token={token}"
 
-        msg.html = render_template('email/verification_email.html', verification_link=verification_link) # Use a Jinja2 template for email body
-        # Or a simple string:
-        msg.body = f"Please click the following link to verify your email: {verification_link}"
-
-        mail_instance.send(msg)
+        sent = AzureGraphMailer().send_email(
+            subject="Opus Analytics - Verify your email",
+            to_email=user_email,
+            body_content=html,
+            is_html=True,
+        )
+        if not sent:
+            current_app.logger.error(f"Mailer reported failure sending verification email to {user_email}")
+            return False
         current_app.logger.info(f"Verification email sent to {user_email}")
         return True
     except Exception as e:
-        current_app.logger.error(f"Failed to send verification email to {user_email}: {e}")
+        current_app.logger.error(f"Failed to send verification email to {user_email}: {type(e).__name__}")
         return False
 
 # --- User Registration ---
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    email = data.get("email")
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        data = {}
+    email = str(data.get("email") or "").strip().lower()
     password = data.get("password")
+    full_name = (data.get("full_name") or data.get("fullName") or "").strip() or None
+    company_name = (data.get("company_name") or data.get("companyName") or "").strip() or None
 
-    if not email or not password:
+    if not email or not password or not isinstance(password, str):
         return jsonify({"message": "Email and password are required"}), 400
 
     if User.find_by_email(email):
         return jsonify({"message": "User with this email already exists"}), 409
 
-    new_user = User.create_user(email, password, verification_status='Pending')
+    new_user = User.create_user(
+        email, password, verification_status='Pending',
+        full_name=full_name, company_name=company_name,
+    )
 
     if new_user:
         # Generate a secure, time-sensitive token for email verification
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        # The token will contain the user's email
         verification_token = serializer.dumps(email, salt='email-verification-salt')
 
-        # Save the token and its expiration to the database
         # Token valid for 24 hours
         token_expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
         User.save_verification_token(new_user.user_id, verification_token, token_expiration)
 
-        # Send the verification email
         if send_verification_email(new_user.email, verification_token):
-            return jsonify({"message": "User registered successfully. Please check your email to verify your account."}), 201
-        else:
-            # If email sending fails, you might want to log this and potentially
-            # allow registration but mark it as 'email_send_failed' or similar.
-            return jsonify({"message": "User registered, but failed to send verification email. Please contact support."}), 202
+            return jsonify({
+                "message": "User registered successfully. Please check your email to verify your account.",
+                "email_sent": True,
+            }), 201
+        return jsonify({
+            "message": "User registered, but failed to send verification email. Please contact support.",
+            "email_sent": False,
+        }), 202
     else:
         return jsonify({"message": "Failed to register user"}), 500
-    
+
+def _grant_free_subscription(user):
+    """Give a freshly verified user a Free plan if they have no active subscription. Never raises."""
+    try:
+        if not Subscription.find_by_email(user.email):
+            Subscription.create_subscription(
+                email=user.email,
+                subscription='Free',
+                subscription_status='Active',
+                subscription_from_date=datetime.datetime.utcnow(),
+                subscription_expiration_date=None,
+                resource_id=None,
+                owner=user.email,
+                tag='self-signup',
+            )
+    except Exception as e:
+        current_app.logger.error(f"Failed to grant Free subscription to {user.email}: {type(e).__name__}")
+
 # --- Email Verification Endpoint ---
 @auth_bp.route("/verify-email", methods=["GET"])
 def verify_email():
@@ -122,10 +155,11 @@ def verify_email():
 
         # Check if the token in the database matches the one provided
         # and if it's still valid (not expired based on DB timestamp)
-        if user.verification_token == token and user.token_expiration > datetime.datetime.utcnow():
+        if user.verification_token == token and user.token_expiration is not None and user.token_expiration > datetime.datetime.utcnow():
             User.update_verification_status(user.user_id, 'Verified')
             # Clear the token from DB after successful verification for security
             User.save_verification_token(user.user_id, None, None)
+            _grant_free_subscription(user)
             return jsonify({"message": "Email verified successfully! You can now log in."}), 200
         else:
             return jsonify({"message": "Invalid or expired verification link"}), 400

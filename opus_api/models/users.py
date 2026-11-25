@@ -59,7 +59,7 @@ class User:
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
     @staticmethod
-    def create_user(email, password, verification_status='Pending'):
+    def create_user(email, password, verification_status='Pending', full_name=None, company_name=None):
         """
         Creates a new user in the database.
         Hashes the password before storing.
@@ -69,10 +69,17 @@ class User:
         cursor = get_cursor()
         
         try:
-            query = "INSERT INTO users (email, password_hash, verification_status) VALUES (%s, %s, %s)"
-            cursor.execute(query, (email, hashed_password, verification_status))
+            query = "INSERT INTO users (email, password_hash, full_name, company_name, verification_status) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (email, hashed_password, full_name, company_name, verification_status))
             get_db().commit()
-            return User(cursor.lastrowid, email, hashed_password, verification_status)
+            return User(
+                user_id=cursor.lastrowid,
+                email=email,
+                password_hash=hashed_password,
+                full_name=full_name,
+                company_name=company_name,
+                verification_status=verification_status,
+            )
         except mysql.connector.Error as err:
             print(f"Error creating user: {err}")
             get_db().rollback()
